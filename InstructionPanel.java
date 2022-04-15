@@ -30,6 +30,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.plaf.SliderUI;
 import javax.swing.plaf.basic.BasicTreeUI.SelectionModelPropertyChangeHandler;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 import java.awt.Image;
 import java.io.File;
@@ -46,15 +47,16 @@ public class InstructionPanel extends JPanel
 
     private Scanner instructionsReader;
 
-    private String[] instructionPanelNames;
-    private int instructionPanelIndex; 
+    private int activeSlideIndex; 
+    private int numberOfSlides;
 
     //constructs an instructions panel which has a card layout for switching between
     //slides in the instructions.  
     public InstructionPanel()
     {
-
-        instructionPanelIndex = 0;
+        ArrayList<String> instructionsText = readInstructionsText();
+        numberOfSlides = instructionsText.size();
+        activeSlideIndex = 0;
         setLayout(new BorderLayout());
         instructionsCardLayout = new CardLayout();
         instructionsPanelHolder = new JPanel();
@@ -62,10 +64,12 @@ public class InstructionPanel extends JPanel
         InstructionChangerPanel instructionChangerPanel = new InstructionChangerPanel();
         add(instructionChangerPanel, BorderLayout.NORTH);
         add(instructionsPanelHolder, BorderLayout.CENTER);
-        InstructionSlide slide1 = new InstructionSlide();
-        instructionsPanelHolder.add(slide1, "slide1");
-        instructionsCardLayout.show(instructionsPanelHolder, "slide1");
-
+        for (int i = 0; i < instructionsText.size(); i++)
+        {
+            InstructionSlide slide = new InstructionSlide(instructionsText.get(i));
+            instructionsPanelHolder.add(slide, "" + i);
+        }
+        instructionsCardLayout.show(instructionsPanelHolder, "" + activeSlideIndex);
     }  
 
     //this jpanel is the top panel which is used to switch between instruction slides
@@ -74,21 +78,43 @@ public class InstructionPanel extends JPanel
         public InstructionChangerPanel()
         {
             setLayout(new BorderLayout());
-            BackButton backButton = new BackButton(instructionsCardLayout, instructionsPanelHolder);
+            Button backButton = new Button("Back", 30, 200, 50);
+            backButton.setBackground(new Color(184, 71, 42));
             Button nextButton = new Button("Next", 30, 200, 50);
             add(backButton, BorderLayout.WEST);
             add(nextButton, BorderLayout.EAST);
+
+            backButton.addActionListener(new BackButtonListener());
+            nextButton.addActionListener(new NextButtonListener());
+        }
+
+        class NextButtonListener implements ActionListener
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                nextSlide();
+            }
+        }
+
+        class BackButtonListener implements ActionListener
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                prevSlide();
+            }
         }
     }
 
     //this Jpanel is a slide for the instructions 
     class InstructionSlide extends JPanel
     {
-        public InstructionSlide()
+        public InstructionSlide(String text)
         {
             setLayout(new GridLayout(2, 1));
             JTextArea textArea = new JTextArea();
-            textArea.setText("Instructions");
+            textArea.setText(text);
             //TODO: Read instructions for each slid from a text file
             textArea.setEnabled(false);
             textArea.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 20));
@@ -105,13 +131,33 @@ public class InstructionPanel extends JPanel
         {
             public void paintComponent()
             {
-
+                
             }
         }
     }
 
-    private void readInstructionsText()
+    private void nextSlide()
     {
+        instructionsCardLayout.next(instructionsPanelHolder);
+        activeSlideIndex = (activeSlideIndex+1)%numberOfSlides;
+    }
+
+    private void prevSlide()
+    {
+        if (activeSlideIndex == 0)
+        {
+            FlightSimulator.flightSim.showPanel("MainMenu");
+        }
+        else
+        {
+            instructionsCardLayout.previous(instructionsPanelHolder);
+            activeSlideIndex -= 1;
+        }
+    }
+
+    private ArrayList<String> readInstructionsText()
+    {
+        ArrayList<String> instructions = new ArrayList<String>();
         try 
         {
             instructionsReader = new Scanner(new File(FlightSimulator.RESOURCES_FOLDER, "instructions.txt"));
@@ -121,7 +167,21 @@ public class InstructionPanel extends JPanel
             System.out.println("Couldnt find file");
             e.printStackTrace();
         }
-
+        String line = "";
+        line = instructionsReader.nextLine();
+        while (instructionsReader.hasNextLine())
+        {
+            if (line.startsWith("#"))
+            {
+                String textBlock = "";
+                while(instructionsReader.hasNextLine() && !(line = instructionsReader.nextLine()).startsWith("#"))
+                {
+                    textBlock += line + "\n";
+                }
+                instructions.add(textBlock);
+            }
+        }
+        return instructions;
     }
 
     public String getName()
