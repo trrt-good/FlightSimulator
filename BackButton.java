@@ -15,6 +15,9 @@ public class BackButton extends JButton implements ActionListener
     private CardLayout layout;
     private JPanel parentPanel;
     private String prevPanelName;
+
+    //constructs a back button which takes in the nessecary variables for switching 
+    //between panels in a card layout.
     public BackButton(CardLayout layoutIn, JPanel parentPanelIn, String prevPanelNameIn)
     {
         setText("Back");
@@ -30,6 +33,7 @@ public class BackButton extends JButton implements ActionListener
         setPreferredSize(new Dimension(150, 50));
     }
 
+    //different constructor for a non-specific destination for the back button
     public BackButton(CardLayout layoutIn, JPanel parentPanelIn)
     {
         setText("Back");
@@ -45,7 +49,8 @@ public class BackButton extends JButton implements ActionListener
         setPreferredSize(new Dimension(150, 50));
     }
 
-
+    //checks if the previous name variable is null, if it isn't then switch to that
+    //panel, if it is null, simply show the previous panel in the card layout.
     @Override
     public void actionPerformed(ActionEvent e) 
     {

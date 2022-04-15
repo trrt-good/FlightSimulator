@@ -40,6 +40,9 @@ public class InstructionPanel extends JPanel
 {
     private CardLayout instructionsCardLayout;
     private JPanel instructionsPanelHolder;
+
+    //constructs an instructions panel which has a card layout for switching between
+    //slides in the instructions.  
     public InstructionPanel()
     {
         setLayout(new BorderLayout());
@@ -54,6 +57,7 @@ public class InstructionPanel extends JPanel
         instructionsCardLayout.show(instructionsPanelHolder, "slide1");
     }  
 
+    //this jpanel is the top panel which is used to switch between instruction slides
     class InstructionChangerPanel extends JPanel
     {
         public InstructionChangerPanel()
@@ -66,6 +70,7 @@ public class InstructionPanel extends JPanel
         }
     }
 
+    //this Jpanel is a slide for the instructions 
     class InstructionSlide extends JPanel
     {
         public InstructionSlide()

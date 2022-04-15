@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 
 public class MainMenu extends JPanel
 {
+    //This constructs the main menu panel  
     public MainMenu()
     {
         setLayout(new BorderLayout(0, 10));
@@ -19,6 +20,7 @@ public class MainMenu extends JPanel
         add(makeMenuButtonPanel(), BorderLayout.CENTER);
     }
 
+    //returns a Jpanel which contains the title "Flight Simulator"  
     public JPanel makeTitlePanel()
     {
         JPanel panel = new JPanel();
@@ -32,6 +34,7 @@ public class MainMenu extends JPanel
         return panel;
     }
     
+    //returns a JPanel which has all the menu buttons in a flow layout.  
     public JPanel makeMenuButtonPanel()
     {
         JPanel panel = new JPanel();

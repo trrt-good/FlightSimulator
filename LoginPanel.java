@@ -36,7 +36,7 @@ public class LoginPanel extends JPanel
     
     private JPanel login;
     private JPanel signUp;
-    
+
     public LoginPanel()
     {
         localCardLayout = new CardLayout();
@@ -49,6 +49,8 @@ public class LoginPanel extends JPanel
         localCardLayout.show(this, "Login");
     }
     
+    //returns a panel for login, which contains a username and password
+    //input area.
     public JPanel createLoginPanel()
     {
         JPanel panel = new JPanel();
@@ -65,6 +67,8 @@ public class LoginPanel extends JPanel
         return panel;
     }
 
+    //this returns a jpanel for making an account which contains a 
+    //username, password and confirm password areas. 
     public JPanel createSignUpPanel()
     {
         JPanel parentPanel = new JPanel();
@@ -95,6 +99,8 @@ public class LoginPanel extends JPanel
         localCardLayout.show(this, "SignUp");
     }
 
+    //this returns the panel which has the small button to switch
+    //to the signup page
     public JPanel makeSignUpButtonPanel()
     {
         JPanel panel = new JPanel();
@@ -116,6 +122,8 @@ public class LoginPanel extends JPanel
         return "LoginPanel";
     }
     
+    //This class is for each textfield input area, which implements an action
+    //listener so I can get the text entered into the fields 
     class TextFieldPanel extends JPanel implements ActionListener
     {
         private String text;

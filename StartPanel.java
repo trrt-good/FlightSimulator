@@ -30,8 +30,11 @@ import java.awt.Image;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+
 class StartPanel extends JPanel implements ActionListener
 {
+    //Creates the start panel with a null layout. This contains the title and a play 
+    //button which starts the rest of the game
     public StartPanel()
     {
         setLayout(null);
@@ -48,7 +51,6 @@ class StartPanel extends JPanel implements ActionListener
         playButton.setContentAreaFilled(false);
         playButton.setBorderPainted(false);
         playButton.setFocusPainted(false);
-        //playButton.setBackground(new Color(255, 100, 100));
         playButton.addActionListener(this);
         add(playButton);
         playButton.setBounds(800, 500, 600, 200);

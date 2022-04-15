@@ -5,6 +5,8 @@ import java.awt.Dimension;
 
 public class Button extends JButton
 {
+    //constructs a button so I don't have to repeat the same lines of code over and 
+    //over for each button I make
     public Button(String text, int fontSize)
     {
         setText(text);
@@ -16,6 +18,7 @@ public class Button extends JButton
         setBorderPainted(false);
     }
 
+    //different constructor if I need to specify width and height
     public Button(String text, int fontSize, int width, int height)
     {
         setText(text);
