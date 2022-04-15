@@ -36,15 +36,25 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+
 public class InstructionPanel extends JPanel
 {
     private CardLayout instructionsCardLayout;
     private JPanel instructionsPanelHolder;
 
+    private Scanner instructionsReader;
+
+    private String[] instructionPanelNames;
+    private int instructionPanelIndex; 
+
     //constructs an instructions panel which has a card layout for switching between
     //slides in the instructions.  
     public InstructionPanel()
     {
+
+        instructionPanelIndex = 0;
         setLayout(new BorderLayout());
         instructionsCardLayout = new CardLayout();
         instructionsPanelHolder = new JPanel();
@@ -55,6 +65,7 @@ public class InstructionPanel extends JPanel
         InstructionSlide slide1 = new InstructionSlide();
         instructionsPanelHolder.add(slide1, "slide1");
         instructionsCardLayout.show(instructionsPanelHolder, "slide1");
+
     }  
 
     //this jpanel is the top panel which is used to switch between instruction slides
@@ -97,6 +108,20 @@ public class InstructionPanel extends JPanel
 
             }
         }
+    }
+
+    private void readInstructionsText()
+    {
+        try 
+        {
+            instructionsReader = new Scanner(new File(FlightSimulator.RESOURCES_FOLDER, "instructions.txt"));
+        } 
+        catch (FileNotFoundException e) 
+        {
+            System.out.println("Couldnt find file");
+            e.printStackTrace();
+        }
+
     }
 
     public String getName()
