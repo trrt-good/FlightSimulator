@@ -31,10 +31,15 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Image;
 import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 public class FlightSimulator
 {
-    private static FlightSimulator flightSim;
+    public static FlightSimulator flightSim;
+    public static final File RESOURCES_FOLDER = new File("res");
+    public static final String FONTSTYLE = "Times";
+    public static final Color THEME_COLOR = new Color(50, 110, 184);
 
     private int DEFAULT_WIDTH = 1366;
     private int DEFAULT_HEIGHT = 768;
@@ -46,6 +51,10 @@ public class FlightSimulator
 
     private StartPanel startPanel;
     private LoginPanel loginPanel;
+    private MainMenu mainMenu;
+    private InstructionPanel instructionPanel;
+
+    private Image backgroundImage;
     
     public static void main(String [] args)
     {
@@ -55,11 +64,15 @@ public class FlightSimulator
     
     public void startGame()
     {
-        startPanel = new StartPanel("StartPanel");
-        loginPanel = new LoginPanel(this, "LoginPanel");
+        startPanel = new StartPanel();
+        loginPanel = new LoginPanel();
+        mainMenu = new MainMenu();
+        instructionPanel = new InstructionPanel();
         createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         addPanelToCards(startPanel, startPanel.getName());
         addPanelToCards(loginPanel, loginPanel.getName());
+        addPanelToCards(mainMenu, mainMenu.getName());
+        addPanelToCards(instructionPanel, instructionPanel.getName());
         showPanel(startPanel.getName());
     }
     
@@ -74,6 +87,22 @@ public class FlightSimulator
         mainCardLayout = new CardLayout();
         mainCardPanel.setLayout(mainCardLayout);
         gameFrame.validate();
+        backgroundImage = makeImage(new File(FlightSimulator.RESOURCES_FOLDER, "airplaneBackground.jpg"));
+    }
+
+    public Image makeImage(File imageFile)
+    {
+        Image image = null;
+        try
+        {
+            image = ImageIO.read(imageFile);
+        }
+        catch (IOException e)
+        {
+            System.out.println("Could not locate background image file");
+            e.printStackTrace();
+        }
+        return image;
     }
     
     public void showPanel(String name)
@@ -86,44 +115,15 @@ public class FlightSimulator
         mainCardPanel.add(panel, name);
     }
     
-    class StartPanel extends JPanel implements ActionListener
+    
+    
+    public Image getBackgroundImage()
     {
-        private String name;
-        private Image backgroundImage;
-        public StartPanel(String nameIn)
-        {
-            setLayout(null);
-            JLabel titleLabel = new JLabel("Flight Simulator");
-            titleLabel.setFont(new Font("Serif", Font.BOLD, 100));
-            titleLabel.setBackground(new Color(255, 150, 150));
-            add(titleLabel);
-            titleLabel.setBounds(50, 50, 1000, 130);
-            name = nameIn;
-            
-            JButton playButton = new JButton("PLAY");
-            playButton.setFont(new Font("Serif", Font.BOLD, 50));
-            playButton.setBackground(new Color(255, 100, 100));
-            playButton.addActionListener(this);
-            add(playButton);
-            playButton.setBounds(1000, 500, 300, 100);
-        }
-        
-        public String getName()
-        {
-            return name;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            showPanel(loginPanel.getName());
-        }
-
-        public void paintComponent(Graphics g)
-        {
-            
-        }
+        return backgroundImage;
     }
     
-    
+    public void paintBackground(JPanel panel, Graphics g)
+    {
+        g.drawImage(backgroundImage, 0, 0, panel.getWidth(), (int)(((double)panel.getWidth()/backgroundImage.getWidth(panel))*backgroundImage.getHeight(panel)), panel);
+    }
 }
