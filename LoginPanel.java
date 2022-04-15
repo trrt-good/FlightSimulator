@@ -160,7 +160,6 @@ public class LoginPanel extends JPanel
         {
             showSignUpPanel();
         }
-        
     }
 
     public void paintComponent(Graphics g)
