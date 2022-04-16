@@ -41,9 +41,11 @@ import java.io.IOException;
 public class FlightSimulator
 {
     public static FlightSimulator flightSim;
+    public static User user;
     public static final File RESOURCES_FOLDER = new File("res");
     public static final String FONTSTYLE = "Times";
     public static final Color THEME_COLOR = new Color(50, 110, 184);
+
 
     private int DEFAULT_WIDTH = 1366;
     private int DEFAULT_HEIGHT = 768;
@@ -54,7 +56,7 @@ public class FlightSimulator
     private JPanel mainCardPanel;
 
     private StartPanel startPanel;
-    private LoginPanel loginPanel;
+    private AccountPanel loginPanel;
     private MainMenu mainMenu;
     private InstructionPanel instructionPanel;
 
@@ -71,7 +73,7 @@ public class FlightSimulator
     public void startGame()
     {
         startPanel = new StartPanel();
-        loginPanel = new LoginPanel();
+        loginPanel = new AccountPanel();
         mainMenu = new MainMenu();
         instructionPanel = new InstructionPanel();
         createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);

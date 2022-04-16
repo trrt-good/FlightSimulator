@@ -94,6 +94,9 @@ public class InstructionPanel extends JPanel
             public void actionPerformed(ActionEvent e) 
             {
                 nextSlide();
+                FlightSimulator.user.setMilesFlown(100000);
+                FlightSimulator.user.saveData();
+                FlightSimulator.user.completedTraining();
             }
         }
 
