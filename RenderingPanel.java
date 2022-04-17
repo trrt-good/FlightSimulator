@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.text.AttributeSet.ColorAttribute;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +73,13 @@ public class RenderingPanel extends JPanel implements ActionListener
         lightingObject = lighting;
         lightingObject.update(gameObjects);
         System.out.println("finished in " + (System.nanoTime()-lightingStartTime)/1000000.0 + "ms");
+    }
+
+    public void setBackground(Color color)
+    {
+        emptyImagePixelColorData = new int[getWidth()*getHeight()];
+        backgroundColor = color;
+        Arrays.fill(emptyImagePixelColorData, convertToIntRGB(backgroundColor));
     }
 
     public void addGameObject(GameObject gameObject)
