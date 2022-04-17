@@ -114,6 +114,11 @@ public class FlightSimulator
         }
         return image;
     }
+
+    public void updateWelcomeText()
+    {
+        mainMenu.setWelcomeText("Hi, " + user.getUsername());
+    }
     
     //  shows a given panel name using the card layout
     public void showPanel(String name)

@@ -27,8 +27,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.plaf.SliderUI;
-import javax.swing.plaf.basic.BasicTreeUI.SelectionModelPropertyChangeHandler;
 import java.awt.Insets;
 import java.util.ArrayList;
 
@@ -94,9 +92,6 @@ public class InstructionPanel extends JPanel
             public void actionPerformed(ActionEvent e) 
             {
                 nextSlide();
-                FlightSimulator.user.setMilesFlown(100000);
-                FlightSimulator.user.saveData();
-                FlightSimulator.user.completedTraining();
             }
         }
 

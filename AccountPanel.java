@@ -15,7 +15,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SingleSelectionModel;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -27,7 +26,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import java.awt.Dimension;
 
@@ -105,6 +103,7 @@ public class AccountPanel extends JPanel
                         {
                             FlightSimulator.user = user;
                             FlightSimulator.flightSim.showPanel("MainMenu");
+                            FlightSimulator.flightSim.updateWelcomeText();
                         }
                         else
                         {
@@ -147,7 +146,7 @@ public class AccountPanel extends JPanel
             add(panel, BorderLayout.CENTER);
             setOpaque(false);
             backPanel.setOpaque(false);
-            panel.setOpaque(false);
+            panel.setOpaque(false); 
         }
 
         class SignUpListener implements ActionListener
@@ -160,12 +159,13 @@ public class AccountPanel extends JPanel
                     if (!passworldPrompt.getText().equals(confirmPassworldPrompt.getText()))
                     {
                         System.out.println("Passwords do not match!");
-    
+     
                     }
                     else if (User.getUser(usernamePrompt.getText()) == null)
                     {
                         FlightSimulator.user = new User(usernamePrompt.getText(), confirmPassworldPrompt.getText());
                         FlightSimulator.flightSim.showPanel("MainMenu");
+                        FlightSimulator.flightSim.updateWelcomeText();
                     }
                     else
                     {

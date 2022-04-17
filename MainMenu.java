@@ -1,3 +1,4 @@
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,11 +13,13 @@ import java.awt.event.ActionListener;
 
 public class MainMenu extends JPanel
 {
+    private JLabel welcomeLabel;
     //This constructs the main menu panel  
     public MainMenu()
     {
         setLayout(new BorderLayout(0, 10));
         add(makeTitlePanel(), BorderLayout.NORTH);
+        add(makeLowerButonPanel(), BorderLayout.SOUTH);
         add(makeMenuButtonPanel(), BorderLayout.CENTER);
     }
 
@@ -25,7 +28,6 @@ public class MainMenu extends JPanel
     {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 50));
-        setPreferredSize(new Dimension(100, 200));
         JLabel titleLabel = new JLabel("Flight Simulator");
         titleLabel.setFont(new Font(FlightSimulator.FONTSTYLE, Font.BOLD, 80));
         titleLabel.setForeground(Color.WHITE);
@@ -33,12 +35,34 @@ public class MainMenu extends JPanel
         panel.setOpaque(false);
         return panel;
     }
+
+    public JPanel makeLowerButonPanel()
+    {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 50, 30));
+        Button exitButton = new Button("EXIT", 30, 200, 50);
+        exitButton.setBackground(new Color(184, 71, 42));
+        exitButton.addActionListener(new ExitButtonListener());
+        welcomeLabel = new JLabel("Hi, ");
+        welcomeLabel.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 30));
+        welcomeLabel.setForeground(Color.WHITE);
+        panel.add(welcomeLabel);
+        panel.add(exitButton);
+        panel.setOpaque(false);
+        return panel;
+    }
+
+    public void setWelcomeText(String text)
+    {
+        if (welcomeLabel != null)
+            welcomeLabel.setText(text);
+    }
     
     //returns a JPanel which has all the menu buttons in a flow layout.  
     public JPanel makeMenuButtonPanel()
     {
         JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 70));
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 50));
         Button learnToFlyButton = new Button("Learn to fly", 30, 250, 60);
         learnToFlyButton.addActionListener(new LearnToFlyButtonListener());
         Button freePlayButton = new Button("Free play", 30, 250, 60);
@@ -65,6 +89,14 @@ public class MainMenu extends JPanel
         public void actionPerformed(ActionEvent e)
         {
             FlightSimulator.flightSim.showPanel("InstructionPanel");
+        }
+    }
+
+    public class ExitButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            System.exit(1);
         }
     }
 }
