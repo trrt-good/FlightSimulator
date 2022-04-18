@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.plaf.synth.SynthScrollBarUI;
+
 import java.io.PrintWriter;
 
 public class User 
@@ -49,10 +51,15 @@ public class User
         return username;
     }
 
-    public void completedTraining()
+    public void setCompletedTraining(boolean value)
     {
-        completedTraining = true;
+        completedTraining = value;
         saveData();
+    }
+
+    public boolean getCompletedTraining()
+    {
+        return completedTraining;
     }
 
     public void setMilesFlown(double miles)
@@ -108,10 +115,10 @@ public class User
                 if (line.equals("u " + username))
                 {
                     String pass = fileReader.nextLine().substring(2);
-                    double miles = Double.parseDouble(fileReader.nextLine().substring(12));
-                    boolean completedTraining = Boolean.parseBoolean(fileReader.nextLine().substring(19));
+                    double miles = Double.parseDouble(fileReader.nextLine().substring(11));
+                    boolean completedTraining = Boolean.parseBoolean(fileReader.nextLine().substring(18));
                     user = new User(line.substring(2), pass, completedTraining, miles);
-                    //TODO: fix scanner not reading the file
+                    break;
                 }
             }
         }

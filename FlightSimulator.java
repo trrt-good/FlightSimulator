@@ -47,8 +47,8 @@ public class FlightSimulator
     public static final Color THEME_COLOR = new Color(50, 110, 184);
 
 
-    private int DEFAULT_WIDTH = 1366;
-    private int DEFAULT_HEIGHT = 768;
+    public static final int DEFAULT_WIDTH = 1366;
+    public static final int DEFAULT_HEIGHT = 768;
 
     private JFrame gameFrame;
 
@@ -59,6 +59,7 @@ public class FlightSimulator
     private AccountPanel loginPanel;
     private MainMenu mainMenu;
     private InstructionPanel instructionPanel;
+    private GamePanel gamePanel;
 
     private Image backgroundImage;
     
@@ -76,11 +77,14 @@ public class FlightSimulator
         loginPanel = new AccountPanel();
         mainMenu = new MainMenu();
         instructionPanel = new InstructionPanel();
+        gamePanel = new GamePanel();
+
         createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         addPanelToCards(startPanel, startPanel.getName());
         addPanelToCards(loginPanel, loginPanel.getName());
         addPanelToCards(mainMenu, mainMenu.getName());
         addPanelToCards(instructionPanel, instructionPanel.getName());
+        addPanelToCards(gamePanel, gamePanel.getName());
         showPanel(startPanel.getName());
     }
 
@@ -91,6 +95,7 @@ public class FlightSimulator
         gameFrame.setSize(width, height);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setVisible(true);
+        gameFrame.setResizable(false);
         mainCardPanel = new JPanel();
         gameFrame.add(mainCardPanel);
         mainCardLayout = new CardLayout();

@@ -66,6 +66,7 @@ public class MainMenu extends JPanel
         Button learnToFlyButton = new Button("Learn to fly", 30, 250, 60);
         learnToFlyButton.addActionListener(new LearnToFlyButtonListener());
         Button freePlayButton = new Button("Free play", 30, 250, 60);
+        freePlayButton.addActionListener(new FreePlayButtonListener());
         Button settingsButton = new Button("Settings", 30, 250, 60);
         panel.add(learnToFlyButton);
         panel.add(freePlayButton);
@@ -97,6 +98,17 @@ public class MainMenu extends JPanel
         public void actionPerformed(ActionEvent e)
         {
             System.exit(1);
+        }
+    }
+
+    public class FreePlayButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (FlightSimulator.user.getCompletedTraining())
+            {
+                FlightSimulator.flightSim.showPanel("GamePanel");
+            }
         }
     }
 }

@@ -1,0 +1,3 @@
+"Low Poly Plane" (https://skfb.ly/orFLp) by Qbo2Qbo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+Java API - https://docs.oracle.com/javase/7/docs/api/
+Wolfram Mathword - used for coding many math functions https://mathworld.wolfram.com/topics/Geometry.html
