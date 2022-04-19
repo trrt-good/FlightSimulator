@@ -20,7 +20,7 @@ public class GamePanel extends JPanel
         tempGameObject = new GameObject(new Vector3(0, 0, 0), new EulerAngle(0, 0, 0), 1, "lowPolyPlane1.obj", new Color(150, 150, 150));
         lighting = new Lighting(new Vector3(0, -1, 0), 100, 100);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 10000, 60);
-        gameCamera.setFreeControls(this, 50, 20);
+        gameCamera.setOrbitControls(this, tempGameObject, 1000, 10);
     }
 
     public void paintComponent(Graphics g)

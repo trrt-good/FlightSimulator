@@ -30,15 +30,12 @@ public class Camera
 
     public void lookAt(Vector3 pos)
     {
-        h_orientation = Math.toDegrees(Math.atan((pos.x-position.x)/Math.abs(pos.z-position.z)));
-        v_orientation = Math.toDegrees(Math.atan((pos.y-position.y)/(Math.sqrt((pos.x-position.x)*(pos.x-position.x) + (pos.z-position.z)*(pos.z-position.z)))));
+        h_orientation = (pos.x-position.x < 0)? -Math.toDegrees(Math.atan((pos.z-position.z)/(pos.x-position.x)))-90 : 90-Math.toDegrees(Math.atan((pos.z-position.z)/(pos.x-position.x)));
 
+        v_orientation = Math.toDegrees(Math.atan((pos.y-position.y)/(Math.sqrt((pos.x-position.x)*(pos.x-position.x) + (pos.z-position.z)*(pos.z-position.z)))));
+        
         //Vector3(Math.sin(horizontalAng)*Math.cos(verticalAng), Math.sin(verticalAng), Math.cos(horizontalAng)*Math.cos(verticalAng))
 
-        if (h_orientation < 0)
-            h_orientation += 360;
-        if (v_orientation < 0)
-            h_orientation += 360;
         h_orientation%=360;
         v_orientation%=360;
     }
@@ -69,6 +66,7 @@ public class Camera
 
             prevX = e.getX();
             prevY = e.getY();
+            System.out.println(position);
         }
 
         public void keyPressed(KeyEvent e) 
@@ -94,8 +92,6 @@ public class Camera
                     moveUp(-movementSpeed);
                     break;
             }
-            lookAt(new Vector3(0, 0, 0));
-            System.out.println(h_orientation);
         }
 
         public void mousePressed(MouseEvent e) 
@@ -120,6 +116,9 @@ public class Camera
         private GameObject focusObj;
         private double startDistance;
         private double sensitivity;
+
+        private int prevX = 0;
+        private int prevY = 0;
         
         public OrbitCamController(GameObject focusObjectIn, double startDistanceIn, double sensitivityIn)
         {
@@ -127,25 +126,32 @@ public class Camera
             startDistance = startDistanceIn;
             sensitivity = sensitivityIn;
 
-
+            position = Vector3.add(focusObj.getPosition(), new Vector3(0, 0, -startDistance));
         }
 
         public void mouseWheelMoved(MouseWheelEvent e) 
         {
-            
-            
+            moveForward(-e.getWheelRotation()*30);
         }
 
         public void mouseDragged(MouseEvent e) 
         {
-            
-            
+            position = Vector3.add(Vector3.rotateAroundYaxis(Vector3.subtract(position, focusObj.getPosition()), (e.getX()-prevX)/(2000/sensitivity)) , focusObj.getPosition());
+            if (v_orientation > -80 && (e.getY()-prevY)/(200/sensitivity) > 0)
+                position = Vector3.add(Vector3.rotateAroundYaxis(Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis(Vector3.subtract(position, focusObj.getPosition()), -h_orientation*0.017453292519943295), (e.getY()-prevY)/(2000/sensitivity)), h_orientation*0.017453292519943295) , focusObj.getPosition());
+            else if (v_orientation < 80 && (e.getY()-prevY)/(200/sensitivity) < 0)
+                position = Vector3.add(Vector3.rotateAroundYaxis(Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis(Vector3.subtract(position, focusObj.getPosition()), -h_orientation*0.017453292519943295), (e.getY()-prevY)/(2000/sensitivity)), h_orientation*0.017453292519943295) , focusObj.getPosition());
+
+            lookAt(focusObj.getPosition());
+            v_orientation = Math.max(-89, Math.min(89, v_orientation));
+            prevX = e.getX();
+            prevY = e.getY();
         }
 
         public void mousePressed(MouseEvent e) 
         {
-            
-    
+            prevX = e.getX();
+            prevY = e.getY();
         }
 
         public void mouseMoved(MouseEvent e) {}
