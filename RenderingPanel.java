@@ -86,13 +86,16 @@ public class RenderingPanel extends JPanel implements ActionListener
 
     public void addGameObject(GameObject gameObject)
     {
-        long gameObjectStartTime = System.nanoTime();
-        System.out.print("\tadding gameObject " + gameObject.name + "... ");
-        gameObjects.add(gameObject);
-        if (lightingObject != null)
-            lightingObject.update(gameObjects);
-        triangles.addAll(gameObject.getMesh());
-        System.out.println("finished in " + (System.nanoTime()-gameObjectStartTime)/1000000.0 + "ms");
+        if (gameObject != null)
+        {
+            long gameObjectStartTime = System.nanoTime();
+            System.out.print("\tadding gameObject " + gameObject.name + "... ");
+            gameObjects.add(gameObject);
+            if (lightingObject != null)
+                lightingObject.update(gameObjects);
+            triangles.addAll(gameObject.getMesh());
+            System.out.println("finished in " + (System.nanoTime()-gameObjectStartTime)/1000000.0 + "ms");
+        }
     }
 
     public void setCamera(Camera camIn)
@@ -128,17 +131,15 @@ public class RenderingPanel extends JPanel implements ActionListener
         renderImage.getRaster().setDataElements(0, 0, renderImage.getWidth(), renderImage.getHeight(), emptyImagePixelColorData);
         renderPlane = camera.getRenderPlane();
 
-        
-
         trianglesCalculateTime.startTimer();
         for (int i = 0; i < triangles.size(); i ++)
         {
             calculateTriangle(g, triangles.get(i));
         }
         trianglesCalculateTime.stopTimer();
+        
         trianglesOrderTime.startTimer();
-        if (gameObjects.size() > 0 && triangles.size() > 0)
-            orderTriangles();    
+        Collections.sort(triangle2dList);
         trianglesOrderTime.stopTimer();
 
         trianglesPaintTime.startTimer();
@@ -149,11 +150,6 @@ public class RenderingPanel extends JPanel implements ActionListener
         }
         triangle2dList.clear();
         trianglesPaintTime.stopTimer();
-    }
-
-    private void orderTriangles()
-    {
-        Collections.sort(triangle2dList);
     }
 
     private void calculateTriangle(Graphics g, Triangle triangle)
@@ -167,16 +163,17 @@ public class RenderingPanel extends JPanel implements ActionListener
         Vector3 tempPoint2 = new Vector3(triangle.point2);
         Vector3 tempPoint3 = new Vector3(triangle.point3);
 
+        Vector3 camDirectionVector = camera.getDirectionVector();
         Vector3 camPos = camera.getPosition();
         double distanceToTriangle = Vector3.subtract(Vector3.centerOfTriangle(triangle), camPos).getMagnitude();  
-        if (distanceToTriangle < camera.getViewDistance())
+        if (distanceToTriangle < camera.getViewDistance() && (Vector3.dotProduct(triangle.getPlane().normal, camDirectionVector) < 0 || !triangle.parentGameObject.backFaceCull))
         {
             double renderPlaneWidth = camera.getRenderPlaneWidth();
             if (Vector3.dotProduct(renderPlane.normal, Vector3.subtract(tempPoint1, renderPlane.pointOnPlane)) > 0 && Vector3.dotProduct(renderPlane.normal, Vector3.subtract(tempPoint2, renderPlane.pointOnPlane)) > 0 && Vector3.dotProduct(renderPlane.normal, Vector3.subtract(tempPoint3, renderPlane.pointOnPlane)) > 0)
             {
                 tempPoint1 = Vector3.getIntersectionPoint(Vector3.subtract(tempPoint1, camPos), camPos, renderPlane);
                 double pixelsPerUnit = getWidth()/renderPlaneWidth;
-                Vector3 camCenterPoint = Vector3.getIntersectionPoint(camera.getDirectionVector(), camPos, renderPlane);
+                Vector3 camCenterPoint = Vector3.getIntersectionPoint(camDirectionVector, camPos, renderPlane);
                 Vector3 rotatedPoint = Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis( //rotates the points to only be on the XY plane
                     Vector3.subtract(tempPoint1, camCenterPoint), //moves the point to be centered around 0,0,0
                     -camera.getHorientation()*0.017453292519943295), //amount to be rotated by horizontally
