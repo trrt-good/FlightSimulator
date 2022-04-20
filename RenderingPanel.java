@@ -88,9 +88,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         gameObjects.add(gameObject);
         if (lightingObject != null)
             lightingObject.update(gameObjects);
-        triangles.addAll(gameObject.mesh);
-        if (gameObject.hasPlayerController())
-            this.addKeyListener(gameObject.getPlayerController());
+        triangles.addAll(gameObject.getMesh());
         System.out.println("finished in " + (System.nanoTime()-gameObjectStartTime)/1000000.0 + "ms");
     }
 
@@ -141,6 +139,8 @@ public class RenderingPanel extends JPanel implements ActionListener
 
     private void orderTriangles()
     {
+        double distance1 = 0;
+        double distance2 = 0;
         boolean changed = true;
         while (changed == true)
         {
@@ -149,12 +149,17 @@ public class RenderingPanel extends JPanel implements ActionListener
             {
                 if (triangles.get(i).parentGameObject.shading)
                 {
-                    if (Vector3.subtract(camera.getPosition(), Vector3.centerOfTriangle(triangles.get(i))).getMagnitude() < Vector3.subtract(camera.getPosition(), Vector3.centerOfTriangle(triangles.get(i+1))).getMagnitude())
+                    distance1 = Vector3.subtract(camera.getPosition(), Vector3.centerOfTriangle(triangles.get(i))).getMagnitude();
+                    distance2 = Vector3.subtract(camera.getPosition(), Vector3.centerOfTriangle(triangles.get(i+1))).getMagnitude();
+                    if (distance1 < camera.getViewDistance() && distance2 < camera.getViewDistance())
                     {
-                        Triangle closerTriangle = triangles.get(i);
-                        triangles.set(i, triangles.get(i+1));
-                        triangles.set(i + 1, closerTriangle);
-                        changed = true;
+                        if (distance1 < distance2)
+                        {
+                            Triangle closerTriangle = triangles.get(i);
+                            triangles.set(i, triangles.get(i+1));
+                            triangles.set(i + 1, closerTriangle);
+                            changed = true;
+                        }
                     }
                 }
             }

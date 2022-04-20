@@ -7,13 +7,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 public class GameObject 
 {
-    public List<Triangle> mesh;
+    private List<Triangle> mesh;
     
     public Color color;
     public boolean shading = true;
     public String name;
 
-    private PlayerController playerController = null;
     private Vector3 globalPosition;
     private Vector3 localCenter = new Vector3();
     private Vector3 autoCenter = new Vector3();
@@ -46,18 +45,15 @@ public class GameObject
         color = colorIn;
         name = modelFileName.substring(0, modelFileName.indexOf("."));
         globalPosition = new Vector3();
-        localCenter = autoCenter;
         readObjFile(modelFileName);
+        localCenter = autoCenter;
+        System.out.println(autoCenter);
         setGlobalRotation(orientation);
         setScale(scaleIn);
         setPosition(positionIn);
         System.out.println("finished in all " + mesh.size() + " triangles in " + (System.nanoTime() - start)/1000000 + "ms");
     }
 
-    public void setController(PlayerController controller)
-    {
-        playerController = controller;
-    }
 
     public void recalculateLighting(Lighting lighting)
     {
@@ -70,7 +66,17 @@ public class GameObject
         }
     }
 
+    public List<Triangle> getMesh()
+    {
+        return mesh;
+    }
+
     public Vector3 getCenter()
+    {
+        return localCenter;
+    }
+
+    public Vector3 getLocalCenter()
     {
         return localCenter;
     }
@@ -100,14 +106,9 @@ public class GameObject
         move(new Vector3(10, 0, 0));
     }
 
-    public boolean hasPlayerController()
+    public EulerAngle getOrientation()
     {
-        return playerController != null;
-    }
-
-    public PlayerController getPlayerController()
-    {
-        return playerController;
+        return orientation;
     }
 
     public void setPosition(Vector3 positionIn)
@@ -157,23 +158,23 @@ public class GameObject
         for (int i = 0; i < mesh.size(); i++)
         {
             triangle = mesh.get(i);
-            triangle.point1 = Vector3.subtract(triangle.point1, Vector3.add(globalPosition, localCenter));
+            triangle.point1 = Vector3.subtract(triangle.point1, Vector3.subtract(globalPosition, localCenter));
             triangle.point1 = Vector3.rotateAroundXaxis(triangle.point1, angle.x);
             triangle.point1 = Vector3.rotateAroundYaxis(triangle.point1, angle.y);
             triangle.point1 = Vector3.rotateAroundZaxis(triangle.point1, angle.z);
-            triangle.point1 = Vector3.add(triangle.point1, Vector3.add(globalPosition, localCenter));
+            triangle.point1 = Vector3.add(triangle.point1, Vector3.subtract(globalPosition, localCenter));
 
-            triangle.point2 = Vector3.subtract(triangle.point2, Vector3.add(globalPosition, localCenter));
+            triangle.point2 = Vector3.subtract(triangle.point2, Vector3.subtract(globalPosition, localCenter));
             triangle.point2 = Vector3.rotateAroundXaxis(triangle.point2, angle.x);
             triangle.point2 = Vector3.rotateAroundYaxis(triangle.point2, angle.y);
             triangle.point2 = Vector3.rotateAroundZaxis(triangle.point2, angle.z);
-            triangle.point2 = Vector3.add(triangle.point2, Vector3.add(globalPosition, localCenter));
+            triangle.point2 = Vector3.add(triangle.point2, Vector3.subtract(globalPosition, localCenter));
 
-            triangle.point3 = Vector3.subtract(triangle.point3, Vector3.add(globalPosition, localCenter));
+            triangle.point3 = Vector3.subtract(triangle.point3, Vector3.subtract(globalPosition, localCenter));
             triangle.point3 = Vector3.rotateAroundXaxis(triangle.point3, angle.x);
             triangle.point3 = Vector3.rotateAroundYaxis(triangle.point3, angle.y);
             triangle.point3 = Vector3.rotateAroundZaxis(triangle.point3, angle.z);
-            triangle.point3 = Vector3.add(triangle.point3, Vector3.add(globalPosition, localCenter));
+            triangle.point3 = Vector3.add(triangle.point3, Vector3.subtract(globalPosition, localCenter));
         }
         orientation = orientation.add(angle);
     }
