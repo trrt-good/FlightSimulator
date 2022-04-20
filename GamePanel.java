@@ -20,7 +20,7 @@ public class GamePanel extends JPanel
         airplane = new Airplane(this);
         ground = new Ground();
         lighting = new Lighting(new Vector3(1, -1, 0.5), 30, 60);
-        gameCamera = new Camera(new Vector3(0, 0, -1000), 5000, 60);
+        gameCamera = new Camera(new Vector3(0, 0, -1000), 6000, 60);
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
@@ -33,7 +33,7 @@ public class GamePanel extends JPanel
         renderingPanel.setLighting(lighting);
         renderingPanel.setCamera(gameCamera);
         renderingPanel.setLighting(lighting);
-        renderingPanel.setFog(2000, 4000, skyColor);
+        renderingPanel.setFog(3000, 6000, skyColor);
         renderingPanel.startRenderUpdates();
         add(renderingPanel);
         validate();

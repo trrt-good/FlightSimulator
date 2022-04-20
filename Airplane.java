@@ -46,7 +46,7 @@ public class Airplane extends GameObject
         public void actionPerformed(ActionEvent e) 
         {
             rotator.setDelay(20);
-            double angle = Math.toRadians(Math.pow(1.1, throttle-60)+10);
+            double angle = Math.toRadians(Math.pow(1.1, throttle-60)+0.3*throttle);
 
             Triangle triangle;
             for (int i = 0; i < getMesh().size(); i++)
