@@ -148,9 +148,8 @@ public class GameObject
             triangle.point2 = Vector3.multiply(triangle.point2, scale);
             triangle.point3 = Vector3.multiply(triangle.point3, scale);
         }
-        localCenter = Vector3.multiply(localCenter, scale);
-        autoCenter = Vector3.multiply(autoCenter, scale);
-
+        //localCenter = Vector3.multiply(localCenter, scale);
+        //autoCenter = Vector3.multiply(autoCenter, scale);
     }
 
     public void localRotate(EulerAngle angle)

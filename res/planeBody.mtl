@@ -1,0 +1,13 @@
+# Blender MTL File: 'Sketchfab_2021_04_09_22_18_14.blend'
+# Material Count: 1
+
+newmtl MAT_Base
+Ns 199.999995
+Ka 1.000000 1.000000 1.000000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\tatwo\\Downloads\\low-poly-plane\\source\\TXT_Base.png

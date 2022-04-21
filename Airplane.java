@@ -17,7 +17,7 @@ public class Airplane extends GameObject
 
     public Airplane(JPanel listenerPanel)
     {
-        super(new Vector3(0, 0, 0), new Vector3(100.86, 75, -2.14), new EulerAngle(0, 0, 0), 1, "planeBody.obj", new Color(130, 130, 130));
+        super(new Vector3(0, 0, 0), new Vector3(100.86, 75, -2.14), new EulerAngle(0, 0, 0), 100, "planeBody.obj", new Color(130, 130, 130));
         airplaneController = new AirplaneController();
         listenerPanel.addKeyListener(airplaneController);
         throttle = 0;
