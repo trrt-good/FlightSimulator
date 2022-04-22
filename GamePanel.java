@@ -16,11 +16,11 @@ public class GamePanel extends JPanel
     public GamePanel()
     {
         setLayout(new BorderLayout());
-
-        airplane = new Airplane(this);
+        
         ground = new Ground();
         lighting = new Lighting(new Vector3(1, -1, 0.5), 30, 60);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 6000, 60);
+        airplane = new Airplane(this, gameCamera);
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
@@ -29,6 +29,7 @@ public class GamePanel extends JPanel
         requestFocusInWindow();
         renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH, FlightSimulator.DEFAULT_HEIGHT);
         airplane.setRenderPanel(renderingPanel);
+        airplane.startPhysics();
         renderingPanel.addGameObject(ground);
         renderingPanel.setLighting(lighting);
         renderingPanel.setCamera(gameCamera);

@@ -26,12 +26,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultStyledDocument;
+
 import java.awt.Image;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.awt.event.KeyEvent;
 
 public class SettingsPanel extends JPanel
 {
     
 }
+

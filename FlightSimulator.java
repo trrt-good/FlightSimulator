@@ -19,6 +19,7 @@ import java.io.IOException;
 
 public class FlightSimulator
 {
+    public static GameSettings settings = new GameSettings();
     public static FlightSimulator flightSim;
     public static User user;
     public static final File RESOURCES_FOLDER = new File("res");
