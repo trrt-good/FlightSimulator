@@ -1,6 +1,5 @@
 import javax.swing.*;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,8 +8,8 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 public class RenderingPanel extends JPanel implements ActionListener
 {
-    private List<GameObject> gameObjects = new ArrayList<GameObject>();
-    private List<Triangle> triangles = new ArrayList<Triangle>();
+    private ArrayList<Mesh> meshes = new ArrayList<Mesh>();
+    private ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 
     private Timer renderUpdater;
 
@@ -20,6 +19,7 @@ public class RenderingPanel extends JPanel implements ActionListener
     private Plane renderPlane;        
     private int[] emptyImagePixelColorData;
     private ArrayList<Triangle2D> triangle2dList;
+    private Matrix3x3 pointRotationMatrix;
 
     //Camera:
     private Camera camera;
@@ -47,6 +47,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         renderImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         emptyImagePixelColorData = new int[width*height];
         backgroundColor = new Color(200, 220, 255);
+        triangle2dList = new ArrayList<Triangle2D>();
         Arrays.fill(emptyImagePixelColorData, convertToIntRGB(backgroundColor));
     }
 
@@ -55,6 +56,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         totalFrameTime.startTimer();
         renderUpdater.start();
         validate();
+        requestFocusInWindow();
     }
 
     public void paintComponent(Graphics g) 
@@ -62,7 +64,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         frameDrawTime.startTimer();
         g.drawImage(renderImage, 0, 0, this);
         frameDrawTime.stopTimer();
-        if (gameObjects.size() > 0 && camera != null)
+        if (meshes.size() > 0 && camera != null)
         {
             drawTriangles(g);
         }
@@ -73,7 +75,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         long lightingStartTime = System.nanoTime();
         System.out.print("\tadding lighting... ");
         lightingObject = lighting;
-        lightingObject.update(gameObjects);
+        lightingObject.update(meshes);
         System.out.println("finished in " + (System.nanoTime()-lightingStartTime)/1000000.0 + "ms");
     }
 
@@ -89,11 +91,18 @@ public class RenderingPanel extends JPanel implements ActionListener
         if (gameObject != null)
         {
             long gameObjectStartTime = System.nanoTime();
-            System.out.print("\tadding gameObject " + gameObject.name + "... ");
-            gameObjects.add(gameObject);
-            if (lightingObject != null)
-                lightingObject.update(gameObjects);
-            triangles.addAll(gameObject.getMesh());
+            System.out.print("\tadding gameObject " + gameObject.getName() + "... ");
+            if (gameObject.getMesh() != null)
+            {
+                meshes.add(gameObject.getMesh());
+                if (lightingObject != null)
+                    lightingObject.update(meshes);
+                triangles.addAll(gameObject.getMesh().getTriangles());
+            }
+            else
+            {
+                System.out.print("no triangles added: mesh is null... ");
+            }
             System.out.println("finished in " + (System.nanoTime()-gameObjectStartTime)/1000000.0 + "ms");
         }
     }
@@ -104,7 +113,6 @@ public class RenderingPanel extends JPanel implements ActionListener
         System.out.print("\tadding camera... ");
         camera = camIn;
         renderPlane = camera.getRenderPlane();
-        triangle2dList = new ArrayList<Triangle2D>();
         System.out.println("finished in " + (System.nanoTime()-camStartTime)/1000000.0 + "ms");
     }
 
@@ -130,6 +138,7 @@ public class RenderingPanel extends JPanel implements ActionListener
     {
         renderImage.getRaster().setDataElements(0, 0, renderImage.getWidth(), renderImage.getHeight(), emptyImagePixelColorData);
         renderPlane = camera.getRenderPlane();
+        pointRotationMatrix = Matrix3x3.multiply(Matrix3x3.rotationMatrixAxisX(camera.getVorientation()*0.017453292519943295), Matrix3x3.rotationMatrixAxisY(-camera.getHorientation()*0.017453292519943295));
 
         trianglesCalculateTime.startTimer();
         for (int i = 0; i < triangles.size(); i ++)
@@ -165,8 +174,8 @@ public class RenderingPanel extends JPanel implements ActionListener
 
         Vector3 camDirectionVector = camera.getDirectionVector();
         Vector3 camPos = camera.getPosition();
-        double distanceToTriangle = Vector3.subtract(Vector3.centerOfTriangle(triangle), camPos).getMagnitude();  
-        if (distanceToTriangle < camera.getViewDistance() && (Vector3.dotProduct(triangle.getPlane().normal, camDirectionVector) < 0 || !triangle.parentGameObject.backFaceCull))
+        double distanceToTriangle = Vector3.subtract(triangle.getCenter(), camPos).getMagnitude();  
+        if (distanceToTriangle < camera.getViewDistance() && (Vector3.dotProduct(triangle.getPlane().normal, camDirectionVector) < 0 || !triangle.getMesh().backFaceCulling()))
         {
             double renderPlaneWidth = camera.getRenderPlaneWidth();
             if (Vector3.dotProduct(renderPlane.normal, Vector3.subtract(tempPoint1, renderPlane.pointOnPlane)) > 0 && Vector3.dotProduct(renderPlane.normal, Vector3.subtract(tempPoint2, renderPlane.pointOnPlane)) > 0 && Vector3.dotProduct(renderPlane.normal, Vector3.subtract(tempPoint3, renderPlane.pointOnPlane)) > 0)
@@ -174,20 +183,14 @@ public class RenderingPanel extends JPanel implements ActionListener
                 tempPoint1 = Vector3.getIntersectionPoint(Vector3.subtract(tempPoint1, camPos), camPos, renderPlane);
                 double pixelsPerUnit = getWidth()/renderPlaneWidth;
                 Vector3 camCenterPoint = Vector3.getIntersectionPoint(camDirectionVector, camPos, renderPlane);
-                Vector3 rotatedPoint = Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis( //rotates the points to only be on the XY plane
-                    Vector3.subtract(tempPoint1, camCenterPoint), //moves the point to be centered around 0,0,0
-                    -camera.getHorientation()*0.017453292519943295), //amount to be rotated by horizontally
-                    camera.getVorientation()*0.017453292519943295); //amount to  be rotated by vertically
+                Vector3 rotatedPoint = Vector3.applyMatrix(pointRotationMatrix, Vector3.subtract(tempPoint1, camCenterPoint));
                 if ((Math.abs(rotatedPoint.x) < renderPlaneWidth/2*1.2 && Math.abs(rotatedPoint.y) < renderPlaneWidth*((double)getHeight()/(double)getWidth())/2*1.2))
                     shouldDrawTriangle = true;
                 p1ScreenCoords.x = (int)(getWidth()/2 + rotatedPoint.x*pixelsPerUnit);
                 p1ScreenCoords.y = (int)(getHeight()/2 - rotatedPoint.y*pixelsPerUnit);
         
                 tempPoint2 = Vector3.getIntersectionPoint(Vector3.subtract(tempPoint2, camPos), camPos, renderPlane);
-                rotatedPoint = Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis( //rotates the points to only be on the XY plane
-                    Vector3.subtract(tempPoint2, camCenterPoint), //moves the point to be centered around 0,0,0
-                    -camera.getHorientation()*0.017453292519943295), //amount to be rotated by horizontally
-                    camera.getVorientation()*0.017453292519943295); //amount to  be rotated by vertically
+                rotatedPoint = Vector3.applyMatrix(pointRotationMatrix, Vector3.subtract(tempPoint2, camCenterPoint));
                 if ((Math.abs(rotatedPoint.x) < renderPlaneWidth/2*1.2 && Math.abs(rotatedPoint.y) < renderPlaneWidth*((double)getHeight()/getWidth())/2*1.2))
                     shouldDrawTriangle = true;
                 p2ScreenCoords.x = (int)(getWidth()/2 + rotatedPoint.x*pixelsPerUnit);
@@ -195,10 +198,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         
                 tempPoint3 = new Vector3(triangle.point3);
                 tempPoint3 = Vector3.getIntersectionPoint(Vector3.subtract(tempPoint3, camPos), camPos, renderPlane);
-                rotatedPoint = Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis( //rotates the points to only be on the XY plane
-                    Vector3.subtract(tempPoint3, camCenterPoint), //moves the point to be centered around 0,0,0
-                    -camera.getHorientation()*0.017453292519943295), //amount to be rotated by horizontally
-                    camera.getVorientation()*0.017453292519943295); //amount to  be rotated by vertically
+                rotatedPoint = Vector3.applyMatrix(pointRotationMatrix, Vector3.subtract(tempPoint3, camCenterPoint));
                 if ((Math.abs(rotatedPoint.x) < renderPlaneWidth/2*1.2 && Math.abs(rotatedPoint.y) < renderPlaneWidth*((double)getHeight()/getWidth())/2*1.2))
                     shouldDrawTriangle = true;
                 p3ScreenCoords.x = (int)(getWidth()/2 + rotatedPoint.x*pixelsPerUnit);
@@ -208,7 +208,7 @@ public class RenderingPanel extends JPanel implements ActionListener
             if (shouldDrawTriangle)
             {
                 Color colorUsed;
-                if (triangle.parentGameObject != null && triangle.parentGameObject.shading)
+                if (triangle.getMesh() != null && triangle.getMesh().isShaded())
                 {
                     Color litColor = triangle.getColorWithLighting();
                     if (fogEnabled && distanceToTriangle > fogStartDistance)

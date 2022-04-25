@@ -9,7 +9,6 @@ public class GamePanel extends JPanel
     private Airplane airplane;
     private Lighting lighting; 
     private Camera gameCamera;
-    private Ground ground;
 
     private Color skyColor = new Color(200, 220, 255);
 
@@ -17,7 +16,6 @@ public class GamePanel extends JPanel
     {
         setLayout(new BorderLayout());
         
-        ground = new Ground();
         lighting = new Lighting(new Vector3(1, -1, 0.5), 30, 60);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 6000, 60);
         airplane = new Airplane(this, gameCamera);
@@ -30,7 +28,6 @@ public class GamePanel extends JPanel
         renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH, FlightSimulator.DEFAULT_HEIGHT);
         airplane.setRenderPanel(renderingPanel);
         airplane.startPhysics();
-        renderingPanel.addGameObject(ground);
         renderingPanel.setLighting(lighting);
         renderingPanel.setCamera(gameCamera);
         renderingPanel.setLighting(lighting);
