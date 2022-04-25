@@ -21,7 +21,7 @@ public class Airplane extends GameObject implements ActionListener
         super
         (
             "Airplane",
-            new Mesh("lowPolyPlane1.obj", new Vector3(0, -100, 0), new EulerAngle(), 1, new Color(100, 100, 100), true, false),
+            new Mesh("planeBody.obj", new Vector3(0, 0, 0), new EulerAngle(), 1, new Color(100, 100, 100), true, true),
             new Transform(new Vector3())
         );
         airplaneController = new AirplaneController();
@@ -62,7 +62,6 @@ public class Airplane extends GameObject implements ActionListener
         public boolean rollRight;
         public boolean yawLeft;
         public boolean yawRight;
-        public boolean landingGear;
         public boolean brakes;
 
         public AirplaneController()
@@ -76,7 +75,6 @@ public class Airplane extends GameObject implements ActionListener
             rollRight = false;
             yawLeft = false;
             yawRight = false;
-            landingGear = false;
             brakes = false;
             keyTimer.start();
         }
@@ -100,8 +98,6 @@ public class Airplane extends GameObject implements ActionListener
                 yawLeft = true;
             else if (key == FlightSimulator.settings.yawRight)
                 yawRight = true;
-            else if (key == FlightSimulator.settings.landingGear)
-                landingGear = true;
             else if (key == FlightSimulator.settings.brakes)
                 brakes = true;
         }
@@ -126,8 +122,6 @@ public class Airplane extends GameObject implements ActionListener
                 yawLeft = false;
             else if (key == FlightSimulator.settings.yawRight)
                 yawRight = false;
-            else if (key == FlightSimulator.settings.landingGear)
-                landingGear = false;
             else if (key == FlightSimulator.settings.brakes)
                 brakes = false;
         }
@@ -167,14 +161,9 @@ public class Airplane extends GameObject implements ActionListener
 
         private Vector3 position;
         private Vector3 velocity;
-        private double pitch;
-        private double yaw;
-        private double roll;
         private double velocityPitch;
         private double velocityYaw;
         private double velocityRoll;
-        private Vector3 verticalVector; //vector pointing vertically relative to the airplane, which tells us pitch and roll
-        private Vector3 forwardVector; //vector pointing in the direction of the nose of the airplane, which tells us yaw and pitch
 
         public AirplanePhysics()
         {
@@ -186,14 +175,9 @@ public class Airplane extends GameObject implements ActionListener
 
             position = new Vector3();
             velocity = new Vector3();
-            pitch = 0;
-            yaw = 0;
-            roll = 0;
             velocityPitch = 0;
             velocityRoll = 0;
             velocityYaw = 0;
-            verticalVector = new Vector3(0, 1, 0);
-            forwardVector = new Vector3(0, 0, 1);
         }
 
         public void addForce(Vector3 force)
@@ -235,8 +219,8 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyLift()
         {
-            Vector3 wingsHorizontalMotion = Vector3.projectToPlane(velocity, verticalVector);
-            addForce(Vector3.multiply(verticalVector, wingsHorizontalMotion.getSqrMagnitude()*liftCoefficient));
+            Vector3 wingsHorizontalMotion = Vector3.projectToPlane(velocity, getTransform().getUp());
+            addForce(Vector3.multiply(getTransform().getUp(), wingsHorizontalMotion.getSqrMagnitude()*liftCoefficient));
         }
 
         public void updatePosition()
@@ -257,36 +241,17 @@ public class Airplane extends GameObject implements ActionListener
 
         public void updateOrientation()
         {
-            pitch += velocityPitch;
-            yaw += velocityYaw;
-            roll += velocityRoll;
-            forwardVector = Vector3.angleToVector(yaw, pitch);
-            verticalVector = Vector3.crossProduct(forwardVector, Vector3.angleToVector(yaw+Math.PI/2, pitch));
+            
         }
 
         public void applyThrust(double amount)
         {
-            addForce(Vector3.multiply(forwardVector.getNormalized(), amount*20));
+            addForce(Vector3.multiply(getTransform().getForward(), amount*20));
         }
 
         public Vector3 getPosition()
         {
             return position;
-        }
-
-        public double getPitch()
-        {
-            return pitch;
-        }
-
-        public double getYaw()
-        {
-            return yaw;
-        }
-
-        public double getRoll()
-        {
-            return roll;
         }
 
         public void update()

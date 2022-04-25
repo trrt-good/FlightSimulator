@@ -28,7 +28,8 @@ public class Transform
         Matrix3x3 rotationMatrix = Matrix3x3.axisAngleMatrix(right, angle-rotation.x);
         up = Vector3.applyMatrix(rotationMatrix, up);
         forward = Vector3.applyMatrix(rotationMatrix, forward);
-        gameObject.getMesh().applyMatrix(rotationMatrix);
+        if (gameObject.getMesh() != null)
+            gameObject.getMesh().applyMatrix(rotationMatrix);
         rotation.x = angle;
     }
 
@@ -37,7 +38,8 @@ public class Transform
         Matrix3x3 rotationMatrix = Matrix3x3.axisAngleMatrix(up, angle-rotation.y);
         forward = Vector3.applyMatrix(rotationMatrix, forward);
         right = Vector3.applyMatrix(rotationMatrix, right);
-        gameObject.getMesh().applyMatrix(rotationMatrix);
+        if (gameObject.getMesh() != null)
+            gameObject.getMesh().applyMatrix(rotationMatrix);
         rotation.y = angle;
     }
     
@@ -46,7 +48,8 @@ public class Transform
         Matrix3x3 rotationMatrix = Matrix3x3.axisAngleMatrix(forward, angle-rotation.z);
         up = Vector3.applyMatrix(rotationMatrix, up);
         right = Vector3.applyMatrix(rotationMatrix, right);
-        gameObject.getMesh().applyMatrix(rotationMatrix);
+        if (gameObject.getMesh() != null)
+            gameObject.getMesh().applyMatrix(rotationMatrix);
         rotation.z = angle;
     }
 
@@ -68,28 +71,21 @@ public class Transform
 
     public Vector3 getForward()
     {
-        return forward;
+        return forward.getNormalized();
     }
 
     public Vector3 getUp()
     {
-        return up;
+        return up.getNormalized();
     }
 
     public Vector3 getRight()
     {
-        return right;
+        return right.getNormalized();
     }
 
     public Vector3 getPosition()
     {
-        return position;
+        return position.getNormalized();
     }
-
-    
-    /*
-    TODO: 
-    create a rotate function that rotates the forward, right and up vectors. In order to set the triangles in the mesh to the same rotation,
-    use the forward right and up vectors as a matrix and multiply each triangle by that matrix. 
-    */
 }
