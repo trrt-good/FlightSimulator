@@ -63,7 +63,7 @@ public class AccountPanel extends JPanel
         {
             JPanel panel = new JPanel();
             panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 30));
-            JButton signUpButton = new Button("Sign Up", 30);
+            JButton signUpButton = new Button("Sign Up ", 30);
             signUpButton.addActionListener(new SwitchToSignUpPanel());
             JLabel signUpLabel = new JLabel("Don't have an account?");
             signUpLabel.setForeground(Color.WHITE);
@@ -120,7 +120,7 @@ public class AccountPanel extends JPanel
             usernamePrompt = new TextFieldPanel("Enter a username");
             passworldPrompt = new TextFieldPanel("Set a password");
             confirmPassworldPrompt = new TextFieldPanel("Confirm password");
-            JButton signUpButton = new Button("Sign Up", 30);
+            JButton signUpButton = new Button("Sign Up ", 30);
             signUpButton.addActionListener(new SignUpListener());
             panel.add(usernamePrompt);
             panel.add(passworldPrompt);
