@@ -1,7 +1,4 @@
-"Low Poly Plane" (https://skfb.ly/orFLp) by Qbo2Qbo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-"Low-Poly Gulfstream Aircraft" (https://skfb.ly/6RGzE) by Mauro3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-"Low poly RC Plane" (https://skfb.ly/on9IK) by Thattcher is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-"EA-13 Raven" (https://skfb.ly/6VwnU) by Yo Boy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Plane" (https://skfb.ly/6RGyL) by ideehochzwei is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Java API - https://docs.oracle.com/javase/7/docs/api/
 for rotation matrix things: https://en.wikipedia.org/wiki/Rotation_matrix
 for angles: https://en.wikipedia.org/wiki/Euler_angles
