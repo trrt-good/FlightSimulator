@@ -23,8 +23,6 @@ public class Transform
         gameObject = gameObjectIn;
     }
 
-
-
     public void setPitch(double angle)
     {
         Matrix3x3 rotationMatrix = Matrix3x3.axisAngleMatrix(right, angle-rotation.x);

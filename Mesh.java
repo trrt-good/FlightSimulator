@@ -32,6 +32,11 @@ public class Mesh
         System.out.println("finished in all " + triangles.size() + " triangles in " + (System.nanoTime() - start)/1000000 + "ms");
     }
 
+    protected Mesh()
+    {
+        
+    }
+
     public void rotate(Matrix3x3 rotationMatrix, Vector3 centerOfRotation)
     {
         for (int i = 0; i < triangles.size(); i ++)
