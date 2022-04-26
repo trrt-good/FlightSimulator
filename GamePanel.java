@@ -9,7 +9,7 @@ public class GamePanel extends JPanel
     private Airplane airplane;
     private Lighting lighting; 
     private Camera gameCamera;
-    private Ground ground;
+    private Terrain ground;
 
     private Color skyColor = new Color(200, 220, 255);
 
@@ -17,11 +17,12 @@ public class GamePanel extends JPanel
     {
         setLayout(new BorderLayout());
         
-        lighting = new Lighting(new Vector3(1, -1, 0.5), 30, 60);
-        gameCamera = new Camera(new Vector3(0, 0, -1000), 4000, 10, 60);
+        lighting = new Lighting(new Vector3(1, -1, 1), 30, 200);
+        gameCamera = new Camera(new Vector3(0, 0, -1000), 10000, 10, 60);
         airplane = new Airplane(this, gameCamera);
-        ground = new Ground(-200, 100, 10, 30, 30, 200, new Color(20, 145, 16));
-        gameCamera.setOrbitControls(this, airplane, 1000, 10);
+        ground = new Terrain(-500, -200, 380, 100, 500, 500, 40, 800, new Color(18, 99, 199), new Color(10, 50, 20), Color.WHITE);
+        gameCamera.setFreeControls(this, 500, 10);
+        //gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
     public void paintComponent(Graphics g)
@@ -33,7 +34,7 @@ public class GamePanel extends JPanel
         renderingPanel.setLighting(lighting);
         renderingPanel.setCamera(gameCamera);
         renderingPanel.setLighting(lighting);
-        renderingPanel.setFog(2000, 4000, skyColor);
+        renderingPanel.setFog(8000, 10000, skyColor);
         renderingPanel.addMesh(ground);
         renderingPanel.startRenderUpdates();
         add(renderingPanel);
