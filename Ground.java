@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class Ground extends Mesh
 {
@@ -7,7 +8,6 @@ public class Ground extends Mesh
 
     public Ground(double height, double gridInterval, int gridLength, int gridWidth)
     {
-        super();
         triangles = getTriangles();
         verticies = new Vector3[gridLength][gridWidth];
         for (int x = 0; x < verticies.length; x++)
@@ -22,12 +22,12 @@ public class Ground extends Mesh
         {
             for (int j = 0; j < verticies[i].length-1; j++)
             {
-                triangles.add(new Triangle(this, verticies[j][i], verticies[j+1][i], verticies[j][i+1]));
+                triangles.add(new Triangle(this, verticies[j][i], verticies[j+1][i], verticies[j][i+1], Color.WHITE));
             }
 
             for (int j = 0; j < verticies[i].length-1; j++)
             {
-                triangles.add(new Triangle(this, verticies[j][i+1], verticies[j+1][i], verticies[j+1][i+1]));
+                triangles.add(new Triangle(this, verticies[j][i+1], verticies[j+1][i], verticies[j+1][i+1], Color.WHITE));
             }
         }
     }

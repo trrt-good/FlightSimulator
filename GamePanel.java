@@ -17,7 +17,7 @@ public class GamePanel extends JPanel
         setLayout(new BorderLayout());
         
         lighting = new Lighting(new Vector3(1, -1, 0.5), 30, 60);
-        gameCamera = new Camera(new Vector3(0, 0, -1000), 6000, 60);
+        gameCamera = new Camera(new Vector3(0, 0, -1000), 6000, 10, 60);
         airplane = new Airplane(this, gameCamera);
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }

@@ -19,12 +19,12 @@ public class TimingHelper
         processName = processNameIn;
     }
 
-    public void startTimer()
+    public void startClock()
     {
         startTime = System.nanoTime();
     }
 
-    public void stopTimer()
+    public void stopClock()
     {
         lastProcessTime = mostRecentProcessTime;
         mostRecentProcessTime = System.nanoTime()-startTime;
@@ -32,6 +32,11 @@ public class TimingHelper
             averageProcessTime = mostRecentProcessTime;
         if (lastProcessTime != 0)
             averageProcessTime = (averageProcessTime + mostRecentProcessTime)/2;
+    }
+
+    public double getDeltaTime()
+    {
+        return mostRecentProcessTime/1000000.0;
     }
 
     public static void printSummary()

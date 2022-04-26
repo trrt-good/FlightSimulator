@@ -35,7 +35,7 @@ public class Airplane extends GameObject implements ActionListener
 
     public void setRenderPanel(RenderingPanel renderingPanel)
     {
-        renderingPanel.addGameObject(this);
+        renderingPanel.addMesh(this.getMesh());
     }
 
     public void startPhysics()
