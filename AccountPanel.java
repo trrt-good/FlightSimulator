@@ -41,17 +41,17 @@ public class AccountPanel extends JPanel
     public class LoginPanel extends JPanel
     {
         private TextFieldPanel usernamePrompt;
-        private TextFieldPanel passworldPrompt;
+        private TextFieldPanel passwordPrompt;
         public LoginPanel()
         {
             setLayout(new FlowLayout(FlowLayout.CENTER, 700, 50));
             usernamePrompt = new TextFieldPanel("username");
-            passworldPrompt = new TextFieldPanel("passworld");
+            passwordPrompt = new TextFieldPanel("password");
 
             JButton signInButton = new Button("Sign In", 30);
             signInButton.addActionListener(new SignInListener());
             add(usernamePrompt);
-            add(passworldPrompt);
+            add(passwordPrompt);
             add(signInButton);
             add(makeSignUpButtonPanel());
             setOpaque(false);
@@ -80,12 +80,12 @@ public class AccountPanel extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                if (usernamePrompt.getText() != null && passworldPrompt.getText() != null)
+                if (usernamePrompt.getText() != null && passwordPrompt.getText() != null)
                 {
                     User user = User.getUser(usernamePrompt.getText());
                     if (user != null)
                     {
-                        if (user.getPassword().equals(passworldPrompt.getText()))
+                        if (user.getPassword().equals(passwordPrompt.getText()))
                         {
                             FlightSimulator.user = user;
                             FlightSimulator.flightSim.showPanel("MainMenu");
@@ -110,21 +110,21 @@ public class AccountPanel extends JPanel
     class SignUpPanel extends JPanel
     {
         private TextFieldPanel usernamePrompt;
-        private TextFieldPanel passworldPrompt;
-        private TextFieldPanel confirmPassworldPrompt;
+        private TextFieldPanel passwordPrompt;
+        private TextFieldPanel confirmPasswordPrompt;
         public SignUpPanel()
         {   
             setLayout(new BorderLayout(0, 0));
             JPanel panel = new JPanel();
             panel.setLayout(new FlowLayout(FlowLayout.CENTER, 700, 50));
             usernamePrompt = new TextFieldPanel("Enter a username");
-            passworldPrompt = new TextFieldPanel("Set a password");
-            confirmPassworldPrompt = new TextFieldPanel("Confirm password");
+            passwordPrompt = new TextFieldPanel("Set a password");
+            confirmPasswordPrompt = new TextFieldPanel("Confirm password");
             JButton signUpButton = new Button("Sign Up ", 30);
             signUpButton.addActionListener(new SignUpListener());
             panel.add(usernamePrompt);
-            panel.add(passworldPrompt);
-            panel.add(confirmPassworldPrompt);
+            panel.add(passwordPrompt);
+            panel.add(confirmPasswordPrompt);
             panel.add(signUpButton);
             backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
             backPanel.add(new BackButton(localCardLayout, accountPanel, "Login"));
@@ -140,16 +140,16 @@ public class AccountPanel extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                if (usernamePrompt.getText() != null && passworldPrompt.getText() != null && confirmPassworldPrompt.getText() != null)
+                if (usernamePrompt.getText() != null && passwordPrompt.getText() != null && confirmPasswordPrompt.getText() != null)
                 {
-                    if (!passworldPrompt.getText().equals(confirmPassworldPrompt.getText()))
+                    if (!passwordPrompt.getText().equals(confirmPasswordPrompt.getText()))
                     {
                         System.out.println("Passwords do not match!");
      
                     }
                     else if (User.getUser(usernamePrompt.getText()) == null)
                     {
-                        FlightSimulator.user = new User(usernamePrompt.getText(), confirmPassworldPrompt.getText());
+                        FlightSimulator.user = new User(usernamePrompt.getText(), confirmPasswordPrompt.getText());
                         FlightSimulator.flightSim.showPanel("MainMenu");
                         FlightSimulator.flightSim.updateWelcomeText();
                     }

@@ -163,7 +163,7 @@ public class RenderingPanel extends JPanel implements ActionListener
         fogEnabled = false;
     }
     
-    //
+    //computes the 2d screen coordinates of all the triangles, then paints them on the buffered image. 
     private void computeAndDrawTriangles(Graphics g)
     {
         renderImage.getRaster().setDataElements(0, 0, renderImage.getWidth(), renderImage.getHeight(), blankImagePixelColorData);
