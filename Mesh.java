@@ -21,6 +21,9 @@ public class Mesh
     //a sum of all translations
     private Vector3 totalMovement;
 
+    //the lighting object which was used last to recalculate lighting
+    private Lighting lighting;
+
     //should the back face of the mesh be rendered? (keeping enabled greatly increases preformance, roughly 2x faster)*
     //*however, due to a poor implementation of backFaceCulling, for some cases, it is recommended to dissable this, 
     //which will may sacrafice preformance (especially for larger models), however it will mitigate the
@@ -95,9 +98,22 @@ public class Mesh
     }
     //#endregion
 
-    //recalculates the lighting of each triangle in the mesh based off the given
+    //calculates the lighting of each triangle in the mesh based off the given
     //lighting object
-    public void recalculateLighting(Lighting lighting)
+    public void calculateLighting(Lighting lightingIn)
+    {
+        if (shading)
+        {
+            for (int i = 0; i < triangles.size(); i++)
+            {
+                triangles.get(i).calculateLightingColor(lightingIn);
+            }
+        }
+        lighting = lightingIn;
+    }
+
+    //refreshes the lighting based on the stored lighting object. 
+    public void refreshLighting()
     {
         if (shading)
         {

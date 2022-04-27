@@ -2,6 +2,7 @@ import java.awt.event.KeyEvent;
 
 public class GameSettings 
 {
+    //default settings
     private static final int DEFAULT_THROTTLE_UP = KeyEvent.VK_UP;
     private static final int DEFAULT_THROTTLE_DOWN = KeyEvent.VK_DOWN;
     private static final int DEFAULT_PITCH_UP = KeyEvent.VK_S; 
@@ -17,6 +18,7 @@ public class GameSettings
     private static final double DEFAULT_SENSITIVITY = 10;
     private static final boolean DEFAULT_FOG = true;
 
+    //user's settings 
     public int throttleUp;
     public int throttleDown;
     public int pitchUp;
@@ -37,6 +39,7 @@ public class GameSettings
         restoreDefaults();
     }
 
+    //restores to defaults. 
     public void restoreDefaults()
     {
         throttleUp = DEFAULT_THROTTLE_UP;

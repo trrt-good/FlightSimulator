@@ -1,6 +1,5 @@
 import java.awt.Color;
 import javax.swing.Timer;
-import javax.swing.text.Position;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -32,11 +31,10 @@ public class Airplane extends GameObject implements ActionListener
             new Transform(new Vector3())
         );
 
-        maxEnginePower = 10;
+        maxEnginePower = 25;
         pitchSpeed = 1;
         yawSpeed = 0.5;
         rollSpeed = 1;
-
 
         airplaneController = new AirplaneController();
         groundLevel = -400;
@@ -61,7 +59,8 @@ public class Airplane extends GameObject implements ActionListener
     public void actionPerformed(ActionEvent e) 
     {
         physics.update();
-        physics.applyThrust(throttle);
+        physics.applyThrust(throttle*maxEnginePower);
+        getMesh().refreshLighting();
     }
 
     class AirplaneController implements KeyListener, ActionListener
@@ -270,7 +269,7 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyThrust(double amount)
         {
-            addForce(Vector3.multiply(getTransform().getForward(), amount*20));
+            addForce(Vector3.multiply(getTransform().getForward(), amount));
         }
 
         public Vector3 getPosition()

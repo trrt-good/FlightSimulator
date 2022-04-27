@@ -20,7 +20,7 @@ public class RenderingPanel extends JPanel implements ActionListener
     private ArrayList<Mesh> meshes = new ArrayList<Mesh>(); 
     private ArrayList<Triangle> triangles = new ArrayList<Triangle>(); 
 
-    //timer used to repaint every frame. 
+    //timer used to repaint each frame. 
     private Timer renderUpdater;
 
     //for rendering:
@@ -80,7 +80,8 @@ public class RenderingPanel extends JPanel implements ActionListener
         renderUpdater.start();
 
         //validate and revalidate are necessary in order for paintComponent to 
-        //be called.
+        //be called. Likely because the constructor for this JPanel can be slow
+        //and may cause timing malfunction. 
         validate();
         requestFocusInWindow();
         revalidate();

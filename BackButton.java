@@ -12,6 +12,7 @@ import java.awt.Dimension;
 
 public class BackButton extends JButton implements ActionListener
 {
+    //necessary for switching between cards 
     private CardLayout layout;
     private JPanel parentPanel;
     private String prevPanelName;

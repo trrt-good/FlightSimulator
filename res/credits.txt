@@ -2,7 +2,5 @@
 Java API - https://docs.oracle.com/javase/7/docs/api/
 for rotation matrix things: https://en.wikipedia.org/wiki/Rotation_matrix
 for angles: https://en.wikipedia.org/wiki/Euler_angles
-Wolfram Mathword - used for coding many math functions https://mathworld.wolfram.com/topics/Geometry.html
-https://mathworld.wolfram.com/Point-PlaneDistance.html
-https://en.wikipedia.org/wiki/Perlin_noise
+Wolfram Mathword - used for coding many math functions in the Vector3 class: https://mathworld.wolfram.com/topics/Geometry.html, https://mathworld.wolfram.com/Point-PlaneDistance.html
 Rodrigues' rotation formula: https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation

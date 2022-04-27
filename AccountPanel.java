@@ -17,12 +17,17 @@ import java.awt.Dimension;
 
 public class AccountPanel extends JPanel
 {
+    //this card layout switches between the login and signup pages
     private CardLayout localCardLayout;
     
+    //login and signup panels 
     private JPanel login;
     private JPanel signUp;
+
+    //for the other panels to access 
     private AccountPanel accountPanel;
 
+    //panel for going back to the login page.
     private JPanel backPanel;
 
     public AccountPanel()
@@ -75,6 +80,7 @@ public class AccountPanel extends JPanel
             return panel;
         }
 
+        //listens for the signin button to be called, and gets the user info
         class SignInListener implements ActionListener
         {
             @Override
@@ -93,6 +99,7 @@ public class AccountPanel extends JPanel
                         }
                         else
                         {
+                            //placeholders for pop-up window distplaying the error
                             System.out.println("incorrect password");
                         }
                     }
@@ -135,6 +142,7 @@ public class AccountPanel extends JPanel
             panel.setOpaque(false); 
         }
 
+        //listens for the signup button to be pressed and creates a new user
         class SignUpListener implements ActionListener
         {
             @Override
@@ -209,6 +217,7 @@ public class AccountPanel extends JPanel
         }
     }
 
+    //switches to sign up panel.
     class SwitchToSignUpPanel implements ActionListener
     {
         @Override
@@ -222,8 +231,4 @@ public class AccountPanel extends JPanel
     {
         FlightSimulator.flightSim.paintBackground(this, g);
     }
-
-    
-
-    
 }
