@@ -17,6 +17,9 @@
 
 public class SimplexNoise 
 { // Simplex noise in 2D, 3D and 4D
+
+    //class is just for fun and will likely not be in the final version. 
+
     private static Grad grad3[] = 
     { 
         new Grad(1, 1, 0), new Grad(-1, 1, 0), new Grad(1, -1, 0), new Grad(-1, -1, 0),
