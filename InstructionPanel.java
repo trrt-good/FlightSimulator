@@ -70,7 +70,7 @@ public class InstructionPanel extends JPanel
 
         class NextButtonListener implements ActionListener
         {
-            @Override
+             
             public void actionPerformed(ActionEvent e) 
             {
                 nextSlide();
@@ -79,7 +79,7 @@ public class InstructionPanel extends JPanel
 
         class BackButtonListener implements ActionListener
         {
-            @Override
+             
             public void actionPerformed(ActionEvent e) 
             {
                 prevSlide();

@@ -83,7 +83,7 @@ public class AccountPanel extends JPanel
         //listens for the signin button to be called, and gets the user info
         class SignInListener implements ActionListener
         {
-            @Override
+             
             public void actionPerformed(ActionEvent e) 
             {
                 if (usernamePrompt.getText() != null && passwordPrompt.getText() != null)
@@ -145,7 +145,7 @@ public class AccountPanel extends JPanel
         //listens for the signup button to be pressed and creates a new user
         class SignUpListener implements ActionListener
         {
-            @Override
+             
             public void actionPerformed(ActionEvent e) 
             {
                 if (usernamePrompt.getText() != null && passwordPrompt.getText() != null && confirmPasswordPrompt.getText() != null)
@@ -220,7 +220,7 @@ public class AccountPanel extends JPanel
     //switches to sign up panel.
     class SwitchToSignUpPanel implements ActionListener
     {
-        @Override
+         
         public void actionPerformed(ActionEvent e) 
         {
             showSignUpPanel();

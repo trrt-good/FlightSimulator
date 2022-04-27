@@ -55,7 +55,6 @@ public class Airplane extends GameObject implements ActionListener
         airplaneUpdater.start();
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) 
     {
         physics.update();
@@ -139,7 +138,6 @@ public class Airplane extends GameObject implements ActionListener
                 brakes = false;
         }
 
-        @Override
         public void actionPerformed(ActionEvent e) 
         {
             if (throttleUp && throttle < 100)
