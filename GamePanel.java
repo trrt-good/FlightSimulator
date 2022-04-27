@@ -20,9 +20,9 @@ public class GamePanel extends JPanel
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 200);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 10000, 10, 60);
         airplane = new Airplane(this, gameCamera);
-        ground = new Terrain(-500, -200, 380, 100, 500, 500, 40, 800, new Color(18, 99, 199), new Color(10, 50, 20), Color.WHITE);
-        gameCamera.setFreeControls(this, 500, 10);
-        //gameCamera.setOrbitControls(this, airplane, 1000, 10);
+        ground = new Terrain(-500, -200, 380, 200, 500, 500, 20, 15, new Color(18, 99, 199), new Color(10, 50, 20), Color.WHITE);
+        //gameCamera.setFreeControls(this, 500, 10);
+        gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
     public void paintComponent(Graphics g)

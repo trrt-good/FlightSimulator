@@ -1,5 +1,7 @@
 import java.awt.Color;
 import javax.swing.Timer;
+import javax.swing.text.Position;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
@@ -15,17 +17,29 @@ public class Airplane extends GameObject implements ActionListener
     private AirplaneController airplaneController;
     private AirplanePhysics physics;
     private Timer airplaneUpdater;
+
+    private double maxEnginePower;
+    private double pitchSpeed;
+    private double yawSpeed;
+    private double rollSpeed;
     
     public Airplane(JPanel listenerPanel, Camera camIn)
     {
         super
         (
             "Airplane",
-            new Mesh("planeBody.obj", new Vector3(0, 0, 0), new EulerAngle(), 1, new Color(100, 100, 100), true, true),
+            new Mesh("planeBody.obj", new Vector3(0, 0, 0), new EulerAngle(0, Math.PI/2, 0), 1, new Color(100, 100, 100), true, true),
             new Transform(new Vector3())
         );
+
+        maxEnginePower = 10;
+        pitchSpeed = 1;
+        yawSpeed = 0.5;
+        rollSpeed = 1;
+
+
         airplaneController = new AirplaneController();
-        groundLevel = -600;
+        groundLevel = -400;
         camera = camIn;
         listenerPanel.addKeyListener(airplaneController);
         throttle = 0;
@@ -130,21 +144,21 @@ public class Airplane extends GameObject implements ActionListener
         public void actionPerformed(ActionEvent e) 
         {
             if (throttleUp && throttle < 100)
-                throttle += 0.1;
+                throttle += 0.2;
             if (throttleDown && throttle > 0)
-                throttle -= 0.1;
+                throttle -= 0.2;
             if (pitchUp)
-                physics.addPitchTorque(-0.2);
+                physics.addPitchTorque(-pitchSpeed);
             if (pitchDown)
-                physics.addPitchTorque(0.2);
+                physics.addPitchTorque(pitchSpeed);
             if (rollLeft)
-                physics.addRollTorque(0.2);
+                physics.addRollTorque(rollSpeed);
             if (rollRight)
-                physics.addRollTorque(-0.2);
+                physics.addRollTorque(-rollSpeed);
             if (yawLeft)
-                physics.addYawTorque(-0.2);
+                physics.addYawTorque(-yawSpeed);
             if (yawRight)
-                physics.addYawTorque(0.2);
+                physics.addYawTorque(yawSpeed);
             //TODO: implement landing gear and brakes
         }
     }
@@ -159,7 +173,8 @@ public class Airplane extends GameObject implements ActionListener
         private double angularDragCoefficient;
         //#endregion
 
-        private Vector3 position;
+        private Vector3 physicsPosition;
+        private EulerAngle physicsRotation;
         private Vector3 velocity;
         private double velocityPitch;
         private double velocityYaw;
@@ -169,11 +184,12 @@ public class Airplane extends GameObject implements ActionListener
         {
             gravity = 3;
             mass = 500;
-            liftCoefficient = 1.2;
+            liftCoefficient = 1.1;
             dragCoefficient = 0.1;
             angularDragCoefficient = 0.05;
 
-            position = new Vector3();
+            physicsRotation = new EulerAngle();
+            physicsPosition = new Vector3();
             velocity = new Vector3();
             velocityPitch = 0;
             velocityRoll = 0;
@@ -225,14 +241,15 @@ public class Airplane extends GameObject implements ActionListener
 
         public void updatePosition()
         {
-            if (Vector3.add(position, velocity).y > groundLevel)
-                position.add(velocity);
+            if (Vector3.add(physicsPosition, velocity).y > groundLevel)
+                physicsPosition.add(velocity);
             else
             {
-                position.y = groundLevel;
+                physicsPosition.y = groundLevel;
                 velocity = new Vector3(velocity.x, 0 , velocity.z);
-                position.add(velocity);
+                physicsPosition.add(velocity);
             }
+            getTransform().setPosition(Vector3.add(getTransform().getPosition(), velocity));
             if (camera.getOrbitCamController() != null)
             {
                 camera.getOrbitCamController().updatePosition();
@@ -241,7 +258,14 @@ public class Airplane extends GameObject implements ActionListener
 
         public void updateOrientation()
         {
-            
+            physicsRotation.x += velocityPitch;
+            physicsRotation.y += velocityYaw;
+            physicsRotation.z += velocityRoll;
+
+            getTransform().setPitch(physicsRotation.x);
+            getTransform().setYaw(physicsRotation.y);
+            getTransform().setRoll(physicsRotation.z);
+
         }
 
         public void applyThrust(double amount)
@@ -251,7 +275,7 @@ public class Airplane extends GameObject implements ActionListener
 
         public Vector3 getPosition()
         {
-            return position;
+            return physicsPosition;
         }
 
         public void update()
