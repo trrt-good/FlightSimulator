@@ -141,9 +141,9 @@ public class Airplane extends GameObject implements ActionListener
         public void actionPerformed(ActionEvent e) 
         {
             if (throttleUp && throttle < 100)
-                throttle += 0.2;
+                throttle += 1;
             if (throttleDown && throttle > 0)
-                throttle -= 0.2;
+                throttle -= 1;
             if (pitchUp)
                 physics.addPitchTorque(-pitchSpeed);
             if (pitchDown)
@@ -216,9 +216,8 @@ public class Airplane extends GameObject implements ActionListener
         public void applyDrag()
         {
             Vector3 dragNormalToWings = Vector3.projectToVector(getTransform().getUp(), velocity);
+            Vector3 totalDrag = Vector3.add(Vector3.negate(velocity), Vector3.negate(dragNormalToWings));
             
-            velocity = Vector3.subtract(velocity, Vector3.multiply(velocity, dragCoefficient));
-            velocity = Vector3.subtract(velocity, Vector3.multiply(dragNormalToWings, dragCoefficient));
         }
 
         public void applyAngularDrag()
