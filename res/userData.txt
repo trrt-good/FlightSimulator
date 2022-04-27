@@ -5,8 +5,3 @@ u Tyler
 p 123
 milesFlown 0.0
 completedTraining true
---
-u noob
-p 1
-milesFlown 69.69
-completedTraining true
