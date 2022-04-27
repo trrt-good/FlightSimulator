@@ -33,6 +33,7 @@ public class MainMenu extends JPanel
         return panel;
     }
 
+    //creates the panel on the bottom of the page with the welcome text and an exit button
     public JPanel makeLowerButonPanel()
     {
         JPanel panel = new JPanel();
@@ -49,6 +50,7 @@ public class MainMenu extends JPanel
         return panel;
     }
 
+    //sets the text of the welcome label.
     public void setWelcomeText(String text)
     {
         if (welcomeLabel != null)
@@ -72,6 +74,7 @@ public class MainMenu extends JPanel
         return panel;
     }
 
+    //sets the background
     public void paintComponent(Graphics g)
     {
         FlightSimulator.flightSim.paintBackground(this, g);

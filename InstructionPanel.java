@@ -19,11 +19,14 @@ import java.io.FileNotFoundException;
 
 public class InstructionPanel extends JPanel
 {
+    //the card that holds all the instruction slides.
     private CardLayout instructionsCardLayout;
     private JPanel instructionsPanelHolder;
 
+    //the scanner that reads the instructions text file. 
     private Scanner instructionsReader;
 
+    //slide info
     private int activeSlideIndex; 
     private int numberOfSlides;
 
@@ -113,12 +116,14 @@ public class InstructionPanel extends JPanel
         }
     }
 
+    //moves to the next slide
     private void nextSlide()
     {
         instructionsCardLayout.next(instructionsPanelHolder);
         activeSlideIndex = (activeSlideIndex+1)%numberOfSlides;
     }
 
+    //changes to the prev slide, unless on the first slide where it moves back to the main menu
     private void prevSlide()
     {
         if (activeSlideIndex == 0)
@@ -132,6 +137,7 @@ public class InstructionPanel extends JPanel
         }
     }
 
+    //reads the instructions in the text file
     private ArrayList<String> readInstructionsText()
     {
         ArrayList<String> instructions = new ArrayList<String>();

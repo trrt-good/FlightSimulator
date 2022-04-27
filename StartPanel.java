@@ -40,7 +40,6 @@ class StartPanel extends JPanel implements ActionListener
         return "StartPanel";
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) 
     {
         FlightSimulator.flightSim.showPanel("LoginPanel");

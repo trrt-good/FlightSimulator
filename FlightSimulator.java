@@ -13,34 +13,35 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-/*  SOURCES:
-    java api
-*/
-
 public class FlightSimulator
 {
-    public static GameSettings settings = new GameSettings();
-    public static FlightSimulator flightSim;
-    public static User user;
+    //Final variables
     public static final File RESOURCES_FOLDER = new File("res");
     public static final String FONTSTYLE = "Times";
     public static final Color THEME_COLOR = new Color(50, 110, 184);
-
-
     public static final int DEFAULT_WIDTH = 1366;
     public static final int DEFAULT_HEIGHT = 768;
 
+    //store the essential data for all the classes to have acess to. 
+    public static FlightSimulator flightSim; //the flight sim object in use.
+    public static GameSettings settings = new GameSettings(); //the global settings
+    public static User user; //the current user 
+    
+    //the frame that the program displays.
     private JFrame gameFrame;
 
+    //central card layout that switches between major panels.
     private CardLayout mainCardLayout;
     private JPanel mainCardPanel;
 
+    //all the major panels that are held by the card panel. 
     private StartPanel startPanel;
     private AccountPanel loginPanel;
     private MainMenu mainMenu;
     private InstructionPanel instructionPanel;
     private GamePanel gamePanel;
 
+    //background image 
     private Image backgroundImage;
     
     public static void main(String [] args)

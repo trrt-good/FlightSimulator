@@ -2,6 +2,8 @@ import java.util.List;
 import java.util.ArrayList;
 public class TimingHelper 
 {
+    //for debugging/optimization - will be removed in the final version of the game. 
+
     private static List<TimingHelper> timingHelpers = new ArrayList<TimingHelper>();
     private String processName;
     private long startTime;

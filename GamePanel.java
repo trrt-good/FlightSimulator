@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 
 public class GamePanel extends JPanel
 {
+    //objects for rendering
     private RenderingPanel renderingPanel;
     private Airplane airplane;
     private Lighting lighting; 
@@ -13,6 +14,7 @@ public class GamePanel extends JPanel
 
     private Color skyColor = new Color(200, 220, 255);
 
+    //creates game objects and rendering related objects. 
     public GamePanel()
     {
         setLayout(new BorderLayout());
@@ -25,6 +27,7 @@ public class GamePanel extends JPanel
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
+    //sets up the rendering panel and starts the rendering updates. 
     public void paintComponent(Graphics g)
     {
         requestFocusInWindow();
