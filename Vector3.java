@@ -73,6 +73,11 @@ public class Vector3
         return this;
     }
 
+    public Vector3 getSquare()
+    {
+        return new Vector3(x*x, y*y, z*z);
+    }
+
     //formats the vector into a string for printing. 
     public String toString()
     {

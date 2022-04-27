@@ -183,7 +183,7 @@ public class Airplane extends GameObject implements ActionListener
             mass = 500;
             liftCoefficient = 1.1;
             dragCoefficient = 0.1;
-            angularDragCoefficient = 0.01;
+            angularDragCoefficient = 0.5;
 
             physicsRotation = new EulerAngle();
             physicsPosition = new Vector3();
@@ -216,8 +216,11 @@ public class Airplane extends GameObject implements ActionListener
         public void applyDrag()
         {
             Vector3 dragNormalToWings = Vector3.projectToVector(getTransform().getUp(), velocity);
-            Vector3 totalDrag = Vector3.add(Vector3.negate(velocity), Vector3.negate(dragNormalToWings));
-            
+            Vector3 totalDrag = Vector3.add(velocity, dragNormalToWings);
+            totalDrag = Vector3.multiply(Vector3.negate(totalDrag), velocity.getSqrMagnitude()*dragCoefficient);
+            velocity = Vector3.subtract(velocity, totalDrag);
+            System.out.println(dragNormalToWings + " total drag " + totalDrag);
+
         }
 
         public void applyAngularDrag()
