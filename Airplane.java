@@ -33,11 +33,11 @@ public class Airplane extends GameObject implements ActionListener
 
         maxEnginePower = 25;
         pitchSpeed = 3;
-        yawSpeed = 1;
+        yawSpeed = 3;
         rollSpeed = 3;
 
         airplaneController = new AirplaneController();
-        groundLevel = -400;
+        groundLevel = -600;
         camera = camIn;
         listenerPanel.addKeyListener(airplaneController);
         throttle = 0;
@@ -168,39 +168,38 @@ public class Airplane extends GameObject implements ActionListener
         private double liftCoefficient;
         private double dragCoefficient;
         private double angularDragCoefficient;
+        private double aerodynamicEffectAmount;
         //#endregion
 
         private Vector3 physicsPosition;
         private EulerAngle physicsRotation;
-        private Vector3 localVelocity;
+        private double forwardSpeed;
+        private Vector3 forwardVelocity;
+        private Vector3 velocity;
         private double velocityPitch;
         private double velocityYaw;
         private double velocityRoll;
 
         public AirplanePhysics()
         {
-            gravity = 9.8;
-            mass = 1100;
-            liftCoefficient = 1.8;
+            gravity = 3;
+            mass = 1000;
+            liftCoefficient = 1.5;
             dragCoefficient = 0.05;
             angularDragCoefficient = 0.1;
+            aerodynamicEffectAmount = 0.001;
 
             physicsRotation = new EulerAngle();
             physicsPosition = new Vector3();
-            localVelocity = new Vector3();
+            velocity = new Vector3();
             velocityPitch = 0;
             velocityRoll = 0;
             velocityYaw = 0;
         }
 
-        public void addForceLocal(Vector3 force)
+        public void addForce(Vector3 force)
         {
-            localVelocity.add(Vector3.multiply(force, 1/mass));
-        }
-
-        public void addForceWorld(Vector3 force)
-        {
-            localVelocity.add(Vector3.multiply(getTransform().transformToLocal(force), 1/mass));
+            velocity.add(Vector3.multiply(force, 1/mass));
         }
 
         public void addPitchTorque(double amt)
@@ -220,13 +219,18 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyDrag()
         {
-            Vector3 verticalDrag = Vector3.multiply(Vector3.projectToVector(getTransform().getUp(), localVelocity), dragCoefficient);
-            Vector3 forwardDrag = Vector3
-            Vector3 totalDrag = Vector3.add(Vector3.multiply(localVelocity, dragCoefficient/10), verticalDrag);
-            totalDrag = Vector3.multiply(Vector3.negate(totalDrag), dragCoefficient);
-            localVelocity = Vector3.add(localVelocity, totalDrag);
-            System.out.println(verticalDrag + " total drag " + totalDrag);
+            if (velocity.getSqrMagnitude() > 0)
+            {
+                velocity = Vector3.subtract(velocity, Vector3.multiply(velocity, dragCoefficient*velocity.getMagnitude()/100));
+                Vector3 verticalDrag = Vector3.projectToVector(velocity, getTransform().getUp());
+                velocity = Vector3.subtract(velocity, Vector3.multiply(verticalDrag, dragCoefficient*verticalDrag.getMagnitude()));
+            }
+        }
 
+        public void calculateForward()
+        {
+            forwardVelocity = Vector3.projectToVector(velocity, getTransform().getForward());
+            forwardSpeed = forwardVelocity.getMagnitude();
         }
 
         public void applyAngularDrag()
@@ -238,27 +242,46 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyGravity()
         {
-            localVelocity.add(new Vector3(0, -gravity, 0));
+            velocity.add(new Vector3(0, -gravity, 0));
         }
 
         public void applyLift()
         {
-            Vector3 wingsHorizontalMotion = Vector3.projectToPlane(localVelocity, getTransform().getUp());
-            addForceLocal(Vector3.multiply(getTransform().getUp(), wingsHorizontalMotion.getSqrMagnitude()*liftCoefficient));
-            //System.out.println(wingsHorizontalMotion.getSqrMagnitude()*liftCoefficient);
+            addForce(Vector3.multiply(Vector3.crossProduct(velocity, getTransform().getRight()).getNormalized(), forwardSpeed*forwardSpeed*liftCoefficient));
+        }
+
+        //gives the effect of the plane naturally alligning itself to the direction it's pointing.
+        public void applyAerodynamicEffect()
+        {
+            if (velocity.getSqrMagnitude() > 0)
+            {
+                //compares the direction we are facing to the direction we are moving
+                double correctionFactor = Vector3.dotProduct(getTransform().getForward(), velocity.getNormalized());
+                //squaring gives it a better rolloff curve for the effect
+                correctionFactor *= correctionFactor;
+
+                //calculates the new velocity by bending the current velocity towards the 
+                //direction we are facing, by the correction factor.
+                velocity = Vector3.lerp(velocity, Vector3.projectToVector(velocity, getTransform().getForward()), correctionFactor*forwardSpeed*aerodynamicEffectAmount/100); //time.deltatime
+                
+                //also rotate the plane towards the direction of movement.
+                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), correctionFactor*forwardSpeed*aerodynamicEffectAmount));
+                physicsRotation.y += ((direction.x < 0)? -Math.atan(direction.z/direction.x)-Math.PI/2 : Math.PI/2-Math.atan(direction.z/direction.x));
+                physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z));
+            }
         }
 
         public void updatePosition()
         {
-            if (Vector3.add(physicsPosition, localVelocity).y > groundLevel)
-                physicsPosition.add(localVelocity);
+            if (Vector3.add(physicsPosition, velocity).y > groundLevel)
+                physicsPosition.add(velocity);
             else
             {
                 physicsPosition.y = groundLevel;
-                localVelocity = new Vector3(localVelocity.x, 0 , localVelocity.z);
-                physicsPosition.add(localVelocity);
+                velocity = new Vector3(velocity.x, 0 , velocity.z);
+                physicsPosition.add(velocity);
             }
-            getTransform().setPosition(Vector3.add(getTransform().getPosition(), localVelocity));
+            getTransform().setPosition(Vector3.add(getTransform().getPosition(), velocity));
             if (camera.getOrbitCamController() != null)
             {
                 camera.getOrbitCamController().updatePosition();
@@ -279,7 +302,7 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyThrust(double amount)
         {
-            addForceLocal(Vector3.multiply(getTransform().getForward(), amount));
+            addForce(Vector3.multiply(getTransform().getForward(), amount));
         }
 
         public Vector3 getPosition()
@@ -289,12 +312,18 @@ public class Airplane extends GameObject implements ActionListener
 
         public void update()
         {
-            updateOrientation();
-            updatePosition();
+            calculateForward();
+            applyAerodynamicEffect();
+            applyGravity(); 
+            applyLift(); 
             applyDrag();
             applyAngularDrag();
-            applyLift();
-            applyGravity();            
+            updateOrientation();
+            updatePosition();
+            
+            
+            
+                      
         }
     }
 
