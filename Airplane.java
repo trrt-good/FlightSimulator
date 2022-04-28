@@ -229,8 +229,7 @@ public class Airplane extends GameObject implements ActionListener
 
         public void calculateForward()
         {
-            forwardVelocity = Vector3.projectToVector(velocity, getTransform().getForward());
-            forwardSpeed = forwardVelocity.getMagnitude();
+            forwardSpeed = Vector3.dotProduct(velocity, getTransform().getForward());
         }
 
         public void applyAngularDrag()
