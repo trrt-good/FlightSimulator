@@ -174,7 +174,6 @@ public class Airplane extends GameObject implements ActionListener
         private Vector3 physicsPosition;
         private EulerAngle physicsRotation;
         private double forwardSpeed;
-        private Vector3 forwardVelocity;
         private Vector3 velocity;
         private double velocityPitch;
         private double velocityYaw;
