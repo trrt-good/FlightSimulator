@@ -41,16 +41,16 @@ public class Airplane extends GameObject implements ActionListener
             new Transform(new Vector3(0, 0, 0))
         );
  
-        maxEnginePower = 58;
-        pitchSpeed = 40;
-        yawSpeed = 40;
-        rollSpeed = 40;
-        gravity = 9.8;
-        mass = 1100;
-        liftCoefficient = 1;
-        dragCoefficient = 1;
-        angularDragCoefficient = 1.5;
-        aerodynamicEffectAmount = 0.04;
+        maxEnginePower = 250;
+        pitchSpeed = 30;
+        yawSpeed = 30;
+        rollSpeed = 30;
+        gravity = 30;
+        mass = 1000;
+        liftCoefficient = 15;
+        dragCoefficient = 0.5;
+        angularDragCoefficient = 1;
+        aerodynamicEffectAmount = 0.01;
         groundLevel = -400;
         
         deltaTime = 0.01;
@@ -266,10 +266,10 @@ public class Airplane extends GameObject implements ActionListener
  
                 //calculates the new velocity by bending the current velocity towards the  
                 //direction we are facing, by the correction factor.
-                velocity = Vector3.lerp(velocity, Vector3.projectToVector(velocity, getTransform().getForward()), correctionFactor*forwardSpeed*aerodynamicEffectAmount*deltaTime/1000);  
+                velocity = Vector3.lerp(velocity, Vector3.projectToVector(velocity, getTransform().getForward()), correctionFactor*forwardSpeed*aerodynamicEffectAmount*deltaTime/5);  
                  
                 //also rotate the plane towards the direction of movement.
-                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), correctionFactor*forwardSpeed*aerodynamicEffectAmount*deltaTime));
+                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), aerodynamicEffectAmount*deltaTime*forwardSpeed*correctionFactor));
                 physicsRotation.y += ((direction.x < 0)? -Math.atan(direction.z/direction.x)-Math.PI/2 : Math.PI/2-Math.atan(direction.z/direction.x));
                 physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z));
             }
