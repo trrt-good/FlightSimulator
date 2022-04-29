@@ -45,15 +45,14 @@ public class Airplane extends GameObject implements ActionListener
         maxEnginePower = 25000;
         pitchSpeed = 20;
         yawSpeed = 20;
-        rollSpeed = 20;
+        rollSpeed = 30;
         gravity = 30;
         mass = 1000;
         liftCoefficient = 15;
         dragCoefficient = 0.5;
         angularDragCoefficient = 1;
         aerodynamicEffectAmount = 0.01;
-        yawRollEffectAmount = 2;
-
+        yawRollEffectAmount = 3;
         groundLevel = -400;
         
         deltaTime = 0.01;
@@ -237,7 +236,7 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyYawRollEffect()
         {
-            if (velocity.x != 0 && velocity.z != 0)
+            if (velocity.x != 0 && velocity.z != 0 && (airplaneController.yawLeft || airplaneController.yawRight))
             {
                 double rollAmount = Vector3.dotProduct(Vector3.projectToPlane(velocity, getTransform().getUp()).getNormalized(), getTransform().getRight());
                 physicsRotation.z += rollAmount*yawRollEffectAmount*deltaTime;
