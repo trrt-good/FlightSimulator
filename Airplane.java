@@ -27,6 +27,7 @@ public class Airplane extends GameObject implements ActionListener
     private double liftCoefficient;
     private double dragCoefficient;
     private double angularDragCoefficient;
+    private double yawRollEffectAmount;
     private double aerodynamicEffectAmount;
     
     private double groundLevel;  
@@ -41,16 +42,18 @@ public class Airplane extends GameObject implements ActionListener
             new Transform(new Vector3(0, 0, 0))
         );
  
-        maxEnginePower = 250;
-        pitchSpeed = 30;
-        yawSpeed = 30;
-        rollSpeed = 30;
+        maxEnginePower = 25000;
+        pitchSpeed = 20;
+        yawSpeed = 20;
+        rollSpeed = 20;
         gravity = 30;
         mass = 1000;
         liftCoefficient = 15;
         dragCoefficient = 0.5;
         angularDragCoefficient = 1;
         aerodynamicEffectAmount = 0.01;
+        yawRollEffectAmount = 2;
+
         groundLevel = -400;
         
         deltaTime = 0.01;
@@ -60,7 +63,7 @@ public class Airplane extends GameObject implements ActionListener
         listenerPanel.addKeyListener(airplaneController);
         throttle = 0;
         physics = new AirplanePhysics();
-        airplaneUpdater = new Timer(10, this);
+        airplaneUpdater = new Timer(30, this);
     }
  
     public void setRenderPanel(RenderingPanel renderingPanel)
@@ -161,10 +164,10 @@ public class Airplane extends GameObject implements ActionListener
  
         public void actionPerformed(ActionEvent e)  
         {
-            if (throttleUp && throttle < 100)
-                throttle += 1;
+            if (throttleUp && throttle < 1)
+                throttle += 0.1*deltaTime;
             if (throttleDown && throttle > 0)
-                throttle -= 1;
+                throttle -= 0.1*deltaTime;
             if (pitchUp)
                 physics.addPitchTorque(-pitchSpeed);
             if (pitchDown)
@@ -231,6 +234,15 @@ public class Airplane extends GameObject implements ActionListener
                 velocity = Vector3.subtract(velocity, Vector3.multiply(verticalDrag, dragCoefficient*verticalDrag.getMagnitude()*deltaTime));
             }
         }
+
+        public void applyYawRollEffect()
+        {
+            if (velocity.x != 0 && velocity.z != 0)
+            {
+                double rollAmount = Vector3.dotProduct(Vector3.projectToPlane(velocity, getTransform().getUp()).getNormalized(), getTransform().getRight());
+                physicsRotation.z += rollAmount*yawRollEffectAmount*deltaTime;
+            }
+        }
  
         public void calculateForward()
         {
@@ -269,7 +281,7 @@ public class Airplane extends GameObject implements ActionListener
                 velocity = Vector3.lerp(velocity, Vector3.projectToVector(velocity, getTransform().getForward()), correctionFactor*forwardSpeed*aerodynamicEffectAmount*deltaTime/5);  
                  
                 //also rotate the plane towards the direction of movement.
-                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), aerodynamicEffectAmount*deltaTime*forwardSpeed*correctionFactor));
+                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), aerodynamicEffectAmount*deltaTime*forwardSpeed*1.5));
                 physicsRotation.y += ((direction.x < 0)? -Math.atan(direction.z/direction.x)-Math.PI/2 : Math.PI/2-Math.atan(direction.z/direction.x));
                 physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z));
             }
@@ -318,6 +330,7 @@ public class Airplane extends GameObject implements ActionListener
         {
             calculateForward();
             applyAerodynamicEffect();
+            applyYawRollEffect();
             applyGravity();  
             applyLift();  
             applyDrag();
