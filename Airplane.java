@@ -78,6 +78,23 @@ public class Airplane extends GameObject implements ActionListener
  
     public void actionPerformed(ActionEvent e)  
     {
+        if (airplaneController.throttleUp && throttle < 1)
+            throttle += 0.1*deltaTime;
+        if (airplaneController.throttleDown && throttle > 0)
+            throttle -= 0.1*deltaTime;
+        if (airplaneController.pitchUp)
+            physics.addPitchTorque(-pitchSpeed);
+        if (airplaneController.pitchDown)
+            physics.addPitchTorque(pitchSpeed);
+        if (airplaneController.rollLeft)
+            physics.addRollTorque(rollSpeed);
+        if (airplaneController.rollRight)
+            physics.addRollTorque(-rollSpeed);
+        if (airplaneController.yawLeft)
+            physics.addYawTorque(-yawSpeed);
+        if (airplaneController.yawRight)
+            physics.addYawTorque(yawSpeed);
+
         physics.update();
         physics.applyThrust(throttle*maxEnginePower);
         getMesh().refreshLighting();
@@ -85,10 +102,8 @@ public class Airplane extends GameObject implements ActionListener
         lastFrame = System.nanoTime()/1000000000.0;
     }
  
-    class AirplaneController implements KeyListener, ActionListener
+    class AirplaneController implements KeyListener
     {
-        public Timer keyTimer;
- 
         public boolean throttleUp;
         public boolean throttleDown;
         public boolean pitchUp;
@@ -101,7 +116,6 @@ public class Airplane extends GameObject implements ActionListener
  
         public AirplaneController()
         {
-            keyTimer = new Timer(5, this);
             throttleUp = false;
             throttleDown = false;
             pitchUp = false;
@@ -111,7 +125,6 @@ public class Airplane extends GameObject implements ActionListener
             yawLeft = false;
             yawRight = false;
             brakes = false;
-            keyTimer.start();
         }
  
         public void keyPressed(KeyEvent e)  
@@ -159,27 +172,6 @@ public class Airplane extends GameObject implements ActionListener
                 yawRight = false;
             else if (key == FlightSimulator.settings.brakes)
                 brakes = false;
-        }
- 
-        public void actionPerformed(ActionEvent e)  
-        {
-            if (throttleUp && throttle < 1)
-                throttle += 0.1*deltaTime;
-            if (throttleDown && throttle > 0)
-                throttle -= 0.1*deltaTime;
-            if (pitchUp)
-                physics.addPitchTorque(-pitchSpeed);
-            if (pitchDown)
-                physics.addPitchTorque(pitchSpeed);
-            if (rollLeft)
-                physics.addRollTorque(rollSpeed);
-            if (rollRight)
-                physics.addRollTorque(-rollSpeed);
-            if (yawLeft)
-                physics.addYawTorque(-yawSpeed);
-            if (yawRight)
-                physics.addYawTorque(yawSpeed);
-            //TODO: implement landing gear and brakes
         }
     }
  
