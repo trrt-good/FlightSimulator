@@ -39,7 +39,7 @@ public class GamePanel extends JPanel
         renderingPanel.setLighting(lighting);
         renderingPanel.setFog(8000, 10000, skyColor);
         renderingPanel.addMesh(ground);
-        renderingPanel.startRenderUpdates();
+        renderingPanel.start();
         add(renderingPanel);
         validate();
     }

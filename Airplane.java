@@ -336,11 +336,7 @@ public class Airplane extends GameObject implements ActionListener
             applyDrag();
             applyAngularDrag();
             updateOrientation();
-            updatePosition();
-             
-             
-             
-                       
+            updatePosition();  
         }
     }
  
