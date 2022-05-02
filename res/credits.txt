@@ -1,4 +1,4 @@
-"Plane" (https://skfb.ly/6RGyL) by ideehochzwei is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+"Low-poly Airplane" (https://skfb.ly/6U86y) by MaX3Dd is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Java API - https://docs.oracle.com/javase/7/docs/api/
 for rotation matrix things: https://en.wikipedia.org/wiki/Rotation_matrix
 for angles: https://en.wikipedia.org/wiki/Euler_angles

@@ -38,7 +38,7 @@ public class Airplane extends GameObject implements ActionListener
         super
         (
             "Airplane",
-            new Mesh("airplane.obj", "diffuse.png", new Vector3(0, 0, 0), new EulerAngle(0, 0, 0), 2, new Color(100, 100, 100), true, true),
+            new Mesh("airplane.obj", "airplaneTexture.png", new Vector3(0, 0, 0), new EulerAngle(0, 0, 0), 2, new Color(100, 100, 100), true, true),
             new Transform(new Vector3(0, 0, 0))
         );
  
@@ -52,7 +52,7 @@ public class Airplane extends GameObject implements ActionListener
         dragCoefficient = 0.5;
         angularDragCoefficient = 1;
         aerodynamicEffectAmount = 0.01;
-        yawRollEffectAmount = 3;
+        yawRollEffectAmount = 30;
         groundLevel = -400;
         
         deltaTime = 0.01;
@@ -228,9 +228,10 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyYawRollEffect()
         {
-            if (velocity.x != 0 && velocity.z != 0 && (airplaneController.yawLeft || airplaneController.yawRight))
+            if (velocity.x != 0 && velocity.z != 0)
             {
                 double rollAmount = Vector3.dotProduct(Vector3.projectToPlane(velocity, getTransform().getUp()).getNormalized(), getTransform().getRight());
+                rollAmount *= rollAmount *rollAmount;
                 physicsRotation.z += rollAmount*yawRollEffectAmount*deltaTime;
             }
         }
