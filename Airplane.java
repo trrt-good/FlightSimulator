@@ -38,7 +38,7 @@ public class Airplane extends GameObject implements ActionListener
         super
         (
             "Airplane",
-            new Mesh("planeBody.obj", new Vector3(0, 0, 0), new EulerAngle(0, Math.PI/2, 0), 1, new Color(100, 100, 100), true, true),
+            new Mesh("airplane.obj", "diffuse.png", new Vector3(0, 0, 0), new EulerAngle(0, 0, 0), 2, new Color(100, 100, 100), true, true),
             new Transform(new Vector3(0, 0, 0))
         );
  
