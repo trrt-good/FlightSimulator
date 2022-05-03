@@ -3,6 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.StringTokenizer;
+
+import javax.annotation.processing.Filer;
 
 import java.io.PrintWriter;
 
@@ -16,6 +19,7 @@ public class User
     private boolean completedTraining; //has this user completed flight training or not?
     private String username;
     private String password;
+    private GameSettings userSettings;
     
     //constructor for creating a NEW user. This automatically writes the user into the file.
     public User(String usernameIn, String passwordIn)
@@ -30,16 +34,18 @@ public class User
         fileWriter.append("\np " + password);
         fileWriter.append("\nmilesFlown " + milesFlown);
         fileWriter.append("\ncompletedTraining " + completedTraining);
+        fileWriter.append("\nsettings " + new GameSettings().toString());
         fileWriter.close();
     }
 
     //private constructor which allows this class to create a custom user object based on information in the user data file.
-    private User(String usernameIn, String passwordIn, boolean completedTrainingIn, double milesFlownIn)
+    private User(String usernameIn, String passwordIn, boolean completedTrainingIn, double milesFlownIn, GameSettings gameSettings)
     {
         username = usernameIn;
         password = passwordIn;
         milesFlown = milesFlownIn;
         completedTraining = completedTrainingIn;
+        userSettings = gameSettings;
     }
 
     //writes the data of the User instance into ACCOUNT_DATA_FILE.
@@ -62,6 +68,8 @@ public class User
                 fileWriter.println("milesFlown " + milesFlown);
                 fileReader.nextLine();
                 fileWriter.println("completedTraining " + completedTraining);
+                fileReader.nextLine();
+                fileWriter.println("settings " + userSettings.toString());
                 break;
             }
         }
@@ -94,7 +102,18 @@ public class User
                     String pass = fileReader.nextLine().substring(2);
                     double miles = Double.parseDouble(fileReader.nextLine().substring(11));
                     boolean completedTraining = Boolean.parseBoolean(fileReader.nextLine().substring(18));
-                    user = new User(line.substring(2), pass, completedTraining, miles);
+                    StringTokenizer settingsTokens = new StringTokenizer(fileReader.nextLine());
+                    settingsTokens.nextToken();
+                    GameSettings newSettings = new GameSettings
+                    (
+                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
+                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
+                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
+                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
+                        Integer.parseInt(settingsTokens.nextToken()), Double.parseDouble(settingsTokens.nextToken()),
+                        Double.parseDouble(settingsTokens.nextToken()), Boolean.parseBoolean(settingsTokens.nextToken())
+                    );
+                    user = new User(line.substring(2), pass, completedTraining, miles, newSettings);
                     break;
                 }
             }
@@ -154,6 +173,11 @@ public class User
     public boolean getCompletedTraining()
     {
         return completedTraining;
+    }
+
+    public GameSettings getSettings()
+    {
+        return userSettings;
     }
 
     public void setMilesFlown(double miles)
