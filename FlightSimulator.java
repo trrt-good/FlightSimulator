@@ -24,7 +24,6 @@ public class FlightSimulator
 
     //store the essential data for all the classes to have acess to. 
     public static FlightSimulator flightSim; //the flight sim object in use.
-    public static GameSettings settings = new GameSettings(); //the global settings
     public static User user; //the current user 
     
     //the frame that the program displays.

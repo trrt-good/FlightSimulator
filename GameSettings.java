@@ -11,7 +11,6 @@ public class GameSettings
     private static final int DEFAULT_ROLL_RIGHT = KeyEvent.VK_D;
     private static final int DEFAULT_YAW_LEFT = KeyEvent.VK_Q;
     private static final int DEFAULT_YAW_RIGHT = KeyEvent.VK_E;
-    private static final int DEFAULT_LANDING_GEAR = KeyEvent.VK_G;
     private static final int DEFAULT_BRAKES = KeyEvent.VK_B;
 
     private static final double DEFAULT_FOV = 60;
@@ -27,7 +26,6 @@ public class GameSettings
     public int rollRight;
     public int yawLeft;
     public int yawRight;
-    public int landingGear;
     public int brakes;
 
     public double fov;
@@ -37,6 +35,22 @@ public class GameSettings
     public GameSettings()
     {
         restoreDefaults();
+    }
+
+    public GameSettings(int thUp, int thDown, int pUp, int pDown, int rLeft, int rRight, int yLeft, int yRight, int b, double fv, double sens, boolean fg)
+    {
+        throttleUp = thUp;
+        throttleDown = thDown;
+        pitchUp = pUp;
+        pitchDown = pDown;
+        rollLeft = rLeft;
+        rollRight = rRight;
+        yawLeft = yLeft;
+        yawRight = yRight;
+        brakes = b;
+        fov = fv;
+        sensitivity = sens;
+        fog = fg;
     }
 
     //restores to defaults. 
@@ -50,11 +64,15 @@ public class GameSettings
         rollRight = DEFAULT_ROLL_RIGHT;
         yawLeft = DEFAULT_YAW_LEFT;
         yawRight = DEFAULT_YAW_RIGHT;
-        landingGear = DEFAULT_LANDING_GEAR;
         brakes = DEFAULT_BRAKES;
         
         fov = DEFAULT_FOV;
         sensitivity = DEFAULT_SENSITIVITY;
         fog = DEFAULT_FOG;
+    }
+
+    public String toString()
+    {
+        return String.format(" %d %d %d %d %d %d %d %d %d %f %f %b", throttleUp, throttleDown, pitchUp, pitchDown, rollLeft, rollRight, yawLeft, yawRight, brakes, fov, sensitivity, fog);
     }
 }

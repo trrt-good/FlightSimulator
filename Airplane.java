@@ -130,23 +130,23 @@ public class Airplane extends GameObject implements ActionListener
         public void keyPressed(KeyEvent e)  
         {
             int key = e.getKeyCode();
-            if (key == FlightSimulator.settings.throttleUp)
+            if (key == FlightSimulator.user.getSettings().throttleUp)
                 throttleUp = true;
-            else if (key == FlightSimulator.settings.throttleDown)
+            else if (key == FlightSimulator.user.getSettings().throttleDown)
                 throttleDown = true;
-            else if (key == FlightSimulator.settings.pitchUp)
+            else if (key == FlightSimulator.user.getSettings().pitchUp)
                 pitchUp = true;
-            else if (key == FlightSimulator.settings.pitchDown)
+            else if (key == FlightSimulator.user.getSettings().pitchDown)
                 pitchDown = true;
-            else if (key == FlightSimulator.settings.rollLeft)
+            else if (key == FlightSimulator.user.getSettings().rollLeft)
                 rollLeft = true;
-            else if (key == FlightSimulator.settings.rollRight)
+            else if (key == FlightSimulator.user.getSettings().rollRight)
                 rollRight = true;
-            else if (key == FlightSimulator.settings.yawLeft)
+            else if (key == FlightSimulator.user.getSettings().yawLeft)
                 yawLeft = true;
-            else if (key == FlightSimulator.settings.yawRight)
+            else if (key == FlightSimulator.user.getSettings().yawRight)
                 yawRight = true;
-            else if (key == FlightSimulator.settings.brakes)
+            else if (key == FlightSimulator.user.getSettings().brakes)
                 brakes = true;
         }
  
@@ -154,23 +154,23 @@ public class Airplane extends GameObject implements ActionListener
         public void keyReleased(KeyEvent e)  
         {
             int key = e.getKeyCode();
-            if (key == FlightSimulator.settings.throttleUp)
+            if (key == FlightSimulator.user.getSettings().throttleUp)
                 throttleUp = false;
-            else if (key == FlightSimulator.settings.throttleDown)
+            else if (key == FlightSimulator.user.getSettings().throttleDown)
                 throttleDown = false;
-            else if (key == FlightSimulator.settings.pitchUp)
+            else if (key == FlightSimulator.user.getSettings().pitchUp)
                 pitchUp = false;
-            else if (key == FlightSimulator.settings.pitchDown)
+            else if (key == FlightSimulator.user.getSettings().pitchDown)
                 pitchDown = false;
-            else if (key == FlightSimulator.settings.rollLeft)
+            else if (key == FlightSimulator.user.getSettings().rollLeft)
                 rollLeft = false;
-            else if (key == FlightSimulator.settings.rollRight)
+            else if (key == FlightSimulator.user.getSettings().rollRight)
                 rollRight = false;
-            else if (key == FlightSimulator.settings.yawLeft)
+            else if (key == FlightSimulator.user.getSettings().yawLeft)
                 yawLeft = false;
-            else if (key == FlightSimulator.settings.yawRight)
+            else if (key == FlightSimulator.user.getSettings().yawRight)
                 yawRight = false;
-            else if (key == FlightSimulator.settings.brakes)
+            else if (key == FlightSimulator.user.getSettings().brakes)
                 brakes = false;
         }
     }
