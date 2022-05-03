@@ -19,7 +19,7 @@ public class GamePanel extends JPanel
     {
         setLayout(new BorderLayout());
         
-        lighting = new Lighting(new Vector3(1, -1, 1), 30, 200);
+        lighting = new Lighting(new Vector3(1, -1, 1), 30, 100);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 10000, 10, 60);
         airplane = new Airplane(this, gameCamera);
         ground = new Terrain(-500, -200, 380, 200, 500, 500, 20, 15, new Color(18, 99, 199), new Color(10, 50, 20), Color.WHITE);
