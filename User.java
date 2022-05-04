@@ -4,9 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-
-import javax.annotation.processing.Filer;
-
 import java.io.PrintWriter;
 
 public class User 
@@ -29,12 +26,13 @@ public class User
         password = passwordIn;
         milesFlown = 0;
         completedTraining = false;
+        userSettings = new GameSettings();
         fileWriter.append("\n--");
         fileWriter.append("\nu " + username);
         fileWriter.append("\np " + password);
         fileWriter.append("\nmilesFlown " + milesFlown);
         fileWriter.append("\ncompletedTraining " + completedTraining);
-        fileWriter.append("\nsettings " + new GameSettings().toString());
+        fileWriter.append("\nsettings " + userSettings.toString());
         fileWriter.close();
     }
 
@@ -102,16 +100,16 @@ public class User
                     String pass = fileReader.nextLine().substring(2);
                     double miles = Double.parseDouble(fileReader.nextLine().substring(11));
                     boolean completedTraining = Boolean.parseBoolean(fileReader.nextLine().substring(18));
-                    StringTokenizer settingsTokens = new StringTokenizer(fileReader.nextLine());
-                    settingsTokens.nextToken();
+                    StringTokenizer settingsLine = new StringTokenizer(fileReader.nextLine());
+                    settingsLine.nextToken();
                     GameSettings newSettings = new GameSettings
                     (
-                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
-                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
-                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
-                        Integer.parseInt(settingsTokens.nextToken()), Integer.parseInt(settingsTokens.nextToken()),
-                        Integer.parseInt(settingsTokens.nextToken()), Double.parseDouble(settingsTokens.nextToken()),
-                        Double.parseDouble(settingsTokens.nextToken()), Boolean.parseBoolean(settingsTokens.nextToken())
+                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
+                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
+                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
+                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
+                        Integer.parseInt(settingsLine.nextToken()), Double.parseDouble(settingsLine.nextToken()),
+                        Double.parseDouble(settingsLine.nextToken()), Boolean.parseBoolean(settingsLine.nextToken())
                     );
                     user = new User(line.substring(2), pass, completedTraining, miles, newSettings);
                     break;
