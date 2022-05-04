@@ -32,6 +32,8 @@ public class GamePanel extends JPanel
     {
         requestFocusInWindow();
         renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH, FlightSimulator.DEFAULT_HEIGHT);
+        gameCamera.setFov(FlightSimulator.user.getSettings().fov);
+        gameCamera.setSensitivity(FlightSimulator.user.getSettings().sensitivity);
         airplane.setRenderPanel(renderingPanel);
         airplane.startPhysics();
         renderingPanel.setLighting(lighting);
