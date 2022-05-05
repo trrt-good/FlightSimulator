@@ -200,13 +200,12 @@ public class RenderingPanel extends JPanel implements Runnable
     public void start()
     {
         validate();
-        requestFocusInWindow();
         revalidate();
         if (renderingThread == null)
         {
-            renderingThread = new Thread(this, "Rendering Panel Thread");
-            renderingThread.start();
             threadRunning = true;
+            renderingThread = new Thread(this, "Rendering");
+            renderingThread.start();
         }
     }
 
@@ -229,10 +228,18 @@ public class RenderingPanel extends JPanel implements Runnable
         }
     }
 
-    public void stop()
+    public void stopThread()
     {
-        threadRunning = false;
-        renderingThread = null;
+        try
+        {
+            threadRunning = false;
+            renderingThread.interrupt();
+            renderingThread = null;
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     //calculates the three screen coordinates of a single triangle in world space, based off the orientation and position of the camera. 

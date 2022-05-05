@@ -76,14 +76,13 @@ public class Airplane extends GameObject implements ActionListener
     {
         physicsEnabled = true;
         airplaneUpdater.start();
-        airplaneUpdater.setRepeats(true);
         lastFrame = System.currentTimeMillis();
     }
 
     public void stopPhysics()
     {
         physicsEnabled = false;
-        airplaneUpdater.setRepeats(false);
+        airplaneUpdater.stop();
     }
  
     public void actionPerformed(ActionEvent e)  

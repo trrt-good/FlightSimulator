@@ -15,7 +15,7 @@ public class GamePanel extends JPanel implements KeyListener
     private Camera gameCamera;
     private Terrain ground;
 
-    private boolean paused;
+    private static boolean paused;
 
     private Color skyColor = new Color(200, 220, 255);
 
@@ -69,8 +69,11 @@ public class GamePanel extends JPanel implements KeyListener
 
     public void keyPressed(KeyEvent e) 
     {
+        requestFocusInWindow();
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
         {
+            System.out.println(Thread.currentThread());
+            System.out.println(2);
             if (paused)
             {
                 paused = false;
@@ -81,9 +84,14 @@ public class GamePanel extends JPanel implements KeyListener
             {
                 paused = true;
                 airplane.stopPhysics();
-                renderingPanel.stop();
+                renderingPanel.stopThread();
             }
         }
+    }
+
+    public static boolean isPaused()
+    {
+        return paused;
     }
 
     public void keyTyped(KeyEvent e) {}

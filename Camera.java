@@ -85,6 +85,8 @@ public class Camera
         //changes the distance based on the mouse movement. 
         public void mouseWheelMoved(MouseWheelEvent e) 
         {
+            if (GamePanel.isPaused())
+                return;
             distance = Math.max(minDistance, Math.min(distance + e.getWheelRotation()*30, maxDistance));
             difference = Vector3.multiply(directionUnit, distance);
             updatePosition();
@@ -93,6 +95,8 @@ public class Camera
         //pans the camera 
         public void mouseDragged(MouseEvent e) 
         {
+            if (GamePanel.isPaused())
+                return;
             directionUnit = Vector3.rotateAroundYaxis(directionUnit, (e.getX()-prevX)/(2000/sensitivity));
             if (vAngle > -maxAngle && (e.getY()-prevY)/(200/sensitivity) > 0)
                 directionUnit = Vector3.rotateAroundYaxis(Vector3.rotateAroundXaxis(Vector3.rotateAroundYaxis(directionUnit, -hAngle*0.017453292519943295), (e.getY()-prevY)/(2000/sensitivity)), hAngle*0.017453292519943295);
@@ -120,6 +124,8 @@ public class Camera
         //updates the position of the camera to be around the focusObject.
         public void updatePosition()
         {
+            if (GamePanel.isPaused())
+                return;
             position = Vector3.add(focusObj.getTransform().getPosition(), difference);
         }
 
