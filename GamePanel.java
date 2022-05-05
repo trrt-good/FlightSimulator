@@ -1,10 +1,14 @@
+import javax.swing.Action;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GamePanel extends JPanel implements KeyListener
 {
@@ -24,6 +28,7 @@ public class GamePanel extends JPanel implements KeyListener
     {
         setLayout(new BorderLayout());
         addKeyListener(this);
+        setUpSidePanel();
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 150);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 30000, 10, 60);
         airplane = new Airplane(this, gameCamera);
@@ -36,7 +41,7 @@ public class GamePanel extends JPanel implements KeyListener
     public void paintComponent(Graphics g)
     {
         requestFocusInWindow();
-        renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH, FlightSimulator.DEFAULT_HEIGHT);
+        renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/5, FlightSimulator.DEFAULT_HEIGHT);
         gameCamera.setFov(FlightSimulator.user.getSettings().fov);
         gameCamera.setSensitivity(FlightSimulator.user.getSettings().sensitivity);
         airplane.setRenderPanel(renderingPanel);
@@ -58,11 +63,22 @@ public class GamePanel extends JPanel implements KeyListener
         JPanel sidePanel = new JPanel();
         sidePanel.setBackground(new Color(50, 50, 50));
         sidePanel.setPreferredSize(new Dimension(FlightSimulator.DEFAULT_WIDTH/5, 100));
-        this.add(sidePanel);
-
+        sidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+        Button pauseButton = new Button("Pause (esc key)", 30);
+        pauseButton.addActionListener(new PauseListener());
+        Button mainMenuButton = new Button("Main Menu", 30);
+        mainMenuButton.addActionListener(MainMenu.getMainMenuPanelSwitcher());
+        Button settingsButton = new Button("Settings", 30);
+        settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher());
+        Button controlsButton = new Button("Controls", 30);
+        sidePanel.add(pauseButton);
+        sidePanel.add(mainMenuButton);
+        sidePanel.add(settingsButton);
+        sidePanel.add(controlsButton);
+        this.add(sidePanel, BorderLayout.EAST);
     }
 
-    public String getName()
+    public static String name()
     {
         return "GamePanel";
     }
@@ -72,20 +88,23 @@ public class GamePanel extends JPanel implements KeyListener
         requestFocusInWindow();
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
         {
-            System.out.println(Thread.currentThread());
-            System.out.println(2);
-            if (paused)
-            {
-                paused = false;
-                airplane.startPhysics();
-                renderingPanel.start();
-            }
-            else
-            {
-                paused = true;
-                airplane.stopPhysics();
-                renderingPanel.stopThread();
-            }
+            togglePause();
+        }
+    }
+
+    public void togglePause()
+    {
+        if (paused)
+        {
+            paused = false;
+            airplane.startPhysics();
+            renderingPanel.start();
+        }
+        else
+        {
+            paused = true;
+            airplane.stopPhysics();
+            renderingPanel.stopThread();
         }
     }
 
@@ -96,4 +115,26 @@ public class GamePanel extends JPanel implements KeyListener
 
     public void keyTyped(KeyEvent e) {}
     public void keyReleased(KeyEvent e) {}
+
+    public static SwitchToGamePanelListener getGamePanelSwitcher()
+    {
+        return new SwitchToGamePanelListener();
+    }
+
+    static class SwitchToGamePanelListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            if (FlightSimulator.user.getCompletedTraining())
+                FlightSimulator.flightSim.showPanel(name());
+        }
+    }
+
+    class PauseListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            togglePause();
+        }
+    }
 }

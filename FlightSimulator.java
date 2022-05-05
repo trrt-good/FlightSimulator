@@ -39,6 +39,7 @@ public class FlightSimulator
     private MainMenu mainMenu;
     private InstructionPanel instructionPanel;
     private GamePanel gamePanel;
+    private SettingsPanel settingsPanel;
 
     //background image 
     private Image backgroundImage;
@@ -58,13 +59,15 @@ public class FlightSimulator
         mainMenu = new MainMenu();
         instructionPanel = new InstructionPanel();
         gamePanel = new GamePanel();
+        settingsPanel = new SettingsPanel();
 
         createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         addPanelToCards(startPanel, startPanel.getName());
         addPanelToCards(loginPanel, loginPanel.getName());
-        addPanelToCards(mainMenu, mainMenu.getName());
-        addPanelToCards(instructionPanel, instructionPanel.getName());
-        addPanelToCards(gamePanel, gamePanel.getName());
+        addPanelToCards(mainMenu, MainMenu.name());
+        addPanelToCards(instructionPanel, InstructionPanel.name());
+        addPanelToCards(gamePanel, GamePanel.name());
+        addPanelToCards(settingsPanel, SettingsPanel.name());
         showPanel(startPanel.getName());
     }
 

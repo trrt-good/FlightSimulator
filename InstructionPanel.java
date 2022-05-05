@@ -167,8 +167,21 @@ public class InstructionPanel extends JPanel
         return instructions;
     }
 
-    public String getName()
+    public static String name()
     {
         return "InstructionPanel";
+    }
+
+    public static SwitchToInstructionPanelListener getInstructionPanelSwitcher()
+    {
+        return new SwitchToInstructionPanelListener();
+    }
+
+    static class SwitchToInstructionPanelListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
+        {
+            FlightSimulator.flightSim.showPanel(name());
+        }
     }
 }

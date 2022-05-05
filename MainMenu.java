@@ -63,10 +63,11 @@ public class MainMenu extends JPanel
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 50));
         Button learnToFlyButton = new Button("Learn to fly", 30, 250, 60);
-        learnToFlyButton.addActionListener(new LearnToFlyButtonListener());
+        learnToFlyButton.addActionListener(InstructionPanel.getInstructionPanelSwitcher());
         Button freePlayButton = new Button("Free play", 30, 250, 60);
-        freePlayButton.addActionListener(new FreePlayButtonListener());
+        freePlayButton.addActionListener(GamePanel.getGamePanelSwitcher());
         Button settingsButton = new Button("Settings", 30, 250, 60);
+        settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher());
         panel.add(learnToFlyButton);
         panel.add(freePlayButton);
         panel.add(settingsButton);
@@ -80,17 +81,9 @@ public class MainMenu extends JPanel
         FlightSimulator.flightSim.paintBackground(this, g);
     }
 
-    public String getName()
+    public static String name()
     {
         return "MainMenu";
-    }
-
-    public class LearnToFlyButtonListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
-            FlightSimulator.flightSim.showPanel("InstructionPanel");
-        }
     }
 
     public class ExitButtonListener implements ActionListener
@@ -101,14 +94,16 @@ public class MainMenu extends JPanel
         }
     }
 
-    public class FreePlayButtonListener implements ActionListener
+    public static SwitchToMainMenuPanelListener getMainMenuPanelSwitcher()
     {
-        public void actionPerformed(ActionEvent e)
+        return new SwitchToMainMenuPanelListener();
+    }
+
+    static class SwitchToMainMenuPanelListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e) 
         {
-            if (FlightSimulator.user.getCompletedTraining())
-            {
-                FlightSimulator.flightSim.showPanel("GamePanel");
-            }
+            FlightSimulator.flightSim.showPanel(name());
         }
     }
 }
