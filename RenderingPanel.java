@@ -10,7 +10,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
-import java.time.chrono.ThaiBuddhistChronology;
 
 public class RenderingPanel extends JPanel implements Runnable
 {

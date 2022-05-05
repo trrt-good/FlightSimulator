@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
-import java.net.PasswordAuthentication;
 import java.awt.event.KeyEvent;
 
 public class GamePanel extends JPanel implements KeyListener
