@@ -17,6 +17,7 @@ public class Airplane extends GameObject implements ActionListener
     private Timer airplaneUpdater;
     private double deltaTime; //the time in seconds since last update.  
     private double lastFrame;
+    private boolean physicsEnabled;
  
     private double maxEnginePower;
     private double pitchSpeed;
@@ -57,6 +58,7 @@ public class Airplane extends GameObject implements ActionListener
         
         deltaTime = 0.01;
         lastFrame = 0;
+        physicsEnabled = false;
         airplaneController = new AirplaneController();
         camera = camIn;
         listenerPanel.addKeyListener(airplaneController);
@@ -72,8 +74,16 @@ public class Airplane extends GameObject implements ActionListener
  
     public void startPhysics()
     {
+        physicsEnabled = true;
         airplaneUpdater.start();
-        lastFrame = System.nanoTime()/1000000000.0;
+        airplaneUpdater.setRepeats(true);
+        lastFrame = System.currentTimeMillis();
+    }
+
+    public void stopPhysics()
+    {
+        physicsEnabled = false;
+        airplaneUpdater.setRepeats(false);
     }
  
     public void actionPerformed(ActionEvent e)  
@@ -98,8 +108,8 @@ public class Airplane extends GameObject implements ActionListener
         physics.update();
         physics.applyThrust(throttle*maxEnginePower);
         getMesh().refreshLighting();
-        deltaTime = System.nanoTime()/1000000000.0 - lastFrame;
-        lastFrame = System.nanoTime()/1000000000.0;
+        deltaTime = (System.currentTimeMillis() - lastFrame)/1000.0;
+        lastFrame = System.currentTimeMillis();
     }
  
     class AirplaneController implements KeyListener
@@ -129,49 +139,55 @@ public class Airplane extends GameObject implements ActionListener
  
         public void keyPressed(KeyEvent e)  
         {
-            int key = e.getKeyCode();
-            if (key == FlightSimulator.user.getSettings().throttleUp)
-                throttleUp = true;
-            else if (key == FlightSimulator.user.getSettings().throttleDown)
-                throttleDown = true;
-            else if (key == FlightSimulator.user.getSettings().pitchUp)
-                pitchUp = true;
-            else if (key == FlightSimulator.user.getSettings().pitchDown)
-                pitchDown = true;
-            else if (key == FlightSimulator.user.getSettings().rollLeft)
-                rollLeft = true;
-            else if (key == FlightSimulator.user.getSettings().rollRight)
-                rollRight = true;
-            else if (key == FlightSimulator.user.getSettings().yawLeft)
-                yawLeft = true;
-            else if (key == FlightSimulator.user.getSettings().yawRight)
-                yawRight = true;
-            else if (key == FlightSimulator.user.getSettings().brakes)
-                brakes = true;
+            if (physicsEnabled)
+            {
+                int key = e.getKeyCode();
+                if (key == FlightSimulator.user.getSettings().throttleUp)
+                    throttleUp = true;
+                else if (key == FlightSimulator.user.getSettings().throttleDown)
+                    throttleDown = true;
+                else if (key == FlightSimulator.user.getSettings().pitchUp)
+                    pitchUp = true;
+                else if (key == FlightSimulator.user.getSettings().pitchDown)
+                    pitchDown = true;
+                else if (key == FlightSimulator.user.getSettings().rollLeft)
+                    rollLeft = true;
+                else if (key == FlightSimulator.user.getSettings().rollRight)
+                    rollRight = true;
+                else if (key == FlightSimulator.user.getSettings().yawLeft)
+                    yawLeft = true;
+                else if (key == FlightSimulator.user.getSettings().yawRight)
+                    yawRight = true;
+                else if (key == FlightSimulator.user.getSettings().brakes)
+                    brakes = true;
+            }
         }
  
         public void keyTyped(KeyEvent e) {}
         public void keyReleased(KeyEvent e)  
         {
-            int key = e.getKeyCode();
-            if (key == FlightSimulator.user.getSettings().throttleUp)
-                throttleUp = false;
-            else if (key == FlightSimulator.user.getSettings().throttleDown)
-                throttleDown = false;
-            else if (key == FlightSimulator.user.getSettings().pitchUp)
-                pitchUp = false;
-            else if (key == FlightSimulator.user.getSettings().pitchDown)
-                pitchDown = false;
-            else if (key == FlightSimulator.user.getSettings().rollLeft)
-                rollLeft = false;
-            else if (key == FlightSimulator.user.getSettings().rollRight)
-                rollRight = false;
-            else if (key == FlightSimulator.user.getSettings().yawLeft)
-                yawLeft = false;
-            else if (key == FlightSimulator.user.getSettings().yawRight)
-                yawRight = false;
-            else if (key == FlightSimulator.user.getSettings().brakes)
-                brakes = false;
+            if (physicsEnabled)
+            {
+                int key = e.getKeyCode();
+                if (key == FlightSimulator.user.getSettings().throttleUp)
+                    throttleUp = false;
+                else if (key == FlightSimulator.user.getSettings().throttleDown)
+                    throttleDown = false;
+                else if (key == FlightSimulator.user.getSettings().pitchUp)
+                    pitchUp = false;
+                else if (key == FlightSimulator.user.getSettings().pitchDown)
+                    pitchDown = false;
+                else if (key == FlightSimulator.user.getSettings().rollLeft)
+                    rollLeft = false;
+                else if (key == FlightSimulator.user.getSettings().rollRight)
+                    rollRight = false;
+                else if (key == FlightSimulator.user.getSettings().yawLeft)
+                    yawLeft = false;
+                else if (key == FlightSimulator.user.getSettings().yawRight)
+                    yawRight = false;
+                else if (key == FlightSimulator.user.getSettings().brakes)
+                    brakes = false;
+            }
         }
     }
  
@@ -228,7 +244,7 @@ public class Airplane extends GameObject implements ActionListener
 
         public void applyYawRollEffect()
         {
-            if (velocity.x != 0 && velocity.z != 0)
+            if (velocity.x != 0 && velocity.z != 0 && (airplaneController.yawLeft || airplaneController.yawRight))
             {
                 double rollAmount = Vector3.dotProduct(Vector3.projectToPlane(velocity, getTransform().getUp()).getNormalized(), getTransform().getRight());
                 rollAmount *= rollAmount *rollAmount;
