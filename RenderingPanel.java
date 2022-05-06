@@ -201,6 +201,7 @@ public class RenderingPanel extends JPanel implements Runnable
     {
         validate();
         revalidate();
+        System.out.println("start");
         if (renderingThread == null)
         {
             threadRunning = true;
@@ -211,7 +212,7 @@ public class RenderingPanel extends JPanel implements Runnable
 
     public void run() 
     {
-        while(true)
+        while(threadRunning)
         {
             if (fps > 0)
             {
@@ -222,21 +223,21 @@ public class RenderingPanel extends JPanel implements Runnable
                 catch (InterruptedException e)
                 {}
             }
-            repaint();
-            if (!threadRunning)
-                break;
+            //repaint();
         }
+        System.out.println("stoppedRunning");
     }
 
     public void stopThread()
     {
         try
         {
+            System.out.println("Stop");
             threadRunning = false;
             renderingThread.interrupt();
             renderingThread = null;
         }
-        catch (Exception e)
+        catch (SecurityException e)
         {
 
         }

@@ -99,16 +99,15 @@ public class AccountPanel extends JPanel
                         }
                         else
                         {
-                            //placeholders for pop-up window distplaying the error
-                            System.out.println("incorrect password");
+                            new PopupFrame("Incorrect Password");
                         }
                     }
                     else
-                        System.out.println("could not find user");
+                        new PopupFrame("No such user");
                 }
                 else
                 {
-                    System.out.println("Re-enter info");
+                    new PopupFrame("Missing info");
                 }
             }
         }
@@ -152,8 +151,7 @@ public class AccountPanel extends JPanel
                 {
                     if (!passwordPrompt.getText().equals(confirmPasswordPrompt.getText()))
                     {
-                        System.out.println("Passwords do not match!");
-     
+                        new PopupFrame("Passwords do not match!");
                     }
                     else if (User.getUser(usernamePrompt.getText()) == null)
                     {
@@ -163,15 +161,14 @@ public class AccountPanel extends JPanel
                     }
                     else
                     {
-                        System.out.println("Username already taken!");
+                        new PopupFrame("Username already taken");
+
                     }
                 }
                 else
                 {
-                    System.out.println("Re-enter info");
-                }
-
-                
+                    new PopupFrame("Missing info");
+                } 
             }
         }
     }
@@ -188,9 +185,9 @@ public class AccountPanel extends JPanel
     
     //This class is for each textfield input area, which implements an action
     //listener so I can get the text entered into the fields 
-    class TextFieldPanel extends JPanel implements ActionListener
+    class TextFieldPanel extends JPanel
     {
-        private String text;
+        private JTextField textField;
         public TextFieldPanel(String prompt)
         {
             setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
@@ -198,9 +195,8 @@ public class AccountPanel extends JPanel
             promptLabel.setForeground(Color.WHITE);
             promptLabel.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
             add(promptLabel);
-            JTextField textField = new JTextField("", 10);
+            textField = new JTextField("", 10);
             textField.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 30));
-            textField.addActionListener(this);
             setOpaque(false);
             add(textField);
             setPreferredSize(new Dimension(260, 100));
@@ -208,12 +204,7 @@ public class AccountPanel extends JPanel
         
         public String getText()
         {
-            return text;
-        }
-        
-        public void actionPerformed(ActionEvent evt)
-        {
-            text = evt.getActionCommand();
+            return textField.getText();
         }
     }
 
