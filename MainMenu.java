@@ -67,7 +67,7 @@ public class MainMenu extends JPanel
         Button freePlayButton = new Button("Free play", 30, 250, 60);
         freePlayButton.addActionListener(GamePanel.getGamePanelSwitcher());
         Button settingsButton = new Button("Settings", 30, 250, 60);
-        settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher());
+        settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher(MainMenu.name()));
         panel.add(learnToFlyButton);
         panel.add(freePlayButton);
         panel.add(settingsButton);

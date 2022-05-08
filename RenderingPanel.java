@@ -80,7 +80,7 @@ public class RenderingPanel extends JPanel implements Runnable
         Arrays.fill(blankImagePixelColorData, convertToIntRGB(backgroundColor));
     }
 
-    public void paintComponent(Graphics g) 
+    protected void paintComponent(Graphics g) 
     {
         totalFrameTime.stopClock();
         totalFrameTime.startClock();
@@ -164,6 +164,7 @@ public class RenderingPanel extends JPanel implements Runnable
     {
         trianglesCalculateTime.startClock();
 
+        renderPlaneWidth = camera.getRenderPlaneWidth();
         camPos = camera.getPosition();
         camDirection = camera.getDirectionVector();
         renderPlane = new Plane(Vector3.add(Vector3.multiply(camDirection, camera.getRenderPlaneDistance()), camPos), camDirection);
@@ -201,7 +202,6 @@ public class RenderingPanel extends JPanel implements Runnable
     {
         validate();
         revalidate();
-        System.out.println("start");
         if (renderingThread == null)
         {
             threadRunning = true;
@@ -223,16 +223,14 @@ public class RenderingPanel extends JPanel implements Runnable
                 catch (InterruptedException e)
                 {}
             }
-            //repaint();
+            this.repaint();
         }
-        System.out.println("stoppedRunning");
     }
 
     public void stopThread()
     {
         try
         {
-            System.out.println("Stop");
             threadRunning = false;
             renderingThread.interrupt();
             renderingThread = null;

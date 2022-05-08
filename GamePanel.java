@@ -40,14 +40,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         gameCamera = new Camera(new Vector3(0, 0, -1000), 30000, 10, 60);
         airplane = new Airplane(this, gameCamera);
         ground = new Terrain(-500, -200, 2000, 750, 500, 500, 0.02, 30, new Color(18, 99, 199), new Color(10, 50, 20), new Color(230, 230, 230));
-        //gameCamera.setFreeControls(this, 500, 10);
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
     //sets up the rendering panel and starts the rendering updates. 
-    public void paintComponent(Graphics g)
+    protected void paintComponent(Graphics g)
     {
-        setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 30));
+        g.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 30));
         requestFocusInWindow();
         if (renderingPanel == null)
         {
@@ -69,9 +68,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
         if (paused)
         {
-            g.drawString("PAUSED", 300, 200);
+            g.drawRect(10, 10, 1000, 1000);
+            g.drawString("PAUSED", FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/5 + 10, 50);
         }
-        System.out.println("paintcomp");
     }
 
     public void setUpSidePanel()
@@ -83,8 +82,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         Button mainMenuButton = new Button("Main Menu", 30);
         mainMenuButton.addActionListener(MainMenu.getMainMenuPanelSwitcher());
         Button settingsButton = new Button("Settings", 30);
-        settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher());
+        settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher(GamePanel.name()));
         Button controlsButton = new Button("Controls", 30);
+        controlsButton.addActionListener(ControlsPanel.getControlsSwitcher(GamePanel.name()));
         sidePanel.add(mainMenuButton);
         sidePanel.add(settingsButton);
         sidePanel.add(controlsButton);
@@ -114,7 +114,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         }
         else
         {
-            //repaint();
+            repaint();
             paused = true;
             airplane.stopPhysics();
             renderingPanel.stopThread();
@@ -125,7 +125,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
     {
         if (!paused)
         {
-            //repaint();
+            repaint();
             paused = true;
             airplane.stopPhysics();
             renderingPanel.stopThread();
@@ -140,6 +140,12 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             airplane.startPhysics();
             renderingPanel.start();
         }
+    }
+
+    public void updateSettings()
+    {
+        gameCamera.setFov(FlightSimulator.user.getSettings().fov);
+        gameCamera.setSensitivity(FlightSimulator.user.getSettings().sensitivity);
     }
 
     public static boolean isPaused()
@@ -184,10 +190,12 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
     public void focusGained(FocusEvent e) 
     {
         unpause();
-        System.out.println("focused");
+        repaint();
+        updateSettings();
     }
     public void focusLost(FocusEvent e) 
     {
+        repaint();
         pause();
     }
     public void mouseEntered(MouseEvent e) {}

@@ -40,6 +40,7 @@ public class FlightSimulator
     private InstructionPanel instructionPanel;
     private GamePanel gamePanel;
     private SettingsPanel settingsPanel;
+    private ControlsPanel controlsPanel;
 
     //background image 
     private Image backgroundImage;
@@ -54,20 +55,24 @@ public class FlightSimulator
     //  central card layout
     public void startGame()
     {
+        createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
         startPanel = new StartPanel();
         loginPanel = new AccountPanel();
         mainMenu = new MainMenu();
         instructionPanel = new InstructionPanel();
         gamePanel = new GamePanel();
         settingsPanel = new SettingsPanel();
+        controlsPanel = new ControlsPanel();
 
-        createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        
         addPanelToCards(startPanel, startPanel.getName());
         addPanelToCards(loginPanel, loginPanel.getName());
         addPanelToCards(mainMenu, MainMenu.name());
         addPanelToCards(instructionPanel, InstructionPanel.name());
         addPanelToCards(gamePanel, GamePanel.name());
         addPanelToCards(settingsPanel, SettingsPanel.name());
+        addPanelToCards(controlsPanel, ControlsPanel.name());
         showPanel(startPanel.getName());
     }
 
@@ -125,7 +130,27 @@ public class FlightSimulator
     {
         return backgroundImage;
     }
+
+    public CardLayout getCardLayout()
+    {
+        return mainCardLayout;
+    }
+
+    public JPanel getCardPanelHolder()
+    {
+        return mainCardPanel;
+    }
     
+    public SettingsPanel getSettingsPanel()
+    {
+        return settingsPanel;
+    }
+
+    public ControlsPanel getControlsPanel()
+    {
+        return controlsPanel;
+    }
+
     //a shortcut for drawing the background image scaled to the given panel size.
     //used by other panels to draw the background as to not write unnecessary code 
     public void paintBackground(JPanel panel, Graphics g)

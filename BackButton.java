@@ -50,6 +50,11 @@ public class BackButton extends JButton implements ActionListener
         setPreferredSize(new Dimension(150, 50));
     }
 
+    public void setDestination(String name)
+    {
+        prevPanelName = name;
+    }
+
     //checks if the previous name variable is null, if it isn't then switch to that
     //panel, if it is null, simply show the previous panel in the card layout.
      
