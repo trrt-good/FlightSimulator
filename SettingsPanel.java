@@ -1,4 +1,3 @@
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -87,7 +86,6 @@ public class SettingsPanel extends JPanel implements FocusListener
     class SliderSetting extends JPanel implements ChangeListener
     {        
         private JTextField valueDisplay;
-        private String valueDisplayText;
         private JSlider slider;
 
         public SliderSetting(String settingName, int min, int max)
@@ -99,7 +97,6 @@ public class SettingsPanel extends JPanel implements FocusListener
             settingLabel.setForeground(Color.WHITE);
             valueDisplay = new JTextField(5);
             valueDisplay.setEditable(false);
-            valueDisplayText = "";
             valueDisplay.setFont(new Font(FlightSimulator.FONTSTYLE, Font.BOLD, 40));
             slider = new JSlider(min, max);
             slider.setOpaque(false);
