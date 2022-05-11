@@ -30,7 +30,7 @@ public class Vector3
     //returns the magnitude of the vector
     public double getMagnitude()
     {
-        return Math.sqrt((x*x+z*z) + y*y);
+        return Math.sqrt(x*x+z*z + y*y);
     }
 
     //returns the squared magnitude of the vector (faster)
@@ -54,7 +54,7 @@ public class Vector3
         else
             return this;
     }
-
+    
     //adds the specified vector to itself, as well as returning the result.
     public Vector3 add(Vector3 vectorIn)
     {
@@ -82,6 +82,13 @@ public class Vector3
     public String toString()
     {
         return new String(String.format("[%.2f, %.2f, %.2f]", x, y, z));
+    }
+
+    public void set(Vector3 vector)
+    {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
     }
 
 //============================= static methods ===============================
@@ -132,7 +139,8 @@ public class Vector3
     //returns a vector with the specified rotation
     public static Vector3 angleToVector(double yaw, double pitch)
     {
-        return new Vector3(Math.sin(yaw)*Math.cos(pitch), Math.sin(pitch), Math.cos(yaw)*Math.cos(pitch));
+        double cosPitch = Math.cos(pitch);
+        return new Vector3(Math.sin(yaw)*cosPitch, Math.sin(pitch), Math.cos(yaw)*cosPitch);
     }
 
     //returns the point at which the vector "lineDirection" starting at point "linePoint" intersects "plane"

@@ -39,7 +39,7 @@ public class Airplane extends GameObject implements ActionListener
         super
         (
             "Airplane",
-            new Mesh("airplane.obj", "airplaneTexture.png", new Vector3(0, 0, 0), new EulerAngle(0, 0, 0), 2, new Color(100, 100, 100), true, true),
+            new Mesh("airplane.obj", "airplaneTexture.png", new Vector3(0, 0, 0), new EulerAngle(0, 0, 0), 2, true, true),
             new Transform(new Vector3(0, 0, 0))
         );
  
@@ -192,7 +192,7 @@ public class Airplane extends GameObject implements ActionListener
  
     class AirplanePhysics
     {
- 
+
         private Vector3 physicsPosition;
         private EulerAngle physicsRotation;
         private double forwardSpeed;
