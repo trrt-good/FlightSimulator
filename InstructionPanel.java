@@ -13,9 +13,13 @@ import java.awt.Insets;
 import java.util.ArrayList;
 
 import java.io.File;
-
+import javax.imageio.ImageIO;
+import java.awt.Image;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import java.awt.Graphics;
 
 public class InstructionPanel extends JPanel
 {
@@ -30,6 +34,8 @@ public class InstructionPanel extends JPanel
     private int activeSlideIndex; 
     private int numberOfSlides;
 
+    private Image[] instructionImages; 
+
     //constructs an instructions panel which has a card layout for switching between
     //slides in the instructions.  
     public InstructionPanel()
@@ -38,12 +44,14 @@ public class InstructionPanel extends JPanel
         numberOfSlides = instructionsText.size();
         activeSlideIndex = 0;
         setLayout(new BorderLayout());
+        instructionImages = new Image[numberOfSlides];
         instructionsCardLayout = new CardLayout();
         instructionsPanelHolder = new JPanel();
         instructionsPanelHolder.setLayout(instructionsCardLayout);
         InstructionChangerPanel instructionChangerPanel = new InstructionChangerPanel();
         add(instructionChangerPanel, BorderLayout.NORTH);
         add(instructionsPanelHolder, BorderLayout.CENTER);
+        loadImages();
         for (int i = 0; i < instructionsText.size(); i++)
         {
             InstructionSlide slide = new InstructionSlide(instructionsText.get(i));
@@ -51,6 +59,30 @@ public class InstructionPanel extends JPanel
         }
         instructionsCardLayout.show(instructionsPanelHolder, "" + activeSlideIndex);
     }  
+
+    public void loadImages()
+    {
+        for (int i = 0; i < instructionImages.length; i ++)
+        {
+            Image image = null;
+            try
+            {
+                image = ImageIO.read(new File(FlightSimulator.RESOURCES_FOLDER, "Slide" + (i+1) + ".png"));
+            }
+            catch (IOException e)
+            {
+                try
+                {
+                    image = ImageIO.read(new File(FlightSimulator.RESOURCES_FOLDER, "Slide" + (i+1) + ".jpg"));
+                }
+                catch (IOException f)
+                {
+                    System.err.println("ERROR: could not find instruction image");
+                }
+            }
+            instructionImages[i] = image;
+        }
+    }
 
     //this jpanel is the top panel which is used to switch between instruction slides
     class InstructionChangerPanel extends JPanel
@@ -95,10 +127,10 @@ public class InstructionPanel extends JPanel
             setLayout(new GridLayout(2, 1));
             JTextArea textArea = new JTextArea();
             textArea.setText(text);
-            //TODO: Read instructions for each slid from a text file
             textArea.setEnabled(false);
             textArea.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 20));
-            textArea.setForeground(Color.BLACK);
+            textArea.setBackground(Color.BLACK);
+            textArea.setForeground(Color.WHITE);
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
             textArea.setMargin(new Insets(20, 20, 20, 20));
@@ -109,9 +141,9 @@ public class InstructionPanel extends JPanel
 
         class PicturePanel extends JPanel
         {
-            public void paintComponent()
+            public void paintComponent(Graphics g)
             {
-                
+                g.drawImage(instructionImages[activeSlideIndex], 300, -10, (int)(instructionImages[activeSlideIndex].getWidth(this)/(double)instructionImages[activeSlideIndex].getHeight(this)*400), 400, this);
             }
         }
     }

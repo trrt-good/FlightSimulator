@@ -1,30 +1,58 @@
 #1
-instructions slide 1 
-airplanes 
+Slide 1: rotation basics
+
+When reffering to airplanes, rotation is defined using three main components:
+
+Pitch: like nodding you head up and down
+Yaw: like shaking your head side to side
+Roll: like tilting your head so that you maintain the direction you are looking. 
 #2
-instructions slide 2 
-other things
+Slide 2: Airplane parts
+
+Basic airplanes have four main parts for controlling flying:
+
+Ailerons: located on the wing of the airplane, these control roll.
+Elevators: located on the horiztonal stabilizer of the airplane (small wings at the back), these control pitch.
+Rudders: located on the vertical stabilizer, these control yaw.
+Flaps: used for takeoff and landing by increasing lift at low speeds, while increasing drag. 
 #3
-instructions slide 3
-more airplane things
+Slide 3: Taking off
+
+First, make sure that you have enough room to take off in the runway.
+It's important to reach a fast enough speed before pitching up to take off. If your speed is too slow, the airplane will not be able to take off due to the lack of lift. 
+Pitch up slowly at around 60 knots for the optimal takeoff
+
 #4
-instructions slide 4
-other airplane things
+Slide 4: Landing
+
+1. Descend to around 1000 ft 
+2. make sure the plane is completely lined up with the runway
+3. descend slowly, decreasing or turning off the throttle if needed.
+4. touchdown, using the brakes. 
+
 #5
-instrucitons slide 5
-wings
+Slide 5: Altimeter
+
+The altimeter tells the pilot the altitude of the airplane in feet above sea level
 #6 
-instructions slide 6
-instruments
+Slide 6: Airspeed indicator
+
+Indicates the aircraft's speed relative to the air around it in knots.
 #7
-instructions slide 7 
-instruments more 
+Slide 7: Compass/Heading indicator
+
+Indicates the direction the airplane is heading in the cardinal directions and degrees, either by using a magnetic compass or a gyroscope.
 #8
-instructions slide 8 
-more things 
+Slide 8: Attitude indicator / Fake horizon
+
+Indicates the airplane's relation to the horizon, effected by roll and pitch
 #9 
-instructions slide 9
-other things
+Slide 9: Turn indicator
+
+Indicates roll and used for coordinated turning. Keeping the airplane's roll at the indicated L or R markings will preform a controlled turn. 
+
+It's important to remember to yaw and roll at the same time in opposite directions while preforming a coordinated turn. This is because yawing causes lift in one wing to increase, which rotates the plane in the longitudinal axis. This rotation needs to be counteracted, which is why you have to roll in the opposite direction of the yaw.
 #10
-instructions slide 10
-last instructions slide 
+Slide 10: Vertical speed indicator / veriometer
+
+indicates the vertical climb in feet per minute by measuring changes in air pressure. 
