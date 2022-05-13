@@ -110,6 +110,36 @@ public class Airplane extends GameObject implements ActionListener
         deltaTime = (System.currentTimeMillis() - lastFrame)/1000.0;
         lastFrame = System.currentTimeMillis();
     }
+
+    public void reset()
+    {
+        this.getTransform().setPosition(new Vector3(0, 0, 0));
+        getTransform().setPitch(0);
+        getTransform().setYaw(0);
+        getTransform().setRoll(0);
+        throttle = 0;
+        this.physics.reset();
+    }
+
+    public double getAltitude()
+    {
+        return physics.getPosition().y;
+    }
+
+    public double getSpeed()
+    {
+        return physics.forwardSpeed;
+    }
+
+    public EulerAngle orientation()
+    {
+        return physics.physicsRotation;
+    }
+
+    public double getVerticalClimb()
+    {
+        return physics.velocity.y;
+    }
  
     class AirplaneController implements KeyListener
     {
@@ -254,6 +284,16 @@ public class Airplane extends GameObject implements ActionListener
         public void calculateForward()
         {
             forwardSpeed = Vector3.dotProduct(velocity, getTransform().getForward());
+        }
+
+        public void reset()
+        {
+            physicsRotation = new EulerAngle();
+            physicsPosition = new Vector3();
+            velocity = new Vector3();
+            velocityPitch = 0;
+            velocityRoll = 0;
+            velocityYaw = 0;
         }
  
         public void applyAngularDrag()

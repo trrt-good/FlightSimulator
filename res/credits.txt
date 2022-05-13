@@ -1,12 +1,24 @@
-"Low-poly Airplane" (https://skfb.ly/6U86y) by MaX3Dd is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Java API - https://docs.oracle.com/javase/7/docs/api/
-for rotation matrix things: https://en.wikipedia.org/wiki/Rotation_matrix
-for angles: https://en.wikipedia.org/wiki/Euler_angles
-Wolfram Mathword - used for coding many math functions in the Vector3 class: https://mathworld.wolfram.com/topics/Geometry.html, https://mathworld.wolfram.com/Point-PlaneDistance.html
-Rodrigues' rotation formula: https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation
-Simplex Noise class - Based on example code by Stefan Gustavson (stegu@itn.liu.se) 2012-03-09
-multithreading - https://www.tutorialspoint.com/java/java_multithreading.htm
-flight instruments - https://en.wikipedia.org/wiki/Flight_instruments#:~:text=They%20were%3A,speed%20indicator%20(feet%20per%20minute)
-flight dial pictures - https://www.pinterest.com/pin/321444492139380297/
-takeoff clipart - By Huddef https://www.vectorstock.com/royalty-free-vector/airport-and-airplane-iconair-liner-line-art-vector-34009540
-landing clipart - https://clipart.world/airplane-clipart/landing-airplane/
+
+
+MaX3Dd, "Low-poly Airplane" (https://skfb.ly/6U86y) licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/), Sketchfab, 2020.
+
+Weisstein, Eric W. “Geometry -- from Wolfram MathWorld.” Mathworld.wolfram.com, https://mathworld.wolfram.com/topics/Geometry.html.
+
+Wikipedia Contributors. “Rotation Matrix.” Wikipedia, Wikimedia Foundation, 21 Oct. 2019, https://en.wikipedia.org/wiki/Rotation_matrix.
+
+Wikipedia Contributors. “Euler Angles.” Wikipedia, Wikimedia Foundation, 8 Oct. 2019, https://en.wikipedia.org/wiki/Euler_angles. Accessed 30 Oct. 2019.
+
+Wikipedia Contributors. “Axis–Angle Representation.” Wikipedia, Wikimedia Foundation, 8 May 2020, https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation.
+
+Wikipedia Contributors. “Flight Instruments.” Wikipedia, 27 Apr. 2022, https://en.wikipedia.org/wiki/Flight_instruments#:~:text=They%20were%3A. Accessed 13 May 2022.
+
+“Java - Multithreading - Tutorialspoint.” Tutorialspoint.com, 2020, https://www.tutorialspoint.com/java/java_multithreading.htm.
+
+Gustavson, Stefan. "Simplex Noise." Edited by Peter Eastman and Arman, 2012, https://gist.github.com/Armen138/3171753
+
+Hsia, Vincent. “Aviation Training.” Pinterest, https://www.pinterest.com/pin/321444492139380297/. Accessed 13 May 2022.
+
+Huddef, “Airport and Airplane Iconair Liner Line Art Vector Image on VectorStock.” VectorStock, https://www.vectorstock.com/royalty-free-vector/airport-and-airplane-iconair-liner-line-art-vector-34009540. Accessed 13 May 2022.
+
+"Landing Ariplane." Clipart World, https://clipart.world/airplane-clipart/landing-airplane/

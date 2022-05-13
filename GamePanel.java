@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         addMouseListener(this);
         setUpSidePanel();
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 150);
-        gameCamera = new Camera(new Vector3(0, 0, -1000), 30000, 500, 60);
+        gameCamera = new Camera(new Vector3(0, 0, -1000), 30000, 10, 60);
         airplane = new Airplane(this, gameCamera);
         ground = new Terrain(-500, -200, 2000, 750, 500, 500, 0.02, 30, new Color(18, 99, 199), new Color(10, 50, 20), new Color(230, 230, 230));
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
@@ -49,7 +49,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         requestFocusInWindow();
         if (renderingPanel == null)
         {
-            renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/5, FlightSimulator.DEFAULT_HEIGHT);
+            renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/4, FlightSimulator.DEFAULT_HEIGHT);
             gameCamera.setFov(FlightSimulator.user.getSettings().fov);
             gameCamera.setSensitivity(FlightSimulator.user.getSettings().sensitivity);
             airplane.setRenderPanel(renderingPanel);
@@ -68,7 +68,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         if (paused)
         {
             g.drawRect(10, 10, 1000, 1000);
-            g.drawString("PAUSED", FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/5 + 10, 50);
+            g.drawString("PAUSED", FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/4 + 10, 50);
         }
     }
 
@@ -76,17 +76,20 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
     {
         JPanel sidePanel = new JPanel();
         sidePanel.setBackground(new Color(50, 50, 50));
-        sidePanel.setPreferredSize(new Dimension(FlightSimulator.DEFAULT_WIDTH/5, 100));
-        sidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
-        Button mainMenuButton = new Button("Main Menu", 30);
+        sidePanel.setPreferredSize(new Dimension(FlightSimulator.DEFAULT_WIDTH/4, 100));
+        sidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        Button mainMenuButton = new Button("Main Menu", 20, 150, 50);
         mainMenuButton.addActionListener(MainMenu.getMainMenuPanelSwitcher());
-        Button settingsButton = new Button("Settings", 30);
+        Button settingsButton = new Button("Settings", 20, 150, 50);
         settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher(GamePanel.name()));
-        Button controlsButton = new Button("Controls", 30);
+        Button controlsButton = new Button("Controls", 20, 150, 50);
         controlsButton.addActionListener(ControlsPanel.getControlsSwitcher(GamePanel.name()));
+        Button resetButton = new Button("Reset", 20, 150, 50);
+        resetButton.addActionListener(new ResetButtonListener());
         sidePanel.add(mainMenuButton);
         sidePanel.add(settingsButton);
         sidePanel.add(controlsButton);
+        sidePanel.add(resetButton);
         this.add(sidePanel, BorderLayout.EAST);
     }
 
@@ -166,6 +169,14 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         {
             if (FlightSimulator.user.getCompletedTraining())
                 FlightSimulator.flightSim.showPanel(name());
+        }
+    }
+
+    class ResetButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            airplane.reset();
         }
     }
 
