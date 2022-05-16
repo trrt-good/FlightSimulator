@@ -100,6 +100,7 @@ public class User
                     String pass = fileReader.nextLine().substring(2);
                     double miles = Double.parseDouble(fileReader.nextLine().substring(11));
                     boolean completedTraining = Boolean.parseBoolean(fileReader.nextLine().substring(18));
+                    //TODO: make this work with conlin conventions
                     StringTokenizer settingsLine = new StringTokenizer(fileReader.nextLine());
                     settingsLine.nextToken();
                     GameSettings newSettings = new GameSettings

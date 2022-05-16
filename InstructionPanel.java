@@ -90,7 +90,7 @@ public class InstructionPanel extends JPanel
         public InstructionChangerPanel()
         {
             setLayout(new BorderLayout());
-            Button backButton = new Button("Back", 30, 200, 50);
+            Button backButton = new Button("Previous", 30, 200, 50);
             backButton.setBackground(new Color(184, 71, 42));
             Button nextButton = new Button("Next", 30, 200, 50);
             add(backButton, BorderLayout.WEST);

@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class RenderingPanel extends JPanel implements Runnable
 {
@@ -94,6 +95,9 @@ public class RenderingPanel extends JPanel implements Runnable
         g.drawString("fps: " + (int)(1000/totalFrameTime.getDeltaTime()), 30, 30);
     }
 
+    /**
+     * @param limit the fps limit for the rendering panel
+     */
     public void setFPSlimit(int limit)
     {
         fps = Math.max(0, limit);

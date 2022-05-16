@@ -20,7 +20,8 @@ Slide 3: Taking off
 
 First, make sure that you have enough room to take off in the runway.
 It's important to reach a fast enough speed before pitching up to take off. If your speed is too slow, the airplane will not be able to take off due to the lack of lift. 
-Pitch up slowly at around 60 knots for the optimal takeoff
+Pitch up slowly at around 60 knots for the optimal takeoff. If you pitch up too much, you risk hitting the ground with the tail of your airplane or even stalling the plane.
+In addition, remember not to roll while taking off as you might risk hitting the wing on the ground. 
 
 #4
 Slide 4: Landing
@@ -56,3 +57,8 @@ It's important to remember to yaw and roll at the same time in opposite directio
 Slide 10: Vertical speed indicator / veriometer
 
 indicates the vertical climb in feet per minute by measuring changes in air pressure. 
+#11 
+Slide 11: General tips for flying
+
+- Use the controls gently, as the plane will cruise pretty well on it's own, and might only need occasional input from the pilot. 
+- it's important to consider how lift works in an airplane. When you pitch left or right, the direction of lift is no longer counteracting gravity as well, so you will lost altitude. 
