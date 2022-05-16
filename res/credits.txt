@@ -1,6 +1,11 @@
 Java API - https://docs.oracle.com/javase/7/docs/api/
 
 
+
+Sami Shaio, Arthur van Hoff, "Buffered Image." Java API, https://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html. Accessed 4/10/22
+
+Josh Bloch, "Comparable interface." Java API, https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html. Accessed 4/12/22
+
 MaX3Dd, "Low-poly Airplane" (https://skfb.ly/6U86y) licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/), Sketchfab, 2020.
 
 Weisstein, Eric W. “Geometry -- from Wolfram MathWorld.” Mathworld.wolfram.com, https://mathworld.wolfram.com/topics/Geometry.html.

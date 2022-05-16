@@ -1,4 +1,3 @@
-import java.awt.Color;
 import javax.swing.Timer;
  
 import java.awt.event.ActionListener;
