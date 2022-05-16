@@ -245,14 +245,23 @@ public class RenderingPanel extends JPanel implements Runnable
     {
         Vector3 triangleCenter = triangle.getCenter();
         double distanceToTriangle = Vector3.subtract(triangleCenter, camPos).getMagnitude();  
+
         if 
         (
-            distanceToTriangle < camera.getFarClipDistancee() //is the triangle within the camera's render distance?
-            && distanceToTriangle > camera.getNearClipDistance() //is the triangle far enough from the camera?
-            && Vector3.dotProduct(Vector3.subtract(triangleCenter, camPos), camDirection) > 0 //is the triangle on the side that the camera is facing?
-            && (Vector3.dotProduct(triangle.getPlane().normal, camDirection) < 0 || !triangle.getMesh().backFaceCulling()) //is the triangle facing away? 
+            Vector3.dotProduct(Vector3.subtract(triangleCenter, camPos), camDirection) > 0 //is the triangle on the side that the camera is facing?
+            && distanceToTriangle < camera.getFarClipDistancee() //is the triangle within the camera's render distance?
+            && (Vector3.dotProduct(triangle.getPlane().normal, Vector3.subtract(triangleCenter, camPos)) < 0) //is the triangle facing away? 
         )
         {
+            Plane nearClipPlane = new Plane(Vector3.add(camPos, Vector3.multiply(camDirection, camera.getNearClipDistance())), camDirection);
+            if 
+            (
+                Vector3.dotProduct(nearClipPlane.normal, Vector3.subtract(triangle.vertex1, nearClipPlane.pointOnPlane)) < 0
+                || Vector3.dotProduct(nearClipPlane.normal, Vector3.subtract(triangle.vertex1, nearClipPlane.pointOnPlane)) < 0
+                || Vector3.dotProduct(nearClipPlane.normal, Vector3.subtract(triangle.vertex1, nearClipPlane.pointOnPlane)) < 0
+            )
+            return;
+
             //create local variables: 
 
             //the screen coords of the triangle, to be determined by the rest of the method.

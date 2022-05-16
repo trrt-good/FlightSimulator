@@ -10,6 +10,8 @@ import javax.swing.JPanel;
  
 public class Airplane extends GameObject implements ActionListener
 {
+    private final int CRASH_THRESHOLD = 30;
+
     private Camera camera;
     private double throttle;
     private AirplaneController airplaneController;
@@ -113,12 +115,15 @@ public class Airplane extends GameObject implements ActionListener
 
     public void reset()
     {
-        this.getTransform().setPosition(new Vector3(0, 0, 0));
+        throttle = 0;
+        this.physics.physicsReset();
+        getTransform().setPosition(new Vector3());
         getTransform().setPitch(0);
         getTransform().setYaw(0);
         getTransform().setRoll(0);
-        throttle = 0;
-        this.physics.reset();
+        getTransform().setPitch(0);
+        getTransform().setYaw(0);
+        getTransform().setRoll(0);
     }
 
     public double getAltitude()
@@ -230,6 +235,7 @@ public class Airplane extends GameObject implements ActionListener
         private double velocityPitch;
         private double velocityYaw;
         private double velocityRoll;
+        private boolean grounded; 
  
         public AirplanePhysics()
         {
@@ -248,16 +254,19 @@ public class Airplane extends GameObject implements ActionListener
  
         public void addPitchTorque(double amt)
         {
+            amt *= Math.min(1, forwardSpeed/20);
             velocityPitch = velocityPitch + amt/mass*deltaTime;
         }
  
         public void addYawTorque(double amt)
         {
+            amt *= Math.min(1, forwardSpeed/20);
             velocityYaw = velocityYaw + amt/mass*deltaTime;
         }
  
         public void addRollTorque(double amt)
         {
+            amt *= Math.min(1, forwardSpeed/20);
             velocityRoll = velocityRoll + amt/mass*deltaTime;
         }
  
@@ -286,7 +295,7 @@ public class Airplane extends GameObject implements ActionListener
             forwardSpeed = Vector3.dotProduct(velocity, getTransform().getForward());
         }
 
-        public void reset()
+        public void physicsReset()
         {
             physicsRotation = new EulerAngle();
             physicsPosition = new Vector3();
@@ -294,6 +303,8 @@ public class Airplane extends GameObject implements ActionListener
             velocityPitch = 0;
             velocityRoll = 0;
             velocityYaw = 0;
+            updateOrientation();
+            updatePosition();
         }
  
         public void applyAngularDrag()
@@ -337,17 +348,35 @@ public class Airplane extends GameObject implements ActionListener
         public void updatePosition()
         {
             if (Vector3.add(physicsPosition, velocity).y > groundLevel)
+            {
                 physicsPosition.add(velocity);
+                grounded = false;
+            }
             else
             {
                 physicsPosition.y = groundLevel;
                 velocity = new Vector3(velocity.x, 0 , velocity.z);
                 physicsPosition.add(velocity);
+                grounded = true;
+                checkCrash();
             }
             getTransform().setPosition(Vector3.add(getTransform().getPosition(), velocity));
             if (camera.getOrbitCamController() != null)
             {
                 camera.getOrbitCamController().updatePosition();
+            }
+        }
+
+        public void checkCrash()
+        {
+            double crashFactor = Vector3.dotProduct(velocity, new Vector3(0, -1, 0));
+            if 
+            (
+                (crashFactor > CRASH_THRESHOLD) 
+                || (grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
+            )
+            {
+                reset();
             }
         }
  

@@ -36,9 +36,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         addMouseListener(this);
         setUpSidePanel();
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 150);
-        gameCamera = new Camera(new Vector3(0, 0, -1000), 30000, 10, 60);
+        gameCamera = new Camera(new Vector3(0, 0, -1000), 50000, 30, 60);
         airplane = new Airplane(this, gameCamera);
-        ground = new Terrain(-500, -200, 2000, 750, 500, 500, 0.02, 30, new Color(18, 99, 199), new Color(10, 50, 20), new Color(230, 230, 230));
+        ground = new Terrain(-500, -200, 2000, 1000, 500, 500, 0.02, 30, new Color(18, 99, 199), new Color(10, 50, 20), new Color(230, 230, 230));
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             renderingPanel.setLighting(lighting);
             renderingPanel.setCamera(gameCamera);
             renderingPanel.setLighting(lighting);
-            renderingPanel.setFog(25000, 30000, skyColor);
+            renderingPanel.setFog(25000, 50000, skyColor);
             renderingPanel.addMesh(ground);
             renderingPanel.setFPSlimit(150);
             renderingPanel.start();
@@ -169,6 +169,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         {
             if (FlightSimulator.user.getCompletedTraining())
                 FlightSimulator.flightSim.showPanel(name());
+            else
+                new PopupFrame("Learn to fly first!");
         }
     }
 
