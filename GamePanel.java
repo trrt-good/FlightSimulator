@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
     private static boolean paused;
 
-    private Color skyColor = new Color(200, 220, 255);
+    private Color skyColor = new Color(91, 215, 252);
 
     //creates game objects and rendering related objects. 
     public GamePanel()
@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 150);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 50000, 30, 60);
         airplane = new Airplane(this, gameCamera);
-        ground = new Terrain(-500, -200, 2000, 1000, 500, 500, 0.02, 30, new Color(18, 99, 199), new Color(10, 50, 20), new Color(230, 230, 230));
+        ground = new Terrain(-500, -200, 6000, 1000, 500, 500, 0.02, 30, new Color(1, 75, 148), new Color(15, 99, 0), new Color(200, 200, 210));
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
     }
 
@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             renderingPanel.setLighting(lighting);
             renderingPanel.setCamera(gameCamera);
             renderingPanel.setLighting(lighting);
-            renderingPanel.setFog(25000, 50000, skyColor);
+            renderingPanel.setFog(gameCamera.getFarClipDistancee()*0.6, gameCamera.getFarClipDistancee(), skyColor);
             renderingPanel.addMesh(ground);
             renderingPanel.setFPSlimit(150);
             renderingPanel.start();

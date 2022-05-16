@@ -290,7 +290,7 @@ public class Airplane extends GameObject implements ActionListener
             }
         }
  
-        public void calculateForward()
+        public void calculateForwardV()
         {
             forwardSpeed = Vector3.dotProduct(velocity, getTransform().getForward());
         }
@@ -372,8 +372,7 @@ public class Airplane extends GameObject implements ActionListener
             double crashFactor = Vector3.dotProduct(velocity, new Vector3(0, -1, 0));
             if 
             (
-                (crashFactor > CRASH_THRESHOLD) 
-                || (grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
+                (crashFactor > CRASH_THRESHOLD) || (grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
             )
             {
                 reset();
@@ -404,7 +403,7 @@ public class Airplane extends GameObject implements ActionListener
  
         public void update()
         {
-            calculateForward();
+            calculateForwardV();
             applyAerodynamicEffect();
             applyYawRollEffect();
             applyGravity();  

@@ -57,7 +57,7 @@ public class RenderingPanel extends JPanel implements Runnable
         setPreferredSize(new Dimension(width, height));
 
         //background color: 
-        backgroundColor = new Color(200, 220, 255);
+        backgroundColor = new Color(91, 215, 252);
 
         //innitialize fields 
         camera = null;
@@ -352,8 +352,8 @@ public class RenderingPanel extends JPanel implements Runnable
     //This method is much faster at drawing triangles than Graphics' fillPolygon() method.
     private void paintTriangle(Point p1, Point p2, Point p3, Color triangleColor)
     {
-        Point tempPoint = new Point();
-        int rgb = convertToIntRGB(triangleColor);
+        Point tempPoint = new Point(); //buffer for the sorting algorithm
+        int rgb = convertToIntRGB(triangleColor); //the integer rgb value of the triangle color
 
         //sorts the three points by height using a very simple bubble sort algorithm
         if (p1.getY() > p2.getY())
