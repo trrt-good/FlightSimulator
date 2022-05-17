@@ -47,6 +47,7 @@ Indicates the direction the airplane is heading in the cardinal directions and d
 Slide 8: Attitude indicator / Fake horizon
 
 Indicates the airplane's relation to the horizon, effected by roll and pitch
+(the fake horizon will not be present in this simulation due to the already high visibility)
 #9 
 Slide 9: Turn indicator
 

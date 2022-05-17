@@ -93,7 +93,7 @@ public class FlightSimulator
     }
 
     //  returns an image with the given file
-    public Image makeImage(File imageFile)
+    public static Image makeImage(File imageFile)
     {
         Image image = null;
         try
@@ -102,7 +102,7 @@ public class FlightSimulator
         }
         catch (IOException e)
         {
-            System.out.println("Could not locate background image file");
+            System.out.println("Could not locate image file");
             e.printStackTrace();
         }
         return image;
@@ -139,6 +139,11 @@ public class FlightSimulator
     public JPanel getCardPanelHolder()
     {
         return mainCardPanel;
+    }
+
+    public GamePanel getGamePanel()
+    {
+        return gamePanel;
     }
     
     public SettingsPanel getSettingsPanel()

@@ -33,9 +33,11 @@ public class Airplane extends GameObject implements ActionListener
     private double aerodynamicEffectAmount;
     
     private double groundLevel;  
+
+    private GamePanel gamePanel; 
      
      
-    public Airplane(JPanel listenerPanel, Camera camIn)
+    public Airplane(GamePanel gamePanelIn, Camera camIn)
     {
         super
         (
@@ -62,7 +64,8 @@ public class Airplane extends GameObject implements ActionListener
         physicsEnabled = false;
         airplaneController = new AirplaneController();
         camera = camIn;
-        listenerPanel.addKeyListener(airplaneController);
+        gamePanelIn.addKeyListener(airplaneController);
+        gamePanel = gamePanelIn;
         throttle = 0;
         physics = new AirplanePhysics();
         airplaneUpdater = new Timer(30, this);
@@ -110,6 +113,7 @@ public class Airplane extends GameObject implements ActionListener
         getMesh().refreshLighting();
         deltaTime = (System.currentTimeMillis() - lastFrame)/1000.0;
         lastFrame = System.currentTimeMillis();
+        gamePanel.repaint();
     }
 
     public void reset()

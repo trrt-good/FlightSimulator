@@ -85,7 +85,7 @@ public class Camera
         //changes the distance based on the mouse movement. 
         public void mouseWheelMoved(MouseWheelEvent e) 
         {
-            if (GamePanel.isPaused())
+            if (FlightSimulator.flightSim.getGamePanel().isPaused())
                 return;
             distance = Math.max(minDistance, Math.min(distance + e.getWheelRotation()*30, maxDistance));
             difference = Vector3.multiply(directionUnit, distance);
@@ -95,7 +95,7 @@ public class Camera
         //pans the camera 
         public void mouseDragged(MouseEvent e) 
         {
-            if (GamePanel.isPaused())
+            if (FlightSimulator.flightSim.getGamePanel().isPaused())
                 return;
             directionUnit = Vector3.rotateAroundYaxis(directionUnit, (e.getX()-prevX)/(2000/sensitivity));
             if (vAngle > -maxAngle && (e.getY()-prevY)/(200/sensitivity) > 0)
@@ -124,7 +124,7 @@ public class Camera
         //updates the position of the camera to be around the focusObject.
         public void updatePosition()
         {
-            if (GamePanel.isPaused())
+            if (FlightSimulator.flightSim.getGamePanel().isPaused())
                 return;
             position = Vector3.add(focusObj.getTransform().getPosition(), difference);
         }

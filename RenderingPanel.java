@@ -25,6 +25,8 @@ public class RenderingPanel extends JPanel implements Runnable
     private ArrayList<Triangle2D> drawQeue;
     private Matrix3x3 pointRotationMatrix;
     private double pixelsPerUnit;
+    private Vector3 camCenterPoint;
+
 
     //Threads:
     private Thread renderingThread;
@@ -169,6 +171,7 @@ public class RenderingPanel extends JPanel implements Runnable
         renderPlaneWidth = camera.getRenderPlaneWidth();
         camPos = camera.getPosition();
         camDirection = camera.getDirectionVector();
+        camCenterPoint = Vector3.add(Vector3.multiply(camDirection, camera.getRenderPlaneDistance()), camPos);
         renderPlane = new Plane(Vector3.add(Vector3.multiply(camDirection, camera.getRenderPlaneDistance()), camPos), camDirection);
         pointRotationMatrix = Matrix3x3.multiply(Matrix3x3.rotationMatrixAxisX(camera.getVorientation()*0.017453292519943295), Matrix3x3.rotationMatrixAxisY(-camera.getHorientation()*0.017453292519943295));
         
@@ -279,7 +282,6 @@ public class RenderingPanel extends JPanel implements Runnable
             Vector3 triangleVertex3 = new Vector3(triangle.vertex3);
 
             triangleVertex1 = Vector3.getIntersectionPoint(Vector3.subtract(triangleVertex1, camPos), camPos, renderPlane);
-            Vector3 camCenterPoint = Vector3.getIntersectionPoint(camDirection, camPos, renderPlane);
             Vector3 rotatedPoint = Vector3.applyMatrix(pointRotationMatrix, Vector3.subtract(triangleVertex1, camCenterPoint));
             if ((Math.abs(rotatedPoint.x) < renderPlaneWidth/2*1.2 && Math.abs(rotatedPoint.y) < renderPlaneWidth*((double)getHeight()/(double)getWidth())/2*1.2))
                 shouldDrawTriangle = true;

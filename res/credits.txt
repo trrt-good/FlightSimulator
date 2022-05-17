@@ -1,6 +1,8 @@
 Java API - https://docs.oracle.com/javase/7/docs/api/
 
+Svaha, "Airplane Dials Unisex Adults T-shirt." Svaha USA, https://svahausa.com/products/airplane-dials-unisex-adults-t-shirt. Accessed 5/16/22
 
+ClipartsZone team, "Helpful Tips Clipart." Cliparts Zone, https://cliparts.zone/clipart/432809. Accessed 5/16/22
 
 Sami Shaio, Arthur van Hoff, "Buffered Image." Java API, https://docs.oracle.com/javase/7/docs/api/java/awt/image/BufferedImage.html. Accessed 4/10/22
 
