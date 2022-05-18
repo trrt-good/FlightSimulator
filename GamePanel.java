@@ -1,5 +1,9 @@
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
@@ -223,6 +227,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
     class QuestionPopup extends JFrame implements ActionListener
     {
+        private int numCorrect;
+        private char[] answers; 
+
         public QuestionPopup(int questionNum, char... correctAnswers)
         {
             setVisible(true);
@@ -230,13 +237,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             setSize(500, 500);
             setResizable(false);
             setLayout(new BorderLayout());
-
+            answers = correctAnswers;
+            add(new AnswerChoicePanel(), BorderLayout.CENTER);
             add(new BottomPanel(), BorderLayout.SOUTH);
-
-            if (correctAnswers.length > 1)
-            {
-
-            }
+            
+            
         }
 
         public void paintComponent(Graphics g)
@@ -252,7 +257,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
         public boolean checkAnswers()
         {
-            return true;
+            return numCorrect == answers.length;
         }
 
         public void closeQuestionFrame()
@@ -264,14 +269,48 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         {
             public AnswerChoicePanel()
             {
-                
+                if (answers.length > 1)
+                {
+
+                }
+                else
+                {
+                    ButtonGroup radioButtonGroup = new ButtonGroup();
+                    JRadioButton aButton = new JRadioButton("a");
+                    JRadioButton bButton = new JRadioButton("b");
+                    JRadioButton cButton = new JRadioButton("c");
+                    JRadioButton dButton = new JRadioButton("d");
+                    aButton.addActionListener(this);
+                    bButton.addActionListener(this);
+                    cButton.addActionListener(this);
+                    dButton.addActionListener(this);
+                    radioButtonGroup.add(aButton);
+                    radioButtonGroup.add(bButton);
+                    radioButtonGroup.add(cButton);
+                    radioButtonGroup.add(dButton);
+                }
             }
 
+            //this is completely bugged. if someone diss selects an answer it thinks it's correct
             public void actionPerformed(ActionEvent e) 
             {
-                
+                AbstractButton button = null;
+                if (e.getSource() instanceof AbstractButton)
+                {
+                    button = (AbstractButton)e.getSource();
+                }
+                char answerButton = e.getActionCommand().charAt(0);
+                for (int i = 0; i < answers.length; i ++)
+                {
+                    if (answerButton == answers[i])
+                    {
+                        if (button.isSelected() && button != null)
+                            numCorrect++;
+                        else if (button != null)
+                            numCorrect--;
+                    }
+                }
             }
-            
         }
 
         class BottomPanel extends JPanel implements ActionListener

@@ -66,7 +66,6 @@ public class FlightSimulator
         settingsPanel = new SettingsPanel();
         controlsPanel = new ControlsPanel();
 
-        
         addPanelToCards(startPanel, startPanel.getName());
         addPanelToCards(loginPanel, loginPanel.getName());
         addPanelToCards(mainMenu, MainMenu.name());
