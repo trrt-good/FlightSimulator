@@ -1,5 +1,6 @@
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -116,6 +117,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             add(renderingPanel);
             validate();
         }
+        new QuestionPopup(1, true, true, false, true);
     }
 
     class SidePanel extends JPanel 
@@ -151,6 +153,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             
             //  compass center = 253, 315
             //  airspeed center = 86, 487
+            // if (airplane.getAltitude() > 4000)
+            //     new QuestionPopup(1, 'a');
             drawDialNeedle(g2d, 252, 315, 60, airplane.orientation().y); //compass
             drawDialNeedle(g2d, 85, 487, 60, airplane.getSpeed()/75);//airspeed
             drawTurnCoordinator(g2d, 85, 659, airplane.orientation().z); //turn coordinator
@@ -227,10 +231,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
     class QuestionPopup extends JFrame implements ActionListener
     {
+        private boolean[] selectedAnswers;
+        private boolean[] answers; 
         private int numCorrect;
-        private char[] answers; 
 
-        public QuestionPopup(int questionNum, char... correctAnswers)
+        public QuestionPopup(int questionNum, boolean... correctAnswers)
         {
             setVisible(true);
             setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -238,6 +243,14 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             setResizable(false);
             setLayout(new BorderLayout());
             answers = correctAnswers;
+
+            for (int i = 0; i < answers.length; i ++)
+            {
+                if (answers[i] == true)
+                    numCorrect ++;
+            }
+
+            selectedAnswers = new boolean[]{false, false, false, false};
             add(new AnswerChoicePanel(), BorderLayout.CENTER);
             add(new BottomPanel(), BorderLayout.SOUTH);
             
@@ -257,7 +270,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
         public boolean checkAnswers()
         {
-            return numCorrect == answers.length;
+            boolean correct = true;
+            for (int i = 0; i < selectedAnswers.length; i++)
+            {
+                if (selectedAnswers[i] != answers[i])
+                    correct = false;
+            }
+            return correct;
         }
 
         public void closeQuestionFrame()
@@ -267,19 +286,32 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
         class AnswerChoicePanel extends JPanel implements ActionListener
         {
+
             public AnswerChoicePanel()
             {
-                if (answers.length > 1)
+                setLayout(new FlowLayout(FlowLayout.LEFT, 50, 50));
+                if (numCorrect > 1)
                 {
-
+                    JCheckBox aCheckBox = new JCheckBox("0) ");
+                    JCheckBox bCheckBox = new JCheckBox("1) ");
+                    JCheckBox cCheckBox = new JCheckBox("2) ");
+                    JCheckBox dCheckBox = new JCheckBox("3) ");
+                    aCheckBox.addActionListener(this);
+                    bCheckBox.addActionListener(this);
+                    cCheckBox.addActionListener(this);
+                    dCheckBox.addActionListener(this);
+                    add(aCheckBox);
+                    add(bCheckBox);
+                    add(cCheckBox);
+                    add(dCheckBox);
                 }
                 else
                 {
                     ButtonGroup radioButtonGroup = new ButtonGroup();
-                    JRadioButton aButton = new JRadioButton("a");
-                    JRadioButton bButton = new JRadioButton("b");
-                    JRadioButton cButton = new JRadioButton("c");
-                    JRadioButton dButton = new JRadioButton("d");
+                    JRadioButton aButton = new JRadioButton("0) ");
+                    JRadioButton bButton = new JRadioButton("1) ");
+                    JRadioButton cButton = new JRadioButton("2) ");
+                    JRadioButton dButton = new JRadioButton("3) ");
                     aButton.addActionListener(this);
                     bButton.addActionListener(this);
                     cButton.addActionListener(this);
@@ -288,28 +320,24 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
                     radioButtonGroup.add(bButton);
                     radioButtonGroup.add(cButton);
                     radioButtonGroup.add(dButton);
+                    add(aButton);
+                    add(bButton);
+                    add(cButton);
+                    add(dButton);
                 }
             }
 
-            //this is completely bugged. if someone diss selects an answer it thinks it's correct
             public void actionPerformed(ActionEvent e) 
             {
                 AbstractButton button = null;
                 if (e.getSource() instanceof AbstractButton)
-                {
                     button = (AbstractButton)e.getSource();
-                }
-                char answerButton = e.getActionCommand().charAt(0);
-                for (int i = 0; i < answers.length; i ++)
-                {
-                    if (answerButton == answers[i])
-                    {
-                        if (button.isSelected() && button != null)
-                            numCorrect++;
-                        else if (button != null)
-                            numCorrect--;
-                    }
-                }
+                else
+                    return;
+                if (numCorrect == 1)
+                    selectedAnswers = new boolean[]{false, false, false, false};
+                int answerChosen = Integer.parseInt(e.getActionCommand().substring(0, 1));
+                selectedAnswers[answerChosen] = button.isSelected();
             }
         }
 
@@ -319,7 +347,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             public BottomPanel()
             {
                 setLayout(new FlowLayout());
-                confirmButton = new Button("Check", 30);
+                confirmButton = new Button("Check", 30, 200, 50);
                 setPreferredSize(new Dimension(100, 100));
                 confirmButton.addActionListener(this);
                 add(confirmButton);
