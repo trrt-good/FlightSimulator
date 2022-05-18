@@ -312,6 +312,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
             public AnswerChoicePanel(String choice1Text, String choice2Text, String choice3Text, String choice4Text)
             {
+                setBackground(Color.WHITE);
                 setLayout(new FlowLayout(FlowLayout.LEFT, 100, 50));
                 if (numCorrect > 1)
                 {
@@ -402,6 +403,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
                 }
                 if (checkAnswers())
                 {
+                    new PopupFrame("Correct!");
                     confirmButton.setText("close");
                 }
             }
