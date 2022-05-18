@@ -130,7 +130,7 @@ public class InstructionPanel extends JPanel
             textArea.setEnabled(false);
             textArea.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 20));
             textArea.setBackground(Color.BLACK);
-            textArea.setForeground(Color.WHITE);
+            textArea.setForeground(Color.MAGENTA);
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
             textArea.setMargin(new Insets(20, 20, 20, 20));

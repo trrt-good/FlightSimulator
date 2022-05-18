@@ -4,6 +4,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.plaf.InsetsUIResource;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -26,6 +28,7 @@ import java.awt.BasicStroke;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.awt.Insets;
 
 public class GamePanel extends JPanel implements KeyListener, MouseListener, FocusListener
 {
@@ -55,6 +58,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         addFocusListener(this);
         addMouseListener(this);
         sidePanel = new SidePanel();
+        questions = new ArrayList<String>();
+        aAnswers = new ArrayList<String>();
+        bAnswers = new ArrayList<String>();
+        cAnswers = new ArrayList<String>();
+        dAnswers = new ArrayList<String>();
+        readQuestions();
+
         add(sidePanel, BorderLayout.EAST);
         flightDials = Utils.makeImage(new File(FlightSimulator.RESOURCES_FOLDER, "AirplaneDials.png"));
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 150);
@@ -250,16 +260,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
                     numCorrect ++;
             }
 
+            setBackground(Color.WHITE);
             selectedAnswers = new boolean[]{false, false, false, false};
-            add(new AnswerChoicePanel(), BorderLayout.CENTER);
+            add(new QuestionPanel(questions.get(questionNum-1)), BorderLayout.NORTH);
+            add(new AnswerChoicePanel(aAnswers.get(questionNum-1), bAnswers.get(questionNum-1), cAnswers.get(questionNum-1), dAnswers.get(questionNum-1)), BorderLayout.CENTER);
             add(new BottomPanel(), BorderLayout.SOUTH);
-            
-            
         }
 
         public void paintComponent(Graphics g)
         {
-            System.out.println("paintC");
             requestFocusInWindow();
         }
 
@@ -284,22 +293,44 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             dispose();
         }
 
+        class QuestionPanel extends JPanel 
+        {
+            public QuestionPanel(String questionText)
+            {
+                setBackground(Color.WHITE);
+                JTextArea textField = new JTextArea(questionText);
+                textField.setEditable(false);
+                textField.setMargin(new Insets(15, 15, 15, 15));
+                textField.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 15));
+                textField.setForeground(Color.BLACK);
+                add(textField);
+            }   
+        }
+
         class AnswerChoicePanel extends JPanel implements ActionListener
         {
 
-            public AnswerChoicePanel()
+            public AnswerChoicePanel(String choice1Text, String choice2Text, String choice3Text, String choice4Text)
             {
-                setLayout(new FlowLayout(FlowLayout.LEFT, 50, 50));
+                setLayout(new FlowLayout(FlowLayout.LEFT, 100, 50));
                 if (numCorrect > 1)
                 {
-                    JCheckBox aCheckBox = new JCheckBox("0) ");
-                    JCheckBox bCheckBox = new JCheckBox("1) ");
-                    JCheckBox cCheckBox = new JCheckBox("2) ");
-                    JCheckBox dCheckBox = new JCheckBox("3) ");
+                    JCheckBox aCheckBox = new JCheckBox("0) " + choice1Text);
+                    JCheckBox bCheckBox = new JCheckBox("1) " + choice2Text);
+                    JCheckBox cCheckBox = new JCheckBox("2) " + choice3Text);
+                    JCheckBox dCheckBox = new JCheckBox("3) " + choice4Text);
                     aCheckBox.addActionListener(this);
                     bCheckBox.addActionListener(this);
                     cCheckBox.addActionListener(this);
                     dCheckBox.addActionListener(this);
+                    aCheckBox.setBackground(Color.WHITE);
+                    bCheckBox.setBackground(Color.WHITE);
+                    cCheckBox.setBackground(Color.WHITE);
+                    dCheckBox.setBackground(Color.WHITE);
+                    aCheckBox.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
+                    bCheckBox.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
+                    cCheckBox.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
+                    dCheckBox.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
                     add(aCheckBox);
                     add(bCheckBox);
                     add(cCheckBox);
@@ -308,14 +339,22 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
                 else
                 {
                     ButtonGroup radioButtonGroup = new ButtonGroup();
-                    JRadioButton aButton = new JRadioButton("0) ");
-                    JRadioButton bButton = new JRadioButton("1) ");
-                    JRadioButton cButton = new JRadioButton("2) ");
-                    JRadioButton dButton = new JRadioButton("3) ");
+                    JRadioButton aButton = new JRadioButton("0) " + choice1Text);
+                    JRadioButton bButton = new JRadioButton("1) " + choice2Text);
+                    JRadioButton cButton = new JRadioButton("2) " + choice3Text);
+                    JRadioButton dButton = new JRadioButton("3) " + choice4Text);
                     aButton.addActionListener(this);
                     bButton.addActionListener(this);
                     cButton.addActionListener(this);
                     dButton.addActionListener(this);
+                    aButton.setBackground(Color.WHITE);
+                    bButton.setBackground(Color.WHITE);
+                    cButton.setBackground(Color.WHITE);
+                    dButton.setBackground(Color.WHITE);
+                    aButton.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
+                    bButton.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
+                    cButton.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
+                    dButton.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
                     radioButtonGroup.add(aButton);
                     radioButtonGroup.add(bButton);
                     radioButtonGroup.add(cButton);
@@ -346,6 +385,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             private Button confirmButton;
             public BottomPanel()
             {
+                setBackground(Color.WHITE);
                 setLayout(new FlowLayout());
                 confirmButton = new Button("Check", 30, 200, 50);
                 setPreferredSize(new Dimension(100, 100));
