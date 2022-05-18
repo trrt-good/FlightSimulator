@@ -46,14 +46,14 @@ public class Airplane extends GameObject implements ActionListener
             new Transform(new Vector3(0, 0, 0))
         );
  
-        maxEnginePower = 25000;
+        maxEnginePower = 12000;
         pitchSpeed = 20;
         yawSpeed = 20;
         rollSpeed = 30;
-        gravity = 30;
+        gravity = 60;
         mass = 1000;
-        liftCoefficient = 15;
-        dragCoefficient = 0.5;
+        liftCoefficient = 1.5;
+        dragCoefficient = 0.2;
         angularDragCoefficient = 1;
         aerodynamicEffectAmount = 0.01;
         yawRollEffectAmount = 30;
@@ -131,12 +131,12 @@ public class Airplane extends GameObject implements ActionListener
 
     public double getAltitude()
     {
-        return physics.getPosition().y;
+        return physics.getPosition().y-groundLevel;
     }
 
     public double getSpeed()
     {
-        return physics.forwardSpeed;
+        return physics.velocity.getMagnitude();
     }
 
     public EulerAngle orientation()
@@ -277,9 +277,12 @@ public class Airplane extends GameObject implements ActionListener
         {
             if (velocity.getSqrMagnitude() > 0)
             {
-                velocity = Vector3.subtract(velocity, Vector3.multiply(velocity, dragCoefficient*velocity.getMagnitude()*deltaTime/100));
+                double altitudeFactor = (2000/(physicsPosition.y-groundLevel+2000));
+                altitudeFactor += 0.6;
+                altitudeFactor *= altitudeFactor * altitudeFactor;
+                velocity = Vector3.subtract(velocity, Vector3.multiply(velocity, dragCoefficient*velocity.getMagnitude()*deltaTime*altitudeFactor/700));
                 Vector3 verticalDrag = Vector3.projectToVector(velocity, getTransform().getUp());
-                velocity = Vector3.subtract(velocity, Vector3.multiply(verticalDrag, dragCoefficient*verticalDrag.getMagnitude()*deltaTime));
+                velocity = Vector3.subtract(velocity, Vector3.multiply(verticalDrag, dragCoefficient*verticalDrag.getMagnitude()*deltaTime*altitudeFactor));
             }
         }
 
@@ -289,7 +292,7 @@ public class Airplane extends GameObject implements ActionListener
             {
                 double rollAmount = Vector3.dotProduct(Vector3.projectToPlane(velocity, getTransform().getUp()).getNormalized(), getTransform().getRight());
                 rollAmount *= rollAmount *rollAmount;
-                physicsRotation.z += rollAmount*yawRollEffectAmount*deltaTime;
+                velocityRoll *= 1 + rollAmount*yawRollEffectAmount*deltaTime;
             }
         }
  
@@ -324,7 +327,11 @@ public class Airplane extends GameObject implements ActionListener
  
         public void applyLift()
         {
-            addForce(Vector3.multiply(Vector3.crossProduct(velocity, getTransform().getRight()).getNormalized(), forwardSpeed*forwardSpeed*liftCoefficient*deltaTime));
+            //scale lift by altitude to account for the lack of flaps.
+            double altitudeFactor = (2000/(physicsPosition.y-groundLevel+2000));
+            altitudeFactor += 1;
+            altitudeFactor *= altitudeFactor * altitudeFactor;
+            addForce(Vector3.multiply(Vector3.crossProduct(velocity, getTransform().getRight()).getNormalized(), forwardSpeed*forwardSpeed*liftCoefficient*deltaTime*altitudeFactor));
         }
  
         //gives the effect of the plane naturally alligning itself to the direction it's pointing.
@@ -339,12 +346,13 @@ public class Airplane extends GameObject implements ActionListener
  
                 //calculates the new velocity by bending the current velocity towards the  
                 //direction we are facing, by the correction factor.
-                velocity = Vector3.lerp(velocity, Vector3.projectToVector(velocity, getTransform().getForward()), correctionFactor*forwardSpeed*aerodynamicEffectAmount*deltaTime/5);  
+                velocity = Vector3.lerp(velocity, Vector3.projectToVector(velocity, getTransform().getForward()), correctionFactor*forwardSpeed*aerodynamicEffectAmount*deltaTime/2);  
                  
-                //also rotate the plane towards the direction of movement.
-                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), aerodynamicEffectAmount*deltaTime*forwardSpeed*1.5));
+                //also rotate the plane towards the direction of movement. (This is innacurate due to linear interpolation with vectors being translated into rotation)
+                //Would be better with the use of quaternion multiplication.
+                Vector3 direction = getTransform().transformToLocal(Vector3.lerp(getTransform().getForward(), velocity.getNormalized(), correctionFactor*aerodynamicEffectAmount*deltaTime*forwardSpeed));
                 physicsRotation.y += ((direction.x < 0)? -Math.atan(direction.z/direction.x)-Math.PI/2 : Math.PI/2-Math.atan(direction.z/direction.x));
-                physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z));
+                physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z))/5;
             }
         }
  

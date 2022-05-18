@@ -24,6 +24,12 @@ Pitch up slowly at around 60 knots for the optimal takeoff. If you pitch up too 
 In addition, remember not to roll while taking off as you might risk hitting the wing on the ground. 
 
 #4
+Slide 4: Cruising
+
+When flying from one place to another, most of the time is spent cruising, so it's important to know well. 
+The first step is to reach cruising altitude (around 4500 ft in the simulation). This is when you can safely bring the plane's pitch to around 0 degrees, and fly to the destination.
+While cruising, maintian a constant speed (around 110 knots in the simulation). 
+#5
 Slide 4: Landing
 
 1. Descend to around 1000 ft 
@@ -31,34 +37,35 @@ Slide 4: Landing
 3. descend slowly, decreasing or turning off the throttle if needed.
 4. touchdown, using the brakes. 
 
-#5
+#6
 Slide 5: Altimeter
 
-The altimeter tells the pilot the altitude of the airplane in feet above sea level
-#6 
+The altimeter tells the pilot the altitude of the airplane in feet above sea level using an air pressure sensor. 
+Reading an altimeter is similar to reading a clock. The long hand represents the smaller unit, feet in hundreds and the shorter hand represents feet in thousands
+#7
 Slide 6: Airspeed indicator
 
 Indicates the aircraft's speed relative to the air around it in knots.
-#7
+#8
 Slide 7: Compass/Heading indicator
 
 Indicates the direction the airplane is heading in the cardinal directions and degrees, either by using a magnetic compass or a gyroscope.
-#8
+#9
 Slide 8: Attitude indicator / Fake horizon
 
 Indicates the airplane's relation to the horizon, effected by roll and pitch
 (the fake horizon will not be present in this simulation due to the already high visibility)
-#9 
+#10
 Slide 9: Turn indicator
 
 Indicates roll and used for coordinated turning. Keeping the airplane's roll at the indicated L or R markings will preform a controlled turn. 
 
 It's important to remember to yaw and roll at the same time in opposite directions while preforming a coordinated turn. This is because yawing causes lift in one wing to increase, which rotates the plane in the longitudinal axis. This rotation needs to be counteracted, which is why you have to roll in the opposite direction of the yaw.
-#10
+#11
 Slide 10: Vertical speed indicator / veriometer
 
 indicates the vertical climb in feet per minute by measuring changes in air pressure. 
-#11 
+#12
 Slide 11: General tips for flying
 
 - Use the controls gently, as the plane will cruise pretty well on it's own, and might only need occasional input from the pilot. 

@@ -87,7 +87,7 @@ public class ControlsPanel extends JPanel implements FocusListener
 
     protected void paintComponent(Graphics g) 
     {
-        FlightSimulator.flightSim.paintBackground(this, g);
+        Utils.paintBackground(this, g);
         requestFocusInWindow();
     }
 

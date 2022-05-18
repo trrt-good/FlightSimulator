@@ -1,3 +1,4 @@
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -18,6 +19,8 @@ import java.awt.Point;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GamePanel extends JPanel implements KeyListener, MouseListener, FocusListener
 {
@@ -29,6 +32,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
     private Terrain ground;
     private Image flightDials; 
 
+    private ArrayList<String> questions;
+    private ArrayList<String> aAnswers;
+    private ArrayList<String> bAnswers;
+    private ArrayList<String> cAnswers;
+    private ArrayList<String> dAnswers;
 
     private boolean paused;
     private SidePanel sidePanel;
@@ -43,12 +51,42 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         addMouseListener(this);
         sidePanel = new SidePanel();
         add(sidePanel, BorderLayout.EAST);
-        flightDials = FlightSimulator.makeImage(new File(FlightSimulator.RESOURCES_FOLDER, "AirplaneDials.png"));
+        flightDials = Utils.makeImage(new File(FlightSimulator.RESOURCES_FOLDER, "AirplaneDials.png"));
         lighting = new Lighting(new Vector3(1, -1, 1), 30, 150);
         gameCamera = new Camera(new Vector3(0, 0, -1000), 50000, 30, 60);
         airplane = new Airplane(this, gameCamera);
         ground = new Terrain(-500, -200, 6000, 1000, 500, 500, 0.02, 30, new Color(1, 75, 148), new Color(15, 99, 0), new Color(200, 200, 210));
         gameCamera.setOrbitControls(this, airplane, 1000, 10);
+    }
+
+    public void readQuestions()
+    {
+        Scanner reader = Utils.makeReader(new File(FlightSimulator.RESOURCES_FOLDER, "questions.txt"));
+        String line = "";
+        while (reader.hasNextLine())
+        {
+            line = reader.nextLine();
+            if (line.startsWith("q "))
+            {
+                questions.add(line.substring(2));
+            }
+            else if (line.startsWith("a "))
+            {
+                aAnswers.add(line.substring(2));
+            }
+            else if (line.startsWith("b "))
+            {
+                bAnswers.add(line.substring(2));
+            }
+            else if (line.startsWith("c "))
+            {
+                cAnswers.add(line.substring(2));
+            }
+            else if (line.startsWith("d "))
+            {
+                dAnswers.add(line.substring(2));
+            }
+        }
     }
 
     //sets up the rendering panel and starts the rendering updates. 
@@ -109,8 +147,35 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             
             //  compass center = 253, 315
             //  airspeed center = 86, 487
-            g.drawLine(252, 315, 252, 250); //compass
-            g.drawLine(86, 487, 86, 430); //airspeed
+            drawDialNeedle(g2d, 252, 315, 60, airplane.orientation().y); //compass
+            drawDialNeedle(g2d, 85, 487, 60, airplane.getSpeed()/75);//airspeed
+            drawTurnCoordinator(g2d, 85, 659, airplane.orientation().z); //turn coordinator
+            drawDialNeedle(g2d, 255, 489, 55, airplane.getAltitude()/300/Math.PI); //altimeter hundreds needle
+            drawDialNeedle(g2d, 255, 489, 30, airplane.getAltitude()/3000/Math.PI); //altimeter thousands needle
+            drawDialNeedle(g2d, 255, 659, 60, airplane.getVerticalClimb()/Math.PI/10 - Math.PI/2); //Vertical climb
+        }
+
+        public void drawDialNeedle(Graphics2D g2d, int centerX, int centerY, int length, double rotation)
+        {
+            rotation -= Math.PI/2;
+            int endPointX;
+            int endPointY;
+
+            endPointX = centerX+(int)(Math.cos(rotation)*length);
+            endPointY = centerY+(int)(Math.sin(rotation)*length);
+
+            g2d.drawLine(centerX, centerY, endPointX, endPointY);
+        }
+
+        public void drawTurnCoordinator(Graphics2D g2d, int centerX, int centerY, double rotation)
+        {
+            int endPointX;
+            int endPointY;
+
+            endPointX = (int)(Math.cos(-rotation)*50);
+            endPointY = (int)(Math.sin(-rotation)*50);
+            g2d.drawLine(centerX, centerY, centerX+endPointX, centerY+endPointY);
+            g2d.drawLine(centerX, centerY, centerX-endPointX, centerY-endPointY);
         }
     }
 
@@ -153,6 +218,86 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             repaint();
             airplane.stopPhysics();
             renderingPanel.stopThread();
+        }
+    }
+
+    class QuestionPopup extends JFrame implements ActionListener
+    {
+        public QuestionPopup(int questionNum, char... correctAnswers)
+        {
+            setVisible(true);
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            setSize(500, 500);
+            setResizable(false);
+            setLayout(new BorderLayout());
+
+            add(new BottomPanel(), BorderLayout.SOUTH);
+
+            if (correctAnswers.length > 1)
+            {
+
+            }
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            System.out.println("paintC");
+            requestFocusInWindow();
+        }
+
+        public void actionPerformed(ActionEvent e)
+        {
+
+        }
+
+        public boolean checkAnswers()
+        {
+            return true;
+        }
+
+        public void closeQuestionFrame()
+        {
+            dispose();
+        }
+
+        class AnswerChoicePanel extends JPanel implements ActionListener
+        {
+            public AnswerChoicePanel()
+            {
+                
+            }
+
+            public void actionPerformed(ActionEvent e) 
+            {
+                
+            }
+            
+        }
+
+        class BottomPanel extends JPanel implements ActionListener
+        {
+            private Button confirmButton;
+            public BottomPanel()
+            {
+                setLayout(new FlowLayout());
+                confirmButton = new Button("Check", 30);
+                setPreferredSize(new Dimension(100, 100));
+                confirmButton.addActionListener(this);
+                add(confirmButton);
+            }
+
+            public void actionPerformed(ActionEvent e)
+            {
+                if (confirmButton.getText().equalsIgnoreCase("close"))
+                {
+                    closeQuestionFrame();
+                    return;
+                }
+                if (checkAnswers())
+                {
+                    confirmButton.setText("close");
+                }
+            }
         }
     }
 

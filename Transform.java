@@ -128,6 +128,11 @@ public class Transform
         return position;
     }
 
+    public EulerAngle getRotation()
+    {
+        return rotation;
+    }
+
     public GameObject getGameObject()
     {
         return gameObject;

@@ -18,3 +18,10 @@ p 123
 milesFlown 0.0
 completedTraining true
 settings  38 40 83 87 65 68 81 69 66 60.000000 10.000000 true
+
+--
+u 1
+p 11
+milesFlown 0.0
+completedTraining false
+settings  38 40 83 87 65 68 81 69 66 60.000000 10.000000 true

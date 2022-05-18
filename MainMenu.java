@@ -65,7 +65,7 @@ public class MainMenu extends JPanel
         Button learnToFlyButton = new Button("Learn to fly", 30, 250, 60);
         learnToFlyButton.addActionListener(InstructionPanel.getInstructionPanelSwitcher());
         Button freePlayButton = new Button("Free play", 30, 250, 60);
-        freePlayButton.addActionListener(GamePanel.getGamePanelSwitcher());
+        freePlayButton.addActionListener(new FreePlayButtonListener());
         Button settingsButton = new Button("Settings", 30, 250, 60);
         settingsButton.addActionListener(SettingsPanel.getSettingsSwitcher(MainMenu.name()));
         panel.add(learnToFlyButton);
@@ -78,7 +78,7 @@ public class MainMenu extends JPanel
     //sets the background
     public void paintComponent(Graphics g)
     {
-        FlightSimulator.flightSim.paintBackground(this, g);
+        Utils.paintBackground(this, g);
     }
 
     public static String name()
@@ -86,11 +86,26 @@ public class MainMenu extends JPanel
         return "MainMenu";
     }
 
-    public class ExitButtonListener implements ActionListener
+    class ExitButtonListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             System.exit(1);
+        }
+    }
+
+    class FreePlayButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (FlightSimulator.user.getCompletedTraining())
+            {
+                FlightSimulator.flightSim.showPanel(GamePanel.name());
+            }
+            else
+            {
+                new PopupFrame("Learn to fly first!");
+            }
         }
     }
 

@@ -47,6 +47,6 @@ class StartPanel extends JPanel implements ActionListener
 
     public void paintComponent(Graphics g)
     {
-        FlightSimulator.flightSim.paintBackground(this, g);    
+        Utils.paintBackground(this, g);    
     }
 }

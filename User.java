@@ -21,7 +21,7 @@ public class User
     //constructor for creating a NEW user. This automatically writes the user into the file.
     public User(String usernameIn, String passwordIn)
     {
-        PrintWriter fileWriter = makeWriter(ACCOUNT_DATA_FILE, true);
+        PrintWriter fileWriter = Utils.makeWriter(ACCOUNT_DATA_FILE, true);
         username = usernameIn;
         password = passwordIn;
         milesFlown = 0;
@@ -50,8 +50,8 @@ public class User
     public void saveData()
     {
         //make the readers/writers
-        Scanner fileReader = makeReader(ACCOUNT_DATA_FILE);
-        PrintWriter fileWriter = makeWriter(ACCOUNT_DATA_FILE, false);
+        Scanner fileReader = Utils.makeReader(ACCOUNT_DATA_FILE);
+        PrintWriter fileWriter = Utils.makeWriter(ACCOUNT_DATA_FILE, false);
         String line = null;
         while (fileReader.hasNextLine())
         {
@@ -90,7 +90,7 @@ public class User
         User user = null;
         if (username != null)
         {
-            Scanner fileReader = makeReader(ACCOUNT_DATA_FILE);
+            Scanner fileReader = Utils.makeReader(ACCOUNT_DATA_FILE);
             String line = "";
             while (fileReader.hasNextLine())
             {
@@ -118,38 +118,6 @@ public class User
             }
         }
         return user;
-    }
-
-    //returns a scanner object that made for the inputted file.
-    private static Scanner makeReader(File file)
-    {
-        Scanner scanner = null;
-        try
-        {
-            scanner = new Scanner(file);
-            scanner.hasNextLine();
-            //^ called to mitigate bug which causes the scanner to think the file is empty
-        } 
-        catch (FileNotFoundException e) 
-        {
-            System.err.println("ERROR at: User/makeReader() method:\n\tCould not find user data file: " + file.getAbsolutePath());
-        }
-        return scanner;
-    }
-
-    //returns a PrintWriter object for the specified file, and with the option to append or not
-    private static PrintWriter makeWriter(File file, boolean append)
-    {
-        PrintWriter printWriter = null;
-        try 
-        {
-            printWriter = new PrintWriter(new FileWriter(file, append), true);
-        } 
-        catch (IOException e) 
-        {
-            System.err.println("ERROR at: User/makeWriter() method:\n\tIOException related to making a PrintWriter object for file: " + file.getAbsolutePath());
-        }
-        return printWriter;
     }
 
     //#region get/set methods

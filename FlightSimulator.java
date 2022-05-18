@@ -22,6 +22,8 @@ public class FlightSimulator
     public static final int DEFAULT_WIDTH = 1366;
     public static final int DEFAULT_HEIGHT = 768;
 
+    public static final Image BACKGROUND_IMAGE = Utils.makeImage(new File(RESOURCES_FOLDER, "airplaneBackground.jpg"));
+
     //store the essential data for all the classes to have acess to. 
     public static FlightSimulator flightSim; //the flight sim object in use.
     public static User user; //the current user 
@@ -42,8 +44,7 @@ public class FlightSimulator
     private SettingsPanel settingsPanel;
     private ControlsPanel controlsPanel;
 
-    //background image 
-    private Image backgroundImage;
+
     
     public static void main(String [] args)
     {
@@ -89,24 +90,9 @@ public class FlightSimulator
         mainCardLayout = new CardLayout();
         mainCardPanel.setLayout(mainCardLayout);
         gameFrame.validate();
-        backgroundImage = makeImage(new File(FlightSimulator.RESOURCES_FOLDER, "airplaneBackground.jpg"));
     }
 
-    //  returns an image with the given file
-    public static Image makeImage(File imageFile)
-    {
-        Image image = null;
-        try
-        {
-            image = ImageIO.read(imageFile);
-        }
-        catch (IOException e)
-        {
-            System.out.println("Could not locate image file");
-            e.printStackTrace();
-        }
-        return image;
-    }
+
 
     public void updateWelcomeText()
     {
@@ -123,12 +109,6 @@ public class FlightSimulator
     private void addPanelToCards(JPanel panel, String name)
     {
         mainCardPanel.add(panel, name);
-    }
-    
-    //returns background image
-    public Image getBackgroundImage()
-    {
-        return backgroundImage;
     }
 
     public CardLayout getCardLayout()
@@ -156,10 +136,5 @@ public class FlightSimulator
         return controlsPanel;
     }
 
-    //a shortcut for drawing the background image scaled to the given panel size.
-    //used by other panels to draw the background as to not write unnecessary code 
-    public void paintBackground(JPanel panel, Graphics g)
-    {
-        g.drawImage(backgroundImage, 0, 0, panel.getWidth(), (int)(((double)panel.getWidth()/backgroundImage.getWidth(panel))*backgroundImage.getHeight(panel)), panel);
-    }
+    
 }

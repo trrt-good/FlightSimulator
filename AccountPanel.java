@@ -220,6 +220,6 @@ public class AccountPanel extends JPanel
 
     public void paintComponent(Graphics g)
     {
-        FlightSimulator.flightSim.paintBackground(this, g);
+        Utils.paintBackground(this, g);
     }
 }
