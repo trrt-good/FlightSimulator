@@ -32,5 +32,11 @@ public class GameObject
     {
         return name;
     }
+    
+    public void setTransform(Transform transformIn)
+    {
+        transform = transformIn;
+        transform.setGameObject(this);
+    }
     //#endregion
 }

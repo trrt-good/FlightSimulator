@@ -4,9 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
- 
-import javax.swing.JPanel;
- 
+  
 public class Airplane extends GameObject implements ActionListener
 {
     private final int CRASH_THRESHOLD = 30;
@@ -32,6 +30,9 @@ public class Airplane extends GameObject implements ActionListener
     private double yawRollEffectAmount;
     private double aerodynamicEffectAmount;
     
+
+    private boolean takenOff;
+    private boolean landed;
     private double groundLevel;  
 
     private GamePanel gamePanel; 
@@ -57,7 +58,7 @@ public class Airplane extends GameObject implements ActionListener
         angularDragCoefficient = 1;
         aerodynamicEffectAmount = 0.01;
         yawRollEffectAmount = 30;
-        groundLevel = -400;
+        groundLevel = 0;
         
         deltaTime = 0.01;
         lastFrame = 0;
@@ -118,15 +119,16 @@ public class Airplane extends GameObject implements ActionListener
 
     public void reset()
     {
+        gamePanel.pause();
+        stopPhysics();
+        getMesh().resetPosition();
+        getMesh().rotate(getTransform().toLocalMatrix(), new Vector3());
+        
+        setTransform(new Transform(new Vector3()));
         throttle = 0;
-        this.physics.physicsReset();
-        getTransform().setPosition(new Vector3());
-        getTransform().setPitch(0);
-        getTransform().setYaw(0);
-        getTransform().setRoll(0);
-        getTransform().setPitch(0);
-        getTransform().setYaw(0);
-        getTransform().setRoll(0);
+        physics = new AirplanePhysics();
+        startPhysics();
+        gamePanel.unpause();
     }
 
     public double getAltitude()
@@ -139,9 +141,24 @@ public class Airplane extends GameObject implements ActionListener
         return physics.velocity.getMagnitude();
     }
 
+    public boolean hasCrashed()
+    {
+        return physics.crashed();
+    }
+
     public EulerAngle orientation()
     {
         return physics.physicsRotation;
+    }
+
+    public boolean hasLanded()
+    {
+        return physics.landed();
+    }
+
+    public double getThrottle()
+    {
+        return throttle;
     }
 
     public double getVerticalClimb()
@@ -239,6 +256,7 @@ public class Airplane extends GameObject implements ActionListener
         private double velocityYaw;
         private double velocityRoll;
         private boolean grounded; 
+        private boolean crashed;
  
         public AirplanePhysics()
         {
@@ -275,14 +293,14 @@ public class Airplane extends GameObject implements ActionListener
  
         public void applyDrag()
         {
-            if (velocity.getSqrMagnitude() > 0)
+            if (velocity.getSqrMagnitude() > 0.1)
             {
                 double altitudeFactor = (2000/(physicsPosition.y-groundLevel+2000));
                 altitudeFactor += 0.6;
                 altitudeFactor *= altitudeFactor * altitudeFactor;
-                velocity = Vector3.subtract(velocity, Vector3.multiply(velocity, dragCoefficient*velocity.getMagnitude()*deltaTime*altitudeFactor/700));
+                velocity = Vector3.subtract(velocity, Vector3.multiply(velocity, Math.min(1, dragCoefficient*velocity.getMagnitude()*deltaTime*altitudeFactor/700)));
                 Vector3 verticalDrag = Vector3.projectToVector(velocity, getTransform().getUp());
-                velocity = Vector3.subtract(velocity, Vector3.multiply(verticalDrag, dragCoefficient*verticalDrag.getMagnitude()*deltaTime*altitudeFactor));
+                velocity = Vector3.subtract(velocity, Vector3.multiply(verticalDrag, Math.min(1, dragCoefficient*verticalDrag.getMagnitude()*deltaTime*altitudeFactor)));
             }
         }
 
@@ -355,6 +373,16 @@ public class Airplane extends GameObject implements ActionListener
                 physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z))/5;
             }
         }
+
+        public boolean landed()
+        {
+            return landed;
+        }
+
+        public boolean crashed()
+        {
+            return crashed;
+        }
  
         public void updatePosition()
         {
@@ -362,17 +390,21 @@ public class Airplane extends GameObject implements ActionListener
             {
                 physicsPosition.add(velocity);
                 grounded = false;
+                if (physicsPosition.y > 50 && takenOff == false)
+                {
+                    takenOff = true;
+                }
             }
             else
             {
                 physicsPosition.y = groundLevel;
-                velocity = new Vector3(velocity.x, 0 , velocity.z);
+                velocity.y = 0;
                 physicsPosition.add(velocity);
                 grounded = true;
                 checkCrash();
             }
             getTransform().setPosition(Vector3.add(getTransform().getPosition(), velocity));
-            if (camera.getOrbitCamController() != null)
+            if (camera.getOrbitCamController() != null && camera.getOrbitCamController() != null)
             {
                 camera.getOrbitCamController().updatePosition();
             }
@@ -386,7 +418,13 @@ public class Airplane extends GameObject implements ActionListener
                 (crashFactor > CRASH_THRESHOLD) || (grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
             )
             {
+                System.out.println("crash");
                 reset();
+            }
+            else if (takenOff)
+            {
+                System.out.println("land");
+                landed = true;
             }
         }
  
@@ -401,6 +439,14 @@ public class Airplane extends GameObject implements ActionListener
             getTransform().setRoll(physicsRotation.z);
  
         }
+
+        public void breaks()
+        {
+            if (airplaneController.brakes)
+                dragCoefficient = 2;
+            else
+                dragCoefficient = 0.2;
+        }
  
         public void applyThrust(double amount)
         {
@@ -414,15 +460,19 @@ public class Airplane extends GameObject implements ActionListener
  
         public void update()
         {
-            calculateForwardV();
-            applyAerodynamicEffect();
-            applyYawRollEffect();
-            applyGravity();  
-            applyLift();  
-            applyDrag();
-            applyAngularDrag();
-            updateOrientation();
-            updatePosition();  
+            if (physicsEnabled)
+            {
+                calculateForwardV();
+                applyAerodynamicEffect();
+                applyYawRollEffect();
+                applyGravity();  
+                applyLift();  
+                applyDrag();
+                applyAngularDrag();
+                updateOrientation();
+                updatePosition();     
+                breaks();
+            }
         }
     }
  

@@ -107,6 +107,16 @@ public class Transform
         return Vector3.applyMatrix(new Matrix3x3(right, up, forward).getInverse(), point);
     }
 
+    public Matrix3x3 toLocalMatrix()
+    {
+        return new Matrix3x3(right, up, forward).getInverse();
+    }
+
+    public Matrix3x3 toWorldMatrix()
+    {
+        return new Matrix3x3(right, up, forward);
+    }
+
     //#region getter/setter methods
     public Vector3 getForward()
     {

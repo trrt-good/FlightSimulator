@@ -14,7 +14,7 @@ public class Terrain extends Mesh
         {
             for (int z = 0; z < verticies[x].length; z++)
             {
-                verticies[x][z] = new Vector3((x-gridWidth/2.0)*gridInterval, Math.max(height + Math.pow(SimplexNoise.noise(x*frequency, z*frequency)*amplitude, 3) , height+waterLevel) , (z-gridLength/2.0)*gridInterval + 10000);
+                verticies[x][z] = new Vector3((x-gridWidth/2.0)*gridInterval, Math.max(height + Math.pow(SimplexNoise.noise(x*frequency, z*frequency)*amplitude, 3) , height+waterLevel) , (z-gridLength/2.0)*gridInterval + 300000);
             }
         }
         
@@ -43,4 +43,6 @@ public class Terrain extends Mesh
         }
 
     }
+
+    
 }

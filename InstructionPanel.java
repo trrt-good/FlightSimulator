@@ -1,5 +1,6 @@
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;   
@@ -41,7 +42,7 @@ public class InstructionPanel extends JPanel
     public InstructionPanel()
     {
         ArrayList<String> instructionsText = readInstructionsText();
-        numberOfSlides = instructionsText.size();
+        numberOfSlides = instructionsText.size()+1;
         activeSlideIndex = 0;
         setLayout(new BorderLayout());
         instructionImages = new Image[numberOfSlides];
@@ -57,6 +58,7 @@ public class InstructionPanel extends JPanel
             InstructionSlide slide = new InstructionSlide(instructionsText.get(i));
             instructionsPanelHolder.add(slide, "" + i);
         }
+        instructionsPanelHolder.add(new LastSlide(), instructionsText.size());
         instructionsCardLayout.show(instructionsPanelHolder, "" + activeSlideIndex);
     }  
 
@@ -145,6 +147,26 @@ public class InstructionPanel extends JPanel
             {
                 g.drawImage(instructionImages[activeSlideIndex], 300, -10, (int)(instructionImages[activeSlideIndex].getWidth(this)/(double)instructionImages[activeSlideIndex].getHeight(this)*400), 400, this);
             }
+        }
+    }
+
+    class LastSlide extends JPanel
+    {
+        public LastSlide()
+        {
+            setOpaque(false);
+            setLayout(new FlowLayout(FlowLayout.CENTER, 300, 100));
+            JTextArea description = new JTextArea(6, 30);
+            description.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 20));
+            description.setLineWrap(true);
+            description.setWrapStyleWord(true);
+            description.setText("If you feel you are ready, please procede to be tested on your knowlage of flying a plain. In the test, "
+                + "you will be occasionally questioned and you must get no less than two wrong in order to win. You must also take of and land the "
+                + "plane successfully. The landing runway will be north of where you start. GOOD LUCK!");
+            add(description);
+            Button procedeButton = new Button("Test", 30);
+            procedeButton.addActionListener(GamePanel.getGamePanelSwitcher());
+            add(procedeButton);
         }
     }
 

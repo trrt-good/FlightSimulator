@@ -53,8 +53,8 @@ public class Camera
     //the game object. 
     class OrbitCamController implements MouseMotionListener, MouseWheelListener, MouseListener
     {
-        private int maxDistance = 3000; //maximum distance the camera can be from the object
-        private int minDistance = 300; //minimum distance
+        private int maxDistance = 4000; //maximum distance the camera can be from the object
+        private int minDistance = 2500; //minimum distance
 
         private double distance; //distacne from the object
 
@@ -127,6 +127,11 @@ public class Camera
             if (FlightSimulator.flightSim.getGamePanel().isPaused())
                 return;
             position = Vector3.add(focusObj.getTransform().getPosition(), difference);
+        }
+
+        public GameObject getFocusObj()
+        {
+            return focusObj;
         }
 
         public void mouseMoved(MouseEvent e) {}
@@ -299,6 +304,11 @@ public class Camera
     public double getVorientation()
     {
         return vAngle;
+    }
+    
+    public void setFocusObj(GameObject obj)
+    {
+        orbitController.focusObj = obj;
     }
 
     public Vector3 getPosition()

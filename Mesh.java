@@ -4,6 +4,7 @@ import java.util.StringTokenizer;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
@@ -142,6 +143,11 @@ public class Mesh
     public ArrayList<Triangle> getTriangles()
     {
         return triangles;
+    }
+
+    public void resetPosition()
+    {
+        translate(Vector3.negate(totalMovement));
     }
 
     public ArrayList<Vector3> getVertices()
