@@ -11,3 +11,17 @@ p iLoveEclipse
 milesFlown 0.0
 completedTraining true
 settings  38 40 83 87 65 68 81 69 66 120.000000 10.000000 true
+
+--
+u t
+p 1
+milesFlown 0.0
+completedTraining true
+settings  38 40 83 87 65 68 81 69 66 60.000000 10.000000 true
+
+--
+u b
+p b
+milesFlown 0.0
+completedTraining false
+settings  38 40 83 87 65 68 81 69 66 60.000000 10.000000 true

@@ -3,6 +3,7 @@ import java.awt.Graphics;
 
 import java.awt.Image;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,9 +11,13 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+//utilities class for creating simple file IO objects such as scanner
+//file writer or reading images. 
+//Rather than having to re write a bunch of file IO methods in each class 
+//where it's used, I just use this
 public class Utils 
 {
-    //  returns an image with the given file
+    // returns an image with the given file
     public static Image makeImage(File imageFile)
     {
         Image image = null;
@@ -65,5 +70,29 @@ public class Utils
             System.err.println("ERROR at: User/makeWriter() method:\n\tIOException related to making a PrintWriter object for file: " + file.getAbsolutePath());
         }
         return printWriter;
+    }
+
+    //my own implementation of the String.split method 
+    public static String[] split(String string, String regex)
+    {
+        ArrayList<String> words = new ArrayList<>();
+        
+        int firstIndex = 0;
+        int lastIndex = string.indexOf(regex);
+        if (lastIndex != -1)
+        {
+            words.add(string.substring(firstIndex, lastIndex));
+            while (lastIndex != -1 && string.substring(lastIndex).contains(regex))
+            {
+                firstIndex = lastIndex + 1;
+                lastIndex = string.indexOf(regex, firstIndex);
+                if (lastIndex != -1)
+                {
+                    words.add(string.substring(firstIndex, lastIndex));
+                }
+            }
+        }
+        String[] strings = new String[words.size()];
+        return words.toArray(strings);
     }
 }

@@ -1,3 +1,4 @@
+//an object used for presenting planes in 3d space. 
 public class Plane 
 {
     //just for reference if ever needed. 

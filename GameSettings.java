@@ -71,6 +71,7 @@ public class GameSettings
         fog = DEFAULT_FOG;
     }
 
+    //formats the settings into a string for writing to the file
     public String toString()
     {
         return String.format(" %d %d %d %d %d %d %d %d %d %f %f %b", throttleUp, throttleDown, pitchUp, pitchDown, rollLeft, rollRight, yawLeft, yawRight, brakes, fov, sensitivity, fog);

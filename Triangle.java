@@ -1,4 +1,6 @@
 import java.awt.Color;
+
+//represents 3d triangles using three Vector3 vetices
 public class Triangle 
 {
     //3d verticies of the triangle. 

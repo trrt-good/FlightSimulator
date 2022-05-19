@@ -2,8 +2,6 @@ import java.awt.Color;
 
 public class Terrain extends Mesh
 {
-    //this is just for fun and will likely not be in the final version of the game. 
-
     private Vector3[][] verticies;
 
     public Terrain(double height, double waterLevel, double snowLevel, double gridInterval, int gridLength, int gridWidth, double frequency, double amplitude, Color waterColor, Color mountainColor, Color snowColor)

@@ -4,7 +4,6 @@ import java.util.StringTokenizer;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
@@ -75,6 +74,7 @@ public class Mesh
         System.out.println("mesh created: " + modelFileName + " in " + (System.nanoTime() - start)/1000000 + "ms\n\t- " + triangles.size() + " triangles");
     }
 
+    //a second constructor for models without a texture file
     public Mesh(String modelFileName, Color color, Vector3 modelOffsetAmount, EulerAngle modelOffsetRotation, double scale, boolean shaded, boolean shouldBackFaceCull)
     {
         long start = System.nanoTime();
@@ -98,6 +98,7 @@ public class Mesh
         System.out.println("mesh created: " + modelFileName + " in " + (System.nanoTime() - start)/1000000 + "ms\n\t- " + triangles.size() + " triangles");
     }
 
+    //mesh constructor for children
     protected Mesh(boolean shadedIn, boolean shouldBackFaceCull)
     {        
         shading = shadedIn;

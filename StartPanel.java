@@ -6,10 +6,10 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+//the starting panel of the game 
 class StartPanel extends JPanel implements ActionListener
 {
     //Creates the start panel with a null layout. This contains the title and a play 

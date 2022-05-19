@@ -1,9 +1,5 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 import java.io.PrintWriter;
 
 public class User 
@@ -101,16 +97,15 @@ public class User
                     double miles = Double.parseDouble(fileReader.nextLine().substring(11));
                     boolean completedTraining = Boolean.parseBoolean(fileReader.nextLine().substring(18));
                     //TODO: make this work with conlin conventions
-                    StringTokenizer settingsLine = new StringTokenizer(fileReader.nextLine());
-                    settingsLine.nextToken();
+                    String[] settingsLine = Utils.split(fileReader.nextLine(), " ");
                     GameSettings newSettings = new GameSettings
                     (
-                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
-                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
-                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
-                        Integer.parseInt(settingsLine.nextToken()), Integer.parseInt(settingsLine.nextToken()),
-                        Integer.parseInt(settingsLine.nextToken()), Double.parseDouble(settingsLine.nextToken()),
-                        Double.parseDouble(settingsLine.nextToken()), Boolean.parseBoolean(settingsLine.nextToken())
+                        Integer.parseInt(settingsLine[1]), Integer.parseInt(settingsLine[2]),
+                        Integer.parseInt(settingsLine[3]), Integer.parseInt(settingsLine[4]),
+                        Integer.parseInt(settingsLine[5]), Integer.parseInt(settingsLine[6]),
+                        Integer.parseInt(settingsLine[7]), Integer.parseInt(settingsLine[8]),
+                        Integer.parseInt(settingsLine[9]), Double.parseDouble(settingsLine[10]),
+                        Double.parseDouble(settingsLine[11]), Boolean.parseBoolean(settingsLine[12])
                     );
                     user = new User(line.substring(2), pass, completedTraining, miles, newSettings);
                     break;

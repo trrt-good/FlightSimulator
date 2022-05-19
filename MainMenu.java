@@ -109,6 +109,9 @@ public class MainMenu extends JPanel
         }
     }
 
+    
+    //a polymorphic approach to mitigate the problem of having unneccesary 
+    //event listeners that havethe exact same purpose of switching to a panel
     public static SwitchToMainMenuPanelListener getMainMenuPanelSwitcher()
     {
         return new SwitchToMainMenuPanelListener();

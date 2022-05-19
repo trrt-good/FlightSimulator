@@ -16,14 +16,20 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
+//panel for changing basic settings
 public class SettingsPanel extends JPanel implements FocusListener
 {
+    //button for going back to the previous panel
     private BackButton backButton;
 
+    //two settings that this changes
     private SliderSetting fovSlider;
     private SliderSetting sensitivitySlider;
+
+    //button for switching to the controls panel
     private Button controlsButton;
 
+    //makes a settings panel and sets it up
     public SettingsPanel()
     {
         setOpaque(false);
@@ -31,9 +37,9 @@ public class SettingsPanel extends JPanel implements FocusListener
         addFocusListener(this);
         add(topPanel(), BorderLayout.NORTH);
         add(settingsContents(), BorderLayout.CENTER);
-        
     }
 
+    //the panel which holds the back button and the title.
     private JPanel topPanel()
     {
         JPanel panel = new JPanel();
@@ -48,6 +54,7 @@ public class SettingsPanel extends JPanel implements FocusListener
         return panel;
     }
 
+    //makes the two settings slider objects with their specified names
     private JPanel settingsContents()
     {
         JPanel panel = new JPanel();
@@ -69,6 +76,7 @@ public class SettingsPanel extends JPanel implements FocusListener
         requestFocusInWindow();
     }
 
+    //updates the sliders based on user settings when focus is gained
     public void focusGained(FocusEvent e) 
     {
         fovSlider.setValue(FlightSimulator.user.getSettings().fov);
@@ -76,6 +84,7 @@ public class SettingsPanel extends JPanel implements FocusListener
         System.out.println("gained");
     }
 
+    //applies changes from the settings to the user object
     public void focusLost(FocusEvent e) 
     {
         FlightSimulator.user.getSettings().fov = fovSlider.getValue();
@@ -83,11 +92,16 @@ public class SettingsPanel extends JPanel implements FocusListener
         FlightSimulator.user.saveData();
     }
 
+    //an object which has a slider which changes a setting.
     class SliderSetting extends JPanel implements ChangeListener
-    {        
+    {     
+        //the value of the slider   
         private JTextField valueDisplay;
+
+        //the slider itself 
         private JSlider slider;
 
+        //constructs a sliderSetting object with a name and min and max value for the slider
         public SliderSetting(String settingName, int min, int max)
         {        
             setOpaque(false);
@@ -102,29 +116,33 @@ public class SettingsPanel extends JPanel implements FocusListener
             slider.setOpaque(false);
             slider.addChangeListener(this);
 
-
             add(settingLabel);
             add(valueDisplay);
             add(slider);
         }
 
+        //sets the value of the slider (for updating to the user's settings)
         public void setValue(double value)
         {
             slider.setValue((int)value);
             valueDisplay.setText("" + value);
         }
 
+        //returns the value of the slider
         public int getValue()
         {
             return slider.getValue();
         }
 
+        //updates the text whenever the slider changes
         public void stateChanged(ChangeEvent e) 
         {
             valueDisplay.setText("" + slider.getValue());
         }
     }
 
+    //a polymorphic approach to mitigate the problem of having unneccesary 
+    //event listeners that havethe exact same purpose of switching to a panel
     public static SwitchToSettingsListener getSettingsSwitcher(String switcherName)
     {
         return new SwitchToSettingsListener(switcherName);

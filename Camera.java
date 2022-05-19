@@ -1,8 +1,6 @@
-import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
@@ -19,9 +17,8 @@ public class Camera
     private double farClipDistance; //how far away should triangles stop being rendered?
     private double nearClipDistance; //how close should triangles stop being rendered?
 
-    //movement controllers. 
+    //movement controller 
     private OrbitCamController orbitController = null;
-    private FreeCamController freeCamController = null;
 
     //width of the render plane based off fov. 
     private double renderPlaneWidth;
@@ -37,7 +34,7 @@ public class Camera
         setFov(fovIn);
     }
 
-    //sets the v and h angles to look at the specified position.
+    //sets the v and h angles to look at the specified position. 
     public void lookAt(Vector3 pos)
     {
         hAngle = (pos.x-position.x < 0)? -Math.toDegrees(Math.atan((pos.z-position.z)/(pos.x-position.x)))-90 : 90-Math.toDegrees(Math.atan((pos.z-position.z)/(pos.x-position.x)));
@@ -64,17 +61,20 @@ public class Camera
         private GameObject focusObj; //the game object that the camera is focused on. 
         private double sensitivity; //how fast should the camera pan?
 
+        //the previous mouse click position
         private int prevX = 0;
         private int prevY = 0;
 
+        //the difference in position between the camera and the object it's focusing on.
         private Vector3 difference;
-        private Vector3 directionUnit = new Vector3();
+        private Vector3 directionUnit; // the normalized vector pointing away from the focusObj
         
         public OrbitCamController(GameObject focusObjectIn, double startDistanceIn, double sensitivityIn)
         {
             focusObj = focusObjectIn;
             distance = startDistanceIn;
             sensitivity = sensitivityIn;
+            directionUnit = new Vector3();
 
             //sets up the position of the camera.
             position = Vector3.add(focusObj.getTransform().getPosition(), new Vector3(0, 0, -distance));
@@ -82,7 +82,7 @@ public class Camera
             difference = Vector3.multiply(directionUnit, startDistanceIn);
         }
 
-        //changes the distance based on the mouse movement. 
+        //changes the distance from the camera to the focusObj based on the mouse movement. 
         public void mouseWheelMoved(MouseWheelEvent e) 
         {
             if (FlightSimulator.flightSim.getGamePanel().isPaused())
@@ -92,7 +92,9 @@ public class Camera
             updatePosition();
         }
 
-        //pans the camera 
+        //pans the difference vector around the focused object by changing the directionUnit vector 
+        //and then multiplying that by the distance scalar to get the actual differece, then calls
+        //the update position method which sets the position of the camera based on the difference vector.
         public void mouseDragged(MouseEvent e) 
         {
             if (FlightSimulator.flightSim.getGamePanel().isPaused())
@@ -116,12 +118,14 @@ public class Camera
             prevY = e.getY();
         }
 
+        //sets the sensitivty of the camera which is used for user settings
         public void setSensitivity(double sens)
         {
             sensitivity = sens;
         }
 
-        //updates the position of the camera to be around the focusObject.
+        //updates the position of the camera to be around the focusObject. 
+        //uses the difference vector calculated on other methods
         public void updatePosition()
         {
             if (FlightSimulator.flightSim.getGamePanel().isPaused())
@@ -129,6 +133,7 @@ public class Camera
             position = Vector3.add(focusObj.getTransform().getPosition(), difference);
         }
 
+        //returns the focusObj
         public GameObject getFocusObj()
         {
             return focusObj;
@@ -136,94 +141,6 @@ public class Camera
 
         public void mouseMoved(MouseEvent e) {}
         public void mouseClicked(MouseEvent e) {}
-        public void mouseReleased(MouseEvent e) {}
-        public void mouseEntered(MouseEvent e) {}
-        public void mouseExited(MouseEvent e) {}
-    }
-
-    //used mainly for debug, but a simple controller which lets the user fly up down left right forward backward.
-    class FreeCamController implements KeyListener, MouseMotionListener, MouseListener
-    {
-        private int prevX = 0;
-        private int prevY = 0;
-        private double sensitivity;
-        private double movementSpeed;
-
-        public FreeCamController(double sensitivityIn, double movementSpeedIn)
-        {
-            sensitivity = sensitivityIn;
-            movementSpeed = movementSpeedIn;
-        }
-
-        //for camera panning. 
-        public void mouseDragged(MouseEvent e) 
-        {
-            hAngle = hAngle + (e.getX()-prevX)/(100/sensitivity);
-            vAngle = vAngle - (e.getY()-prevY)/(100/sensitivity);
-            if (hAngle < 0)
-                hAngle += 360;
-            if (vAngle < 0)
-                hAngle += 360;
-            hAngle%=360;
-            vAngle%=360;
-
-            prevX = e.getX();
-            prevY = e.getY();
-        }
-
-        //checks for keys
-        public void keyPressed(KeyEvent e) 
-        {
-            switch (e.getKeyChar()) 
-            {
-                case 'w':
-                    moveForward(movementSpeed);
-                    break;
-                case 's':
-                    moveForward(-movementSpeed);
-                    break;
-                case 'a':
-                    moveLeft(movementSpeed);
-                    break;
-                case 'd':
-                    moveLeft(-movementSpeed);
-                    break;
-                case 'e':
-                    moveUp(movementSpeed);
-                    break;
-                case 'q':
-                    moveUp(-movementSpeed);
-                    break;
-            }
-        }
-
-        private void moveForward(double distanceIn)
-        {
-            position.add(Vector3.multiply(Vector3.angleToVector(hAngle*0.017453292519943295, vAngle*0.017453292519943295), distanceIn));
-        }
-
-        private void moveLeft(double distanceIn)
-        {
-            position.add(Vector3.multiply(Vector3.angleToVector(hAngle*0.017453292519943295-Math.PI/2, 0), distanceIn));
-        }
-
-        private void moveUp(double distanceIn)
-        {
-            position.add(Vector3.multiply(Vector3.angleToVector(hAngle*0.017453292519943295, vAngle*0.017453292519943295+Math.PI/2), distanceIn));
-        }
-
-        public void mousePressed(MouseEvent e) 
-        {
-            prevX = e.getX();
-            prevY = e.getY();
-        }
-
-        public void keyReleased(KeyEvent e) {}
-        public void mouseClicked(MouseEvent e) {}
-
-        public void mouseMoved(MouseEvent e) {}
-        public void keyTyped(KeyEvent e) {}
-
         public void mouseReleased(MouseEvent e) {}
         public void mouseEntered(MouseEvent e) {}
         public void mouseExited(MouseEvent e) {}
@@ -238,15 +155,6 @@ public class Camera
         panel.addMouseWheelListener(orbitController);
     }
 
-    //sets the controls to free cam mode. 
-    public void setFreeControls(JPanel panel, double movementSpeed, double sensitivity)
-    {
-        freeCamController = new FreeCamController(sensitivity, movementSpeed);
-        panel.addKeyListener(freeCamController);
-        panel.addMouseListener(freeCamController);
-        panel.addMouseMotionListener(freeCamController);
-    }
-
     //calculates the render plane width, which is a slightly expensive method, so it is only called once. 
     private double calculateRenderPlaneWidth()
     {
@@ -259,6 +167,7 @@ public class Camera
         return farClipDistance;
     }
 
+    //returns the distance of the near clipping pane used by rendering
     public double getNearClipDistance()
     {
         return nearClipDistance;
@@ -269,11 +178,8 @@ public class Camera
         return orbitController;
     }
 
-    public FreeCamController getFreeCamController()
-    {
-        return freeCamController;
-    }
-
+    //sets the fov but also re calculates the width of the rendering plane
+    //based on the new fov which is used for rendering
     public void setFov(double fovIn)
     {
         fov = fovIn;
@@ -291,16 +197,19 @@ public class Camera
         return renderPlaneDistance;
     }
 
+    //returns the direction of the camera as a normalized vector.
     public Vector3 getDirectionVector()
     {
         return Vector3.angleToVector(hAngle*0.017453292519943295, vAngle*0.017453292519943295);
     }
 
+    //returns the horizontal orientation of the camera (yaw)
     public double getHorientation()
     {
         return hAngle;
     }
 
+    //returns the vertical orientation of the camera (pitch)
     public double getVorientation()
     {
         return vAngle;

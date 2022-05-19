@@ -1,8 +1,7 @@
 //Tyler Rose
 //4-7-22
-//
+//FlightSimulator.java
 import java.awt.CardLayout;
-import java.awt.Graphics;
 import java.awt.Color;
 
 import javax.swing.JFrame;    
@@ -10,9 +9,11 @@ import javax.swing.JPanel;
 
 import java.awt.Image;
 import java.io.File;
-import javax.imageio.ImageIO;
-import java.io.IOException;
+import java.util.Arrays;
 
+//The main class for the FlightSimulator game. This creates the main frame
+//central card layout and card holder. It also contains some public finals which
+//are accessed throughout the project.
 public class FlightSimulator
 {
     //Final variables
@@ -47,7 +48,8 @@ public class FlightSimulator
 
     
     public static void main(String [] args)
-    {
+    {   
+        System.out.println(Arrays.toString(Utils.split("hello i am tyler ", " ")));
         flightSim = new FlightSimulator();
         flightSim.startGame();
     }

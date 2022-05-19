@@ -1,3 +1,5 @@
+//The matrix class is used for rotation matrices in rendering as well as 
+//Transform objects. It can be used for matrix multiplication with Vector3 objects too
 public class Matrix3x3 
 {
     //R means row and C means column. R2C3 would be second row third column.

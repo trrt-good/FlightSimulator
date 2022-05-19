@@ -14,10 +14,14 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
+//a panel which allows the user to edit their controls. This also writes the user's
+//prefferences to a text file.
 public class ControlsPanel extends JPanel implements FocusListener
 {
+    //the button which allows the user to go back to the previous panel
     private BackButton backButton;
 
+    //each airplane control has a control setting object 
     private ControlSetting throttleUpControl;
     private ControlSetting throttleDownControl;
     private ControlSetting pitchUpControl;
@@ -28,6 +32,7 @@ public class ControlsPanel extends JPanel implements FocusListener
     private ControlSetting yawRightControl;
     private ControlSetting brakesControl;
 
+    //set up the panel
     public ControlsPanel()
     {
         setOpaque(false);
@@ -38,6 +43,8 @@ public class ControlsPanel extends JPanel implements FocusListener
         
     }
 
+    //returns a jpanel which is the panel at the top of the ControlsPanel which 
+    //contains the back button and the title.
     private JPanel topPanel()
     {
         JPanel panel = new JPanel();
@@ -52,6 +59,7 @@ public class ControlsPanel extends JPanel implements FocusListener
         return panel;
     }
 
+    //the central panel in the borderLayout which contains all the individual control settings
     private JPanel ControlsContents()
     {
         JPanel panel = new JPanel();
@@ -91,6 +99,8 @@ public class ControlsPanel extends JPanel implements FocusListener
         requestFocusInWindow();
     }
 
+    //when this panel gains focus (rather than using paintComponent) I load all the 
+    //user preferences into the ControlSetting objects. 
     public void focusGained(FocusEvent e) 
     {
         throttleUpControl.setKey(FlightSimulator.user.getSettings().throttleUp);
@@ -105,9 +115,11 @@ public class ControlsPanel extends JPanel implements FocusListener
     }
     public void focusLost(FocusEvent e) {}
 
+    //This class is the object for each each keybind which contains a text field and a 
+    //label for the function of the keybind. 
     class ControlSetting extends JPanel
     {        
-        private JTextField keyDisplay;
+        private JTextField keyDisplay; //the textfield that displays the current setting
 
         public ControlSetting(String settingName)
         {        
@@ -123,6 +135,8 @@ public class ControlsPanel extends JPanel implements FocusListener
             add(settingLabel);
         }
 
+        //sets the key based on the value param. accounts for special keys like 
+        //the arrows.
         public void setKey(int value)
         {
             switch (value) {
@@ -147,6 +161,7 @@ public class ControlsPanel extends JPanel implements FocusListener
             keyDisplay.setText("" + (char)(value+32));
         }
 
+        //returns the value of the key based on the KeyEvent VK finals 
         public int getKeyValue()
         {
             switch (keyDisplay.getText().toLowerCase()) {
@@ -166,6 +181,8 @@ public class ControlsPanel extends JPanel implements FocusListener
         }
     }
 
+    //a listener class for the restore defaults button. This restores all the controls to their 
+    //corresponding default values then saves it into the text file.
     class restoreDefaultsListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -183,6 +200,7 @@ public class ControlsPanel extends JPanel implements FocusListener
         }
     }
 
+    //applies any changes from the ControlSettings objects into the text file
     class confirmChangesListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -200,16 +218,21 @@ public class ControlsPanel extends JPanel implements FocusListener
         }
     }
 
+    //returns a listener for switching to this panel.
     public static SwitchToControlsListener getControlsSwitcher(String switcherName)
     {
         return new SwitchToControlsListener(switcherName);
     }
 
+    //the name used for card layout switching
     public static String name()
     {
         return "ControlsPanel";
     }
 
+    //a static listener class which can handle any button who's function is to
+    //switch to the ControlsPanel. This is a polymorphic apporach that avoids having
+    //to make multiple listeners in many difference classes which all have the same purpose.
     static class SwitchToControlsListener implements ActionListener
     {
         private String prevName;

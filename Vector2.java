@@ -1,3 +1,4 @@
+//and Object for represeting 2d bectors and points
 public class Vector2 
 {
     public double x;

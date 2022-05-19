@@ -15,7 +15,10 @@ public class BackButton extends JButton implements ActionListener
     //necessary for switching between cards 
     private CardLayout layout;
     private JPanel parentPanel;
-    private String prevPanelName;
+    private String prevPanelName; //the name of the panel for this button 
+    //to switch to. Note that it doesn't have to be the previous one, but 
+    //it would make more sense to use it to switch to the previous panel
+    //because it is a "back" button afterall.
 
     //constructs a back button which takes in the nessecary variables for switching 
     //between panels in a card layout.

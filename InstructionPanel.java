@@ -62,6 +62,7 @@ public class InstructionPanel extends JPanel
         instructionsCardLayout.show(instructionsPanelHolder, "" + activeSlideIndex);
     }  
 
+    //loads the images of each instruction slide using the ImageIO class
     public void loadImages()
     {
         for (int i = 0; i < instructionImages.length; i ++)
@@ -160,8 +161,8 @@ public class InstructionPanel extends JPanel
             description.setFont(new Font(FlightSimulator.FONTSTYLE, Font.PLAIN, 25));
             description.setLineWrap(true);
             description.setWrapStyleWord(true);
-            description.setText("If you feel you are ready, please procede to be tested on your knowlage of flying a plain. In the test, "
-                + "you will be occasionally questioned and you must get no less than two wrong in order to win. You must also take of and land the "
+            description.setText("If you feel you are ready, please procede to be tested on your knowlage of flying a plane. In the test, "
+                + "you will be occasionally questioned and you must get no less than two wrong in order to win. You must also take off and land the "
                 + "plane successfully. The landing runway will be north of where you start. GOOD LUCK!");
             add(description);
             Button procedeButton = new Button("Test", 30, 100, 50);

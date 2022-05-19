@@ -1,6 +1,10 @@
+/**
+ * Object which holds a mesh and a transform. This is used for any non stationary
+ * 3d object.
+ */
 public class GameObject 
 {  
-    //the mesh of the object
+    //the mesh of the object (a bunch of triangles)
     private Mesh mesh;
 
     //the transform of the object, which handles position and rotation.
@@ -23,6 +27,7 @@ public class GameObject
         return mesh;
     }
 
+    //returns the transform object
     public Transform getTransform()
     {
         return transform;

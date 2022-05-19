@@ -9,8 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
+//a versatile and reletively fast 3d renderer. 
 public class RenderingPanel extends JPanel implements Runnable
 {
     //collection of all the objects that the rendering panel will render
@@ -18,43 +18,38 @@ public class RenderingPanel extends JPanel implements Runnable
     private ArrayList<Triangle> triangles = new ArrayList<Triangle>(); 
 
     //for rendering:
-    private BufferedImage renderImage;
+    private BufferedImage renderImage; //the buffered image that triangles are drawn on
     private Color backgroundColor;
-    private Plane renderPlane;        
-    private int[] blankImagePixelColorData;
-    private ArrayList<Triangle2D> drawQeue;
-    private Matrix3x3 pointRotationMatrix;
-    private double pixelsPerUnit;
-    private Vector3 camCenterPoint;
-
+    private Plane renderPlane; //the plane that triangles are project to in 3d  
+    private int[] blankImagePixelColorData; //pixel data of a blank buffered image
+    private ArrayList<Triangle2D> drawQeue; //the qeue of 2d triangles about to be passed to sorting
+    private Matrix3x3 pointRotationMatrix; //the rotation matrix for rotating points onto the xy plane
+    private double pixelsPerUnit; //number of pixels per unit of 3d space based on fov
+    private double renderPlaneWidth; //width of the render plane
+    private Vector3 camCenterPoint; //center of the camera on the render plane.
 
     //Threads:
     private Thread renderingThread;
     private boolean threadRunning;
     private int fps;
+    private long lastFrameTime;
 
     //Camera:
     private Camera camera;
-    private Vector3 camDirection;
+    private Vector3 camDirection; //normalized vector representing the orientation of the camera
     private Vector3 camPos;
-    private double renderPlaneWidth;
-
 
     //lighting:
     private Lighting lightingObject; 
     
     //fog:
     private double fogStartDistance;
-    private double fullFogDistance;
+    private double fullFogDistance; //distance at which fog is at it's full thickness
     private boolean fogEnabled = false;
     private Color fogColor;
 
-    //used to help with optimizations:
-    private TimingHelper totalFrameTime = new TimingHelper("totalFrameTime");
-    private TimingHelper trianglesOrderTime = new TimingHelper("triangleOrderTime");
-    private TimingHelper trianglesCalculateTime = new TimingHelper("trianglesCalculateTime");
-    private TimingHelper trianglesPaintTime = new TimingHelper("trianglesPaintTime");
-
+    //constructs a rendering panel object with the specified width and height
+    //this is necessary because of the buffered image
     public RenderingPanel(int width, int height)
     {
         setPreferredSize(new Dimension(width, height));
@@ -71,6 +66,7 @@ public class RenderingPanel extends JPanel implements Runnable
         camDirection = new Vector3();   
         camPos = new Vector3();
         fps = -1;
+        lastFrameTime = System.nanoTime();
         
         //creates the buffered image which will be used to render triangles. 
         renderImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -83,8 +79,6 @@ public class RenderingPanel extends JPanel implements Runnable
 
     public void paintComponent(Graphics g) 
     {
-        totalFrameTime.stopClock();
-        totalFrameTime.startClock();
         //makes sure that there are triangles to render in the first place, and that the camera exists.
         if (meshes.size() > 0 && camera != null)
         {
@@ -94,7 +88,7 @@ public class RenderingPanel extends JPanel implements Runnable
             g.drawImage(renderImage, 0, 0, this);
         }
         //fps counter 
-        g.drawString("fps: " + (int)(1000/totalFrameTime.getDeltaTime()), 30, 30);
+        g.drawString("fps: " + (int)(1000000000/(System.nanoTime()-lastFrameTime)), 30, 30);
     }
 
     /**
@@ -146,6 +140,7 @@ public class RenderingPanel extends JPanel implements Runnable
         renderPlane = new Plane(Vector3.add(Vector3.multiply(camDirection, camera.getRenderPlaneDistance()), camera.getPosition()), camDirection);;
     }
 
+    //sets the fog with specified values
     public void setFog(double fogStartDistanceIn, double fullFogDistanceIn, Color fogColorIn)
     {
         fogStartDistance = fogStartDistanceIn;
@@ -166,7 +161,6 @@ public class RenderingPanel extends JPanel implements Runnable
 
     public void computeTriangles()
     {
-        trianglesCalculateTime.startClock();
         pixelsPerUnit = getWidth()/renderPlaneWidth;
         renderPlaneWidth = camera.getRenderPlaneWidth();
         camPos = camera.getPosition();
@@ -181,26 +175,21 @@ public class RenderingPanel extends JPanel implements Runnable
             calculateTriangle(triangles.get(i));
         }
 
-        trianglesCalculateTime.stopClock();
     }
 
     public void sortTriangles()
     {
-        trianglesOrderTime.startClock();
         Collections.sort(drawQeue);
-        trianglesOrderTime.stopClock();
     }
 
     public void drawBufferedImage()
     {
-        trianglesPaintTime.startClock();
         renderImage.getRaster().setDataElements(0, 0, renderImage.getWidth(), renderImage.getHeight(), blankImagePixelColorData);
         for (int i = 0; i < drawQeue.size(); i++)
         {
             Triangle2D triangle2d = drawQeue.get(i);
             paintTriangle(triangle2d.p1, triangle2d.p2, triangle2d.p3, triangle2d.color);
         }
-        trianglesPaintTime.stopClock();
     }
 
     public void start()
