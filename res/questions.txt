@@ -1,5 +1,0 @@
-q what is the plane's current altitude?
-a 4500 ft
-b 4500 m
-c 5400 ft
-d 4050 m
