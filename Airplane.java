@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
   
 public class Airplane extends GameObject implements ActionListener
 {
-    private final int CRASH_THRESHOLD = 30;
+    private final int CRASH_THRESHOLD = 15;
 
     private Camera camera;
     private double throttle;
@@ -47,7 +47,7 @@ public class Airplane extends GameObject implements ActionListener
             new Transform(new Vector3(0, 0, 0))
         );
  
-        maxEnginePower = 12000;
+        maxEnginePower = 12000; //12000
         pitchSpeed = 20;
         yawSpeed = 20;
         rollSpeed = 30;
@@ -121,6 +121,8 @@ public class Airplane extends GameObject implements ActionListener
     {
         gamePanel.pause();
         stopPhysics();
+        takenOff = false;
+        landed = false;
         getMesh().resetPosition();
         getMesh().rotate(getTransform().toLocalMatrix(), new Vector3());
         
@@ -310,7 +312,7 @@ public class Airplane extends GameObject implements ActionListener
             {
                 double rollAmount = Vector3.dotProduct(Vector3.projectToPlane(velocity, getTransform().getUp()).getNormalized(), getTransform().getRight());
                 rollAmount *= rollAmount *rollAmount;
-                velocityRoll *= 1 + rollAmount*yawRollEffectAmount*deltaTime;
+                velocityRoll += deltaTime*rollAmount*yawRollEffectAmount;
             }
         }
  
@@ -349,7 +351,7 @@ public class Airplane extends GameObject implements ActionListener
             double altitudeFactor = (2000/(physicsPosition.y-groundLevel+2000));
             altitudeFactor += 1;
             altitudeFactor *= altitudeFactor * altitudeFactor;
-            addForce(Vector3.multiply(Vector3.crossProduct(velocity, getTransform().getRight()).getNormalized(), forwardSpeed*forwardSpeed*liftCoefficient*deltaTime*altitudeFactor));
+            addForce(Vector3.multiply(Vector3.crossProduct(velocity, getTransform().getRight()).getNormalized(), Math.min(2000, forwardSpeed*forwardSpeed*liftCoefficient*deltaTime*altitudeFactor)));
         }
  
         //gives the effect of the plane naturally alligning itself to the direction it's pointing.
@@ -412,10 +414,10 @@ public class Airplane extends GameObject implements ActionListener
 
         public void checkCrash()
         {
-            double crashFactor = Vector3.dotProduct(velocity, new Vector3(0, -1, 0));
+            double crashFactor = physicsRotation.x*forwardSpeed*physicsRotation.x;
             if 
             (
-                (crashFactor > CRASH_THRESHOLD) || (grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
+                (crashFactor > CRASH_THRESHOLD) || (!takenOff && grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
             )
             {
                 System.out.println("crash");

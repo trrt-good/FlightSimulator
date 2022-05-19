@@ -220,7 +220,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         {
             if (!ended)
             {
-                new EndFrame(false, wrongAmount > 2);
+                new EndFrame(false, wrongAmount <= 2);
                 ended = true;
             }
             pause();
@@ -421,6 +421,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
                         + " in the main menu which will be saved on your account.");
                     button.setText("Main menu");
                     button.setPreferredSize(new Dimension(150, 50));
+                    FlightSimulator.user.setCompletedTraining(true);
                     button.addActionListener(MainMenu.getMainMenuPanelSwitcher());
                 }
                 else
@@ -592,7 +593,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
             private boolean wrong; 
             public BottomPanel()
             {
-                wrong = true;
+                wrong = false;
                 setBackground(Color.WHITE);
                 setLayout(new FlowLayout());
                 confirmButton = new Button("Check", 30, 200, 50);
