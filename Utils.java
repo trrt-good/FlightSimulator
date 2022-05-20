@@ -88,11 +88,18 @@ public class Utils
                 lastIndex = string.indexOf(regex, firstIndex);
                 if (lastIndex != -1)
                 {
-                    words.add(string.substring(firstIndex, lastIndex));
+                    String word = string.substring(firstIndex, lastIndex).trim();
+                    if (!word.equals(regex) && !word.equals(""))
+                        words.add(word);
                 }
             }
+            words.add(string.substring(firstIndex).trim());
         }
         String[] strings = new String[words.size()];
+        for (int i = 0; i < words.size(); i++)
+        {
+            strings[i] = words.get(i);
+        }
         return words.toArray(strings);
     }
 }

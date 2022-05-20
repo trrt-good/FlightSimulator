@@ -49,7 +49,6 @@ public class FlightSimulator
     
     public static void main(String [] args)
     {   
-        System.out.println(Arrays.toString(Utils.split("hello i am tyler ", " ")));
         flightSim = new FlightSimulator();
         flightSim.startGame();
     }
