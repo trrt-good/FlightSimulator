@@ -51,7 +51,7 @@ public class Camera
     class OrbitCamController implements MouseMotionListener, MouseWheelListener, MouseListener
     {
         private int maxDistance = 4000; //maximum distance the camera can be from the object
-        private int minDistance = 2500; //minimum distance
+        private int minDistance = 500; //minimum distance
 
         private double distance; //distacne from the object
 
