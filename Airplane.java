@@ -11,9 +11,6 @@ import java.awt.event.KeyEvent;
  */
 public class Airplane extends GameObject implements ActionListener
 {
-    //threshold for the airplane crashing. Lower threshold means easier to creash
-    private final int CRASH_THRESHOLD = 10; 
-
     //the camera that is focused on this GameObject
     private Camera camera;
     private AirplaneController airplaneController; //the interface for user input
@@ -38,7 +35,6 @@ public class Airplane extends GameObject implements ActionListener
     private double aerodynamicEffectAmount; //the strenth of the effect that straightens out the airplane
     
     private boolean takenOff; //has the airplane taken off yet?
-    private boolean landed; //has the airplane landed yet?
     private double groundLevel;  //the level of ground as a y coordinate
 
     private GamePanel gamePanel; //the GamePanel object that manages the game
@@ -158,7 +154,6 @@ public class Airplane extends GameObject implements ActionListener
         gamePanel.pause();
         stopPhysics();
         takenOff = false;
-        landed = false;
         getMesh().resetPosition();
         getMesh().rotate(getTransform().toLocalMatrix(), new Vector3());
         
@@ -305,7 +300,6 @@ public class Airplane extends GameObject implements ActionListener
         private double velocityPitch; //the velocty of the plane's pitch. Basically how fast it's pitching
         private double velocityYaw; //how fast the plane is yawing
         private double velocityRoll; //how fast the plane is rolling
-        private boolean grounded; //is the plane touching the ground?
  
         //creates an airplanePhysics object with default physics values
         public AirplanePhysics()
@@ -447,7 +441,6 @@ public class Airplane extends GameObject implements ActionListener
             if (Vector3.add(physicsPosition, velocity).y > groundLevel)
             {
                 physicsPosition.add(velocity);
-                grounded = false;
                 if (physicsPosition.y > 50 && takenOff == false)
                 {
                     takenOff = true;
@@ -458,7 +451,6 @@ public class Airplane extends GameObject implements ActionListener
                 physicsPosition.y = groundLevel;
                 velocity.y = 0;
                 physicsPosition.add(velocity);
-                grounded = true;
             }
             getTransform().setPosition(Vector3.add(getTransform().getPosition(), velocity));
             if (camera.getOrbitCamController() != null && camera.getOrbitCamController() != null)

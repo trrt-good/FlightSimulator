@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import java.awt.Image;
 import java.io.File;
-import java.util.Arrays;
 
 //The main class for the FlightSimulator game. This creates the main frame
 //central card layout and card holder. It also contains some public finals which

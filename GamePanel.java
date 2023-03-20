@@ -1,11 +1,4 @@
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -25,7 +18,6 @@ import java.awt.event.FocusListener;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Image;
-import java.awt.Insets;
 
 //the JPanel which has the game in it
 public class GamePanel extends JPanel implements KeyListener, MouseListener, FocusListener
@@ -41,14 +33,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
 
     private Image flightDials; //the image of the flight dials used on the side of the panel
 
-    private int wrongAmount; //number of wrong answers the user has made
-    private boolean ended; //wether or not the game has ended 
-
     private boolean paused; //is the game paused?
     private SidePanel sidePanel; //the panel on the side of the screen which has dials and buttons
     private Color skyColor = new Color(91, 215, 252);
 
-    private boolean learningMode; //has the user learned to fly yet?
 
     //creates game objects and rendering related objects. 
     public GamePanel()
@@ -58,9 +46,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
         addFocusListener(this);
         addMouseListener(this);
         sidePanel = new SidePanel();
-        wrongAmount = 0;
         add(sidePanel, BorderLayout.EAST);
-        ended = false;
         runway1 = new GameObject("runeway1", new Mesh("runway.obj", Color.DARK_GRAY, new Vector3(0, -0.09, 37), new EulerAngle(), 300, false, false), new Transform(new Vector3()));
         runway2 = new GameObject("runeway2", new Mesh("runway.obj", Color.DARK_GRAY, new Vector3(0, -0.09, 2000), new EulerAngle(), 300, false, false), new Transform(new Vector3()));
         
@@ -77,7 +63,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
     {
         super.paintComponent(g);
         requestFocusInWindow();
-        learningMode = !FlightSimulator.user.getCompletedTraining();
         if (renderingPanel == null)
         {
             renderingPanel = new RenderingPanel(FlightSimulator.DEFAULT_WIDTH - FlightSimulator.DEFAULT_WIDTH/4, FlightSimulator.DEFAULT_HEIGHT);
@@ -102,20 +87,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener, Foc
     //the panel that contains dials
     class SidePanel extends JPanel 
     {
-        private boolean[] questionChecklist; //tells the program what questions it still has to ask.
-        private double randomAltitude; //a randomized altitude that the user will be questioned about
-        private double randomSpeed; //a randomized speed that the user will be questioned about
-
         public SidePanel()
         {
             setBackground(new Color(90, 94, 97));
             setPreferredSize(new Dimension(FlightSimulator.DEFAULT_WIDTH/4, 100));
             setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-
-            //set up questions
-            questionChecklist = new boolean[]{false, false, false, false};
-            randomAltitude = Math.random()*1500 + 2500;
-            randomSpeed = Math.random()*40 + 75;
 
             //make buttons
             Button settingsButton = new Button("Settings", 20, 150, 50);
