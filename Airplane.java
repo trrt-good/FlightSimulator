@@ -58,11 +58,11 @@ public class Airplane extends GameObject implements ActionListener
         );
  
         //innitialize fields to their default physics values 
-        maxEnginePower = 12000; 
-        pitchSpeed = 20;
+        maxEnginePower = 20000; 
+        pitchSpeed = 30;
         yawSpeed = 20;
-        rollSpeed = 30;
-        gravity = 60;
+        rollSpeed = 40;
+        gravity = 65;
         mass = 1000;
         liftCoefficient = 1.5;
         dragCoefficient = 0.2;
@@ -123,9 +123,9 @@ public class Airplane extends GameObject implements ActionListener
         //and applies the corresponding changes to the physics 
         //object
         if (airplaneController.throttleUp && throttle < 1)
-            throttle += 0.1*deltaTime;
+            throttle += 1*deltaTime;
         if (airplaneController.throttleDown && throttle > 0)
-            throttle -= 0.1*deltaTime;
+            throttle -= 1*deltaTime;
         if (airplaneController.pitchUp)
             physics.addPitchTorque(-pitchSpeed);
         if (airplaneController.pitchDown)
@@ -183,22 +183,10 @@ public class Airplane extends GameObject implements ActionListener
         return physics.velocity.getMagnitude();
     }
 
-    //returns true if the plane has crashed or not
-    public boolean hasCrashed()
-    {
-        return physics.crashed();
-    }
-
     //returns the orientation for flight dials
     public EulerAngle orientation()
     {
         return physics.physicsRotation;
-    }
-
-    //returns true if the plane has landed or not
-    public boolean hasLanded()
-    {
-        return physics.landed();
     }
 
     //returns the throttle value for the flight dials
@@ -318,7 +306,6 @@ public class Airplane extends GameObject implements ActionListener
         private double velocityYaw; //how fast the plane is yawing
         private double velocityRoll; //how fast the plane is rolling
         private boolean grounded; //is the plane touching the ground?
-        private boolean crashed; //has the plane crashed? this is fed to the main Airplane class
  
         //creates an airplanePhysics object with default physics values
         public AirplanePhysics()
@@ -451,17 +438,6 @@ public class Airplane extends GameObject implements ActionListener
                 physicsRotation.x += Math.atan(direction.y/Math.sqrt(direction.x*direction.x + direction.z*direction.z))/5;
             }
         }
-
-        //returns wether or not the plane has landed
-        public boolean landed()
-        {
-            return landed;
-        }
-
-        public boolean crashed()
-        {
-            return crashed;
-        }
  
         //applies the position of the simulated physicsPosition to the actual Transform of the GameObject.
         //Makes sure that the position cannot fall below the ground level. However, if it approaches the ground level
@@ -483,35 +459,11 @@ public class Airplane extends GameObject implements ActionListener
                 velocity.y = 0;
                 physicsPosition.add(velocity);
                 grounded = true;
-                checkCrash();
             }
             getTransform().setPosition(Vector3.add(getTransform().getPosition(), velocity));
             if (camera.getOrbitCamController() != null && camera.getOrbitCamController() != null)
             {
                 camera.getOrbitCamController().updatePosition();
-            }
-        }
-
-        //checks for a "crash" and sets crashed to true if it detects a crash. Otherwise, 
-        //the plane must have landed successfully so it sets landed to true.
-        public void checkCrash()
-        {
-            //crash factor scaled based on rotation and speed.
-            double crashFactor = physicsRotation.x*forwardSpeed*physicsRotation.x;
-            if 
-            (
-                (crashFactor > CRASH_THRESHOLD) || (!takenOff && grounded && (Math.abs(physicsRotation.x) > 0.2 || Math.abs(physicsRotation.z) > 0.2))
-            )
-            {
-                System.out.println("crash");
-                crashed = true;
-                if (FlightSimulator.user.getCompletedTraining())
-                    reset();
-            }
-            else if (takenOff)
-            {
-                System.out.println("land");
-                landed = true;
             }
         }
  

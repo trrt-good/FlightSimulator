@@ -81,7 +81,6 @@ public class SettingsPanel extends JPanel implements FocusListener
     {
         fovSlider.setValue(FlightSimulator.user.getSettings().fov);
         sensitivitySlider.setValue(FlightSimulator.user.getSettings().sensitivity);
-        System.out.println("gained");
     }
 
     //applies changes from the settings to the user object

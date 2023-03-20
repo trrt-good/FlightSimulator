@@ -27,7 +27,7 @@ public class FlightSimulator
 
     //store the essential data for all the classes to have acess to. 
     public static FlightSimulator flightSim; //the flight sim object in use.
-    public static User user; //the current user 
+    public static User user = User.getUser("user"); //the current user 
     
     //the frame that the program displays.
     private JFrame gameFrame;
@@ -37,10 +37,6 @@ public class FlightSimulator
     private JPanel mainCardPanel;
 
     //all the major panels that are held by the card panel. 
-    private StartPanel startPanel;
-    private AccountPanel loginPanel;
-    private MainMenu mainMenu;
-    private InstructionPanel instructionPanel;
     private GamePanel gamePanel;
     private SettingsPanel settingsPanel;
     private ControlsPanel controlsPanel;
@@ -59,22 +55,13 @@ public class FlightSimulator
     {
         createGameFrameAndCardLayout(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-        startPanel = new StartPanel();
-        loginPanel = new AccountPanel();
-        mainMenu = new MainMenu();
-        instructionPanel = new InstructionPanel();
         gamePanel = new GamePanel();
         settingsPanel = new SettingsPanel();
         controlsPanel = new ControlsPanel();
 
-        addPanelToCards(startPanel, startPanel.getName());
-        addPanelToCards(loginPanel, loginPanel.getName());
-        addPanelToCards(mainMenu, MainMenu.name());
-        addPanelToCards(instructionPanel, InstructionPanel.name());
         addPanelToCards(gamePanel, GamePanel.name());
         addPanelToCards(settingsPanel, SettingsPanel.name());
         addPanelToCards(controlsPanel, ControlsPanel.name());
-        showPanel(startPanel.getName());
     }
 
     //  This method creates the game frame and creates and adds the card layout to the game frame
@@ -90,13 +77,6 @@ public class FlightSimulator
         mainCardLayout = new CardLayout();
         mainCardPanel.setLayout(mainCardLayout);
         gameFrame.validate();
-    }
-
-
-
-    public void updateWelcomeText()
-    {
-        mainMenu.setWelcomeText("Hi, " + user.getUsername());
     }
     
     //  shows a given panel name using the card layout
