@@ -34,7 +34,7 @@ public class FlightSimulator
     //central card layout that switches between major panels.
     private CardLayout mainCardLayout; 
     private JPanel mainCardPanel; 
-
+ 
     //all the major panels that are held by the card panel. 
     private GamePanel gamePanel;
     private SettingsPanel settingsPanel;
