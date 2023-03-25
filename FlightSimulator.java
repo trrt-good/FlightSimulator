@@ -29,11 +29,11 @@ public class FlightSimulator
     public static User user = User.getUser("user"); //the current user 
     
     //the frame that the program displays.
-    private JFrame gameFrame;  
+    private JFrame gameFrame;   
 
     //central card layout that switches between major panels.
-    private CardLayout mainCardLayout;
-    private JPanel mainCardPanel;
+    private CardLayout mainCardLayout; 
+    private JPanel mainCardPanel; 
 
     //all the major panels that are held by the card panel. 
     private GamePanel gamePanel;
