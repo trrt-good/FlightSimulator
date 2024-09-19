@@ -10,4 +10,4 @@ RUNNING THE CODE:
 - compile using `javac *.java`
 - run by running `java FlightSimulator`
 
-![alt text](https://cdn.discordapp.com/attachments/903515599097954354/1008139352997638195/unknown.png)
+![alt text](res/unknown.webp)
